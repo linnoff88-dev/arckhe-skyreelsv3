@@ -1,0 +1,4310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INEMA SkyReels V3 3.49.19</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }
+
+  header {
+    background: #1a1a24;
+    border-bottom: 1px solid #2a2a3a;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header h1 { font-size: 1.3rem; font-weight: 700; color: #a78bfa; }
+  header h1 .ver { font-size: 0.75rem; font-weight: 400; color: #666; margin-left: 8px; vertical-align: middle; }
+  header h1 .ver .feat { color: #7c6fe0; }
+  header h1 .ver .fix  { color: #4caf88; }
+  header span { font-size: 0.8rem; color: #666; }
+
+  .layout { display: grid; grid-template-columns: 400px 1fr; gap: 0; height: calc(100vh - 57px); }
+
+  /* ---- LEFT PANEL ---- */
+  .panel-left {
+    background: #14141e;
+    border-right: 1px solid #2a2a3a;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .form-scroll { overflow-y: auto; flex: 1; padding: 20px; }
+
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 0.78rem; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+
+  select, input[type=text], input[type=number], textarea {
+    width: 100%;
+    background: #1e1e2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #e0e0e0;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  select:focus, input:focus, textarea:focus { border-color: #7c3aed; }
+  textarea { resize: vertical; min-height: 90px; font-family: inherit; }
+
+  /* hints below fields */
+  .hint {
+    font-size: 0.72rem;
+    color: #666;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+  .hint.warn { color: #f59e0b; }
+  .hint.info { color: #60a5fa; }
+  .hint.muted { color: #444; font-style: italic; }
+
+  /* info box (replaces a hidden field) */
+  .info-box {
+    background: #1a1a28;
+    border: 1px solid #2a2a40;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.5;
+  }
+  .info-box strong { color: #a78bfa; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .drop-zone {
+    border: 2px dashed #333;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  .drop-zone:hover, .drop-zone.drag { border-color: #7c3aed; background: #1e1e2e; color: #a78bfa; }
+  .drop-zone input { display: none; }
+  .preview-imgs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .preview-imgs img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid #333; }
+
+  .toggle-row { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+  .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: #333; border-radius: 22px; cursor: pointer; transition: .3s; }
+  .slider:before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: .3s; }
+  input:checked + .slider { background: #7c3aed; }
+  input:checked + .slider:before { transform: translateX(18px); }
+  input:disabled + .slider { opacity: 0.5; cursor: not-allowed; }
+
+  /* task description badge */
+  .task-desc {
+    background: #1a1a28;
+    border-left: 3px solid #7c3aed;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: #999;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .task-desc .time-est { color: #f59e0b; font-weight: 600; }
+
+  .divider { border: none; border-top: 1px solid #222; margin: 16px 0; }
+
+  .btn-generate {
+    width: calc(100% - 40px);
+    margin: 0 20px 20px;
+    padding: 14px;
+    background: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, opacity .2s;
+  }
+  .btn-generate:hover { background: #6d28d9; }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ---- RIGHT PANEL ---- */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tabs { display: flex; border-bottom: 1px solid #2a2a3a; background: #14141e; }
+  .tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #666;
+    border-bottom: 2px solid transparent;
+    transition: color .2s;
+  }
+  .tab.active { color: #a78bfa; border-bottom-color: #7c3aed; }
+
+  .tab-content { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+  .tab-content.active { display: flex; }
+
+  /* Progress tab */
+  .progress-wrap { padding: 20px; }
+  .progress-bar-bg { background: #1e1e2e; border-radius: 999px; height: 8px; overflow: hidden; }
+  .progress-bar { background: linear-gradient(90deg, #7c3aed, #a78bfa); height: 100%; width: 0%; transition: width .5s; border-radius: 999px; }
+  .progress-label { font-size: 0.8rem; color: #888; margin-top: 6px; }
+  .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .status-idle { background: #222; color: #666; }
+  .status-running { background: #1a1a3a; color: #a78bfa; }
+  .status-done { background: #0d2e1a; color: #4ade80; }
+  .status-error { background: #2e0d0d; color: #f87171; }
+
+  .log-box {
+    flex: 1;
+    background: #0a0a10;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    padding: 14px;
+    overflow-y: auto;
+    line-height: 1.6;
+    color: #aaa;
+    margin: 0 20px 20px;
+    border-radius: 10px;
+    border: 1px solid #1e1e2e;
+  }
+  .log-box .err { color: #f87171; }
+  .log-box .info { color: #60a5fa; }
+  .log-box .ok { color: #4ade80; }
+  .log-box .step { color: #a78bfa; font-weight: bold; }
+
+  /* ---- VIDEO TAB LAYOUT ---- */
+  #tab-videos { overflow: hidden; }
+
+  /* Body — default pos-left (row, gallery first) */
+  .vt-body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+  }
+  .vt-body.pos-right  { flex-direction: row-reverse; }
+  .vt-body.pos-top    { flex-direction: column; }
+  .vt-body.pos-bottom { flex-direction: column-reverse; }
+
+  /* Gallery sidebar (left/right) */
+  .vt-gallery {
+    width: 224px;
+    flex-shrink: 0;
+    border-right: 1px solid #1e1e2e;
+    background: #0d0d14;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .vt-body.pos-right .vt-gallery {
+    border-right: none;
+    border-left: 1px solid #1e1e2e;
+  }
+
+  /* Gallery strip (top/bottom) */
+  .vt-body.pos-top .vt-gallery,
+  .vt-body.pos-bottom .vt-gallery {
+    width: 100%;
+    height: 172px;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .vt-body.pos-bottom .vt-gallery {
+    border-bottom: none;
+    border-top: 1px solid #1e1e2e;
+  }
+
+  /* Player area */
+  .vt-player {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 20px;
+  }
+  .video-player-wrap { background: #000; border-radius: 12px; overflow: hidden; }
+  .video-player-wrap video { width: 100%; max-height: 60vh; display: block; }
+  .video-info { font-size: 0.78rem; color: #666; margin-top: 8px; }
+
+  /* Gallery header — default (column mode) */
+  .gallery-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 8px 6px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #1a1a28;
+    flex-wrap: wrap;
+  }
+  .gallery-title {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #555;
+    flex: 1;
+    min-width: 30px;
+  }
+
+  /* Gallery header — strip mode (top/bottom): narrow column on left */
+  .vt-body.pos-top .gallery-header,
+  .vt-body.pos-bottom .gallery-header {
+    flex-direction: column;
+    width: 48px;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid #1a1a28;
+    padding: 8px 4px;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .vt-body.pos-top .gallery-title,
+  .vt-body.pos-bottom .gallery-title { display: none; }
+
+  .gallery-btn {
+    background: none;
+    border: 1px solid #2a2a3a;
+    border-radius: 5px;
+    color: #555;
+    font-size: 0.75rem;
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .gallery-btn:hover { border-color: #7c3aed; color: #a78bfa; }
+  .gallery-btn.on { border-color: #7c3aed; color: #a78bfa; background: #1a1040; }
+
+  /* Position buttons row */
+  .gallery-pos-row {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .vt-body.pos-top .gallery-pos-row,
+  .vt-body.pos-bottom .gallery-pos-row { flex-direction: column; gap: 3px; }
+
+  /* Card containers */
+  .gallery-col, .gallery-grid {
+    overflow-y: auto;
+    padding: 8px;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+    align-content: start;
+  }
+  .gallery-col { display: flex; flex-direction: column; gap: 8px; }
+  .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+  /* Horizontal cards for top/bottom strip */
+  .vt-body.pos-top .gallery-col,
+  .vt-body.pos-bottom .gallery-col,
+  .vt-body.pos-top .gallery-grid,
+  .vt-body.pos-bottom .gallery-grid {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+  }
+  .vt-body.pos-top .video-card,
+  .vt-body.pos-bottom .video-card { width: 128px; flex-shrink: 0; }
+  .vt-body.pos-top .video-card video,
+  .vt-body.pos-bottom .video-card video { height: 68px; }
+
+  /* ---- FULL GALLERY TAB ---- */
+  #tab-galeria { overflow-y: auto; overflow-x: hidden; }
+  .galeria-panel {
+    display: flex;
+    flex-direction: column;
+  }
+  .galeria-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid #1e1e2e;
+    background: #14141e;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .galeria-top-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #666;
+    flex: 1;
+  }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 16px;
+    align-content: start;
+  }
+  /* Larger cards in galeria */
+  .galeria-grid .video-card video { height: 110px; }
+  .galeria-grid .video-card-info { padding: 6px 8px 8px; }
+  .galeria-grid .video-card-info .name { font-size: 0.72rem; }
+  .galeria-grid .video-card-info .meta { font-size: 0.65rem; }
+
+  /* ---- VIDEO CARD ---- */
+  .video-card {
+    position: relative;
+    background: #1a1a24;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color .2s;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  .video-card.selected { border-color: #7c3aed; }
+  .video-card:hover { border-color: #4a3a6a; }
+  .video-card video { width: 100%; height: 80px; object-fit: cover; display: block; pointer-events: none; }
+  .gallery-grid .video-card video { height: 58px; }
+
+  .video-card-info { padding: 4px 7px 6px; }
+  .video-card-info .name { font-size: 0.65rem; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .video-card-info .meta { font-size: 0.6rem; color: #555; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Open button — top-left corner, hidden when private */
+  .card-actions-left {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    opacity: 0;
+    transition: opacity .15s;
+    z-index: 3;
+  }
+  .video-card:hover:not([data-private="true"]) .card-actions-left { opacity: 1; }
+
+  /* Lock button — top-right corner */
+  .card-actions {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    opacity: 0;
+    transition: opacity .15s;
+    z-index: 3;
+  }
+  .video-card:hover .card-actions { opacity: 1; }
+  .video-card[data-private="true"] .card-actions { opacity: 1; }
+
+  .card-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    transition: all .15s;
+  }
+  .card-btn-open { background: rgba(124,58,237,0.85); color: white; }
+  .card-btn-open:hover { background: #7c3aed; }
+  .card-btn-lock { background: rgba(20,20,30,0.85); color: #888; }
+  .card-btn-lock:hover { background: rgba(239,68,68,0.85); color: white; }
+  .video-card[data-private="true"] .card-btn-lock { color: #f87171; background: rgba(239,68,68,0.6); }
+
+  /* Privacy mask */
+  .privacy-mask {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: #0c0c14;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    z-index: 2;
+    cursor: default;
+  }
+  .video-card[data-private="true"] .privacy-mask { display: flex; }
+  .privacy-mask .lock-icon { font-size: 1.3rem; }
+  .privacy-mask .lock-label { font-size: 0.6rem; color: #7c3aed; font-weight: 600; letter-spacing:.04em; }
+  .privacy-mask .lock-hint { font-size: 0.58rem; color: #444; text-align: center; line-height: 1.3; padding: 0 6px; }
+
+  .section-title { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; margin-top: 20px; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* Conditional fields */
+  .cond { display: none; }
+  .cond.show { display: block; }
+
+  /* ---- PRIVACY MODE ---- */
+  .video-tab-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .btn-privacy {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #1e1e2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #888;
+    font-size: 0.78rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-privacy:hover { border-color: #7c3aed; color: #a78bfa; }
+  .btn-privacy.active { background: #2e1a1a; border-color: #ef4444; color: #f87171; }
+  .btn-privacy .dot { width: 8px; height: 8px; border-radius: 50%; background: #555; flex-shrink: 0; }
+  .btn-privacy.active .dot { background: #ef4444; }
+
+  /* Privacy overlay on cards */
+  /* ---- VIDEO DETAILS PANEL ---- */
+  .details-panel {
+    background: #1a1a24;
+    border: 1px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 0.8rem;
+  }
+  .details-panel h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .detail-row {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #1e1e2e;
+    line-height: 1.4;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key {
+    color: #666;
+    min-width: 110px;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+  .detail-val {
+    color: #ccc;
+    word-break: break-all;
+  }
+  .detail-val.prompt-val {
+    color: #a78bfa;
+    font-style: italic;
+  }
+  .detail-val.no-meta {
+    color: #444;
+    font-style: italic;
+  }
+  .detail-downloads {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding-top: 12px; margin-top: 4px;
+    border-top: 1px solid #1e1e2e;
+  }
+  .dl-btn {
+    background: #1e1e2e; border: 1px solid #2a2a3a; border-radius: 6px;
+    color: #a78bfa; font-size: 0.75rem; padding: 5px 10px;
+    text-decoration: none; transition: all .2s;
+  }
+  .dl-btn:hover { border-color: #7c3aed; background: #1a1040; }
+
+  /* ---- QUEUE BUTTON (left panel) ---- */
+  .btn-queue-add {
+    padding: 14px 16px;
+    background: #1e1e2e;
+    color: #a78bfa;
+    border: 1px solid #4a3a8a;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-queue-add:hover { background: #2a1a4a; border-color: #7c3aed; }
+  .btn-queue-add.has-target { background: #1a2a1a; color: #6fcf6f; border-color: #2a5a2a; }
+  .btn-queue-add.has-target:hover { background: #243424; border-color: #4a8a4a; }
+  .queue-btn.add-from-form { background: #1a2a1a; color: #6fcf6f; border-color: #2a5a2a; font-weight: 600; }
+  .queue-btn.add-from-form:hover { background: #243424; }
+
+  /* ---- QUEUE TAB ---- */
+  #tab-queue { overflow: hidden; }
+  .queue-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .queue-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #1e1e2e;
+    flex-shrink: 0;
+    background: #14141e;
+  }
+  .queue-top-title {
+    font-size: 0.78rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    flex: 1;
+  }
+  .queue-btn {
+    background: #1e1e2e;
+    border: 1px solid #2a2a3a;
+    border-radius: 6px;
+    color: #aaa;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .queue-btn:hover { border-color: #7c3aed; color: #a78bfa; }
+  .queue-btn.danger:hover { border-color: #ef4444; color: #f87171; background: #1a0a0a; }
+
+  .queue-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .queue-empty {
+    color: #444;
+    font-size: 0.8rem;
+    font-style: italic;
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  /* Job card in queue */
+  .job-card {
+    background: #1a1a24;
+    border: 1px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .job-card.status-running { border-color: #4a3a8a; background: #1a1a30; }
+  .job-card.status-done    { border-color: #1a4a2a; background: #0d1a12; }
+  .job-card.status-error   { border-color: #4a1a1a; background: #1a0d0d; }
+
+  .job-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .status-pending .job-status-dot  { background: #555; }
+  .status-running .job-status-dot  { background: #a78bfa; animation: pulse 1.2s infinite; }
+  .status-done    .job-status-dot  { background: #4ade80; }
+  .status-error   .job-status-dot  { background: #f87171; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  .job-body { flex: 1; min-width: 0; }
+  .job-label {
+    font-size: 0.8rem;
+    color: #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+  .job-meta {
+    font-size: 0.68rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  .job-meta span { color: #7c7c9a; }
+
+  .job-remove {
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color .15s;
+    flex-shrink: 0;
+  }
+  .job-remove:hover { color: #f87171; }
+  .status-running .job-remove,
+  .status-done    .job-remove,
+  .status-error   .job-remove { display: none; }
+
+  /* ---- NAMED QUEUE SYSTEM ---- */
+
+  .nq-list {
+    flex: 1; overflow-y: auto; padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .nq-card {
+    background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px;
+    padding: 12px 14px; cursor: pointer; transition: border-color .2s, background .2s;
+  }
+  .nq-card:hover { border-color: #4a3a8a; background: #1e1e2e; }
+  .nq-card.status-running { border-color: #5a3aed; background: #1a1a30; }
+  .nq-card.status-done    { border-color: #1a4a2a; background: #0d1a12; }
+  .nq-card.status-error   { border-color: #4a1a1a; background: #1a0d0d; }
+  .nq-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .nq-card-name {
+    flex: 1; font-size: 0.9rem; font-weight: 600; color: #d0c0ff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .nq-card-actions { display: flex; gap: 5px; flex-shrink: 0; }
+  .nq-mini-btn {
+    background: none; border: 1px solid #2a2a3a; border-radius: 5px;
+    color: #666; font-size: 0.72rem; padding: 2px 7px; cursor: pointer;
+    transition: all .15s; line-height: 1.5;
+  }
+  .nq-mini-btn.run:hover  { border-color: #7c3aed; color: #a78bfa; background: #1a1040; }
+  .nq-mini-btn.del:hover  { border-color: #ef4444; color: #f87171; background: #1a0808; }
+  .nq-mini-btn:disabled   { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+  .nq-card-meta { font-size: 0.7rem; color: #555; line-height: 1.5; margin-bottom: 6px; }
+  .nq-status-pill {
+    display: inline-block; padding: 1px 8px; border-radius: 999px;
+    font-size: 0.65rem; font-weight: 600; margin-right: 4px;
+  }
+  .status-idle    .nq-status-pill { background: #222; color: #666; }
+  .status-running .nq-status-pill { background: #1a1a3a; color: #a78bfa; }
+  .status-done    .nq-status-pill { background: #0d2e1a; color: #4ade80; }
+  .status-error   .nq-status-pill { background: #2e0d0d; color: #f87171; }
+  .nq-card-progress-bg { background: #111; border-radius: 999px; height: 4px; overflow: hidden; margin-top: 4px; }
+  .nq-card-progress-fill {
+    height: 100%; background: linear-gradient(90deg, #7c3aed, #a78bfa);
+    border-radius: 999px; transition: width .4s;
+  }
+
+  /* Detail view */
+  .nq-detail-view {
+    display: none; flex-direction: column; flex: 1; overflow: hidden;
+  }
+  .nq-detail-header {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+    border-bottom: 1px solid #1e1e2e; flex-shrink: 0;
+    background: #14141e; flex-wrap: wrap;
+  }
+  .nq-detail-title {
+    flex: 1; font-size: 0.88rem; font-weight: 600; color: #d0c0ff;
+    min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .nq-detail-status { font-size: 0.7rem; color: #666; flex-shrink: 0; }
+  .nq-detail-time   { font-size: 0.7rem; color: #a78bfa; flex-shrink: 0; }
+  .nq-detail-actions { display: flex; gap: 5px; flex-shrink: 0; }
+  .nq-action-btn {
+    background: #1e1e2e; border: 1px solid #2a2a3a; border-radius: 6px;
+    color: #aaa; font-size: 0.72rem; padding: 4px 9px; cursor: pointer;
+    transition: all .2s; white-space: nowrap;
+  }
+  .nq-action-btn.run:hover      { border-color: #7c3aed; color: #a78bfa; background: #1a1040; }
+  .nq-action-btn.finalize:hover { border-color: #f59e0b; color: #fbbf24; }
+  .nq-action-btn.danger:hover   { border-color: #ef4444; color: #f87171; background: #1a0808; }
+  .nq-action-btn.reset          { border-color: #b45309; color: #f59e0b; }
+  .nq-action-btn.reset:hover    { border-color: #f59e0b; color: #fbbf24; background: #1a1000; }
+  .nq-action-btn.danger2        { border-color: #7f1d1d; color: #f87171; }
+  .nq-action-btn.danger2:hover  { border-color: #ef4444; color: #fca5a5; background: #1a0808; }
+  .nq-action-btn:disabled       { opacity: 0.4; cursor: not-allowed; }
+
+  /* Scenes list */
+  .nq-scenes {
+    flex: 1; overflow-y: auto; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .nq-scene-card {
+    background: #1a1a24; border: 1px solid #2a2a3a;
+    border-radius: 10px; overflow: hidden; transition: border-color .2s;
+    flex-shrink: 0;
+  }
+  .nq-scene-card.status-running { border-color: #5a3aed; }
+  .nq-scene-card.status-done    { border-color: #1a4a2a; }
+  .nq-scene-card.status-error   { border-color: #4a1a1a; }
+  .nq-scene-header {
+    display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+    cursor: pointer; transition: background .15s; user-select: none;
+  }
+  .nq-scene-header:hover { background: rgba(255,255,255,.03); }
+  .nq-scene-info { flex: 1; min-width: 0; }
+  .nq-scene-expand {
+    font-size: 0.65rem; color: #444; flex-shrink: 0; transition: transform .2s;
+  }
+  .nq-scene-card.expanded .nq-scene-expand { transform: rotate(180deg); }
+  .nq-scene-body { display: none; padding: 0 12px 12px; }
+  .nq-scene-card.expanded .nq-scene-body { display: block; }
+  .nq-scene-video {
+    width: 100%; max-height: 200px; border-radius: 8px;
+    display: block; margin-bottom: 10px; background: #000;
+  }
+  .nq-no-video {
+    color: #444; font-size: 0.75rem; font-style: italic;
+    padding: 12px 0; text-align: center;
+  }
+  .nq-scene-details { margin-top: 4px; }
+
+  /* Quick-view buttons na linha da cena */
+  .nq-qbtns { display: flex; gap: 3px; margin-left: 2px; flex-shrink: 0; }
+  .nq-qbtn {
+    background: #111118; border: 1px solid #2a2a3a; border-radius: 5px;
+    color: #666; padding: 1px 7px; font-size: .72rem; cursor: pointer;
+    white-space: nowrap; transition: all .15s; line-height: 1.6;
+  }
+  .nq-qbtn:hover { border-color: #6c5ce7; color: #ccc; }
+  .nq-qbtn.qv-active { background: #1e1b3a; border-color: #7c3aed; color: #a78bfa; }
+
+  /* Quick-view panel (entre header e body) */
+  .nq-quickview {
+    display: none; padding: 10px 14px 12px;
+    background: #0d0d18; border-top: 1px solid #1e1e2e;
+  }
+  .nq-quickview.visible { display: block; }
+  .nq-quickview video { width: 100%; max-height: 220px; border-radius: 6px; background: #000; display: block; }
+  .nq-quickview audio { width: 100%; margin-top: 2px; }
+  .nq-qv-imgs { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; }
+  .nq-qv-imgs img {
+    height: 90px; border-radius: 5px; cursor: pointer;
+    object-fit: cover; border: 1px solid #2a2a3a; transition: border-color .15s;
+  }
+  .nq-qv-imgs img:hover { border-color: #7c3aed; }
+  .nq-qv-imgs .qv-no-img { color: #444; font-size: .75rem; font-style: italic; }
+  .nq-qv-text { font-size: .82rem; line-height: 1.65; }
+  .nq-qv-text .qvt-label {
+    color: #555; font-size: .68rem; text-transform: uppercase;
+    letter-spacing: .05em; margin-top: 10px; margin-bottom: 3px;
+  }
+  .nq-qv-text .qvt-label:first-child { margin-top: 0; }
+  .nq-qv-text .qvt-content {
+    color: #ccc; white-space: pre-wrap; word-break: break-word;
+    background: #111120; border-radius: 5px; padding: 6px 9px;
+  }
+  .nq-qv-text .qvt-content.pt { color: #a8d8a8; }
+  .nq-qv-text .qvt-content.en { color: #a8c8e8; }
+  .nq-qv-text .qvt-empty { color: #444; font-style: italic; font-size: .78rem; }
+
+  /* Running banner (top of nq list / detail) */
+  .nq-running-banner {
+    display: none;
+    align-items: center; gap: 10px;
+    padding: 8px 16px;
+    background: #1a1a30; border-bottom: 1px solid #3a2a6a;
+    flex-shrink: 0;
+  }
+  .nq-running-banner.visible { display: flex; }
+  .nq-running-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #a78bfa; flex-shrink: 0;
+    animation: pulse 1.2s infinite;
+  }
+  .nq-running-text { flex: 1; min-width: 0; }
+  .nq-running-text .rb-queue { font-size: 0.72rem; color: #a78bfa; font-weight: 600; }
+  .nq-running-text .rb-scene {
+    font-size: 0.68rem; color: #666;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .nq-running-goto {
+    background: none; border: 1px solid #3a2a6a; border-radius: 5px;
+    color: #a78bfa; font-size: 0.68rem; padding: 2px 7px;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    transition: all .15s;
+  }
+  .nq-running-goto:hover { background: #2a1a4a; border-color: #7c3aed; }
+
+  /* nq progress info in progress tab */
+  .nq-progress-info {
+    font-size: 0.74rem; color: #a78bfa; margin-top: 4px;
+    font-style: italic; min-height: 16px;
+  }
+
+  /* Edit job modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.72);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+  }
+  .modal-box {
+    background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 8px;
+    width: min(540px, 95vw); max-height: 90vh; overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; border-bottom: 1px solid #2a2a3a; font-weight: 600;
+  }
+  .modal-header button { background: none; border: none; color: #888; font-size: 1.1rem; cursor: pointer; }
+  .modal-header button:hover { color: #fff; }
+  .modal-body  { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+  .modal-footer{ padding: 14px 18px; border-top: 1px solid #2a2a3a; display: flex; justify-content: flex-end; gap: 8px; }
+  .modal-input { width: 100%; background: #0f0f13; border: 1px solid #333; border-radius: 4px; color: #e0e0e0; padding: 6px 8px; font-size: .85rem; font-family: inherit; }
+  textarea.modal-input { resize: vertical; }
+  .modal-body label { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; color: #aaa; }
+  .modal-checks { display: flex; gap: 18px; }
+  .modal-checks label { flex-direction: row; align-items: center; gap: 6px; color: #ccc; }
+  .nq-mini-btn.edit { background: #1a2a1a; color: #6fcf6f; border-color: #2a4a2a; }
+  .nq-mini-btn.edit:hover { background: #2a3a2a; }
+
+  /* Finalized video panel */
+  .nq-finalized-panel {
+    background: #141a14; border: 1px solid #2a4a2a; border-radius: 8px;
+    padding: 12px 14px; margin: 0 14px 10px;
+  }
+  .nq-finalized-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .85rem; font-weight: 600; color: #6fcf6f; margin-bottom: 4px;
+  }
+  .nq-finalized-header button {
+    background: none; border: none; color: #888; font-size: 1rem; cursor: pointer; line-height: 1;
+  }
+  .nq-finalized-header button:hover { color: #fff; }
+
+  /* === Projetos === */
+  .proj-panel { display:flex; flex-direction:column; height:100%; }
+  .proj-top { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid #1e1e2e; background:#0a0a0f; position:sticky; top:0; z-index:1; }
+  .proj-top-title { font-weight:600; color:#a78bfa; flex:1; }
+  .proj-list { display:flex; flex-wrap:wrap; gap:14px; padding:16px; align-content:start; }
+  .proj-card { background:#111118; border:1px solid #2a2a3a; border-radius:8px; padding:14px 16px; width:180px; cursor:pointer; transition:border-color .2s; }
+  .proj-card:hover { border-color:#a78bfa; }
+  .proj-card-name { font-weight:600; color:#e0e0e0; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .proj-card-meta { font-size:.75rem; color:#666; margin-top:4px; }
+  .proj-detail { display:flex; flex-direction:column; gap:0; height:100%; overflow-y:auto; }
+  .proj-detail-header { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid #1e1e2e; background:#0a0a0f; position:sticky; top:0; z-index:1; }
+  .proj-detail-name { font-weight:600; color:#a78bfa; font-size:1rem; flex:1; }
+  .proj-folder-section { border-bottom:1px solid #1a1a2a; }
+  .proj-folder-title { font-size:.8rem; font-weight:600; color:#888; text-transform:uppercase; letter-spacing:.06em; padding:10px 14px; display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; }
+  .proj-folder-title .pf-arrow { font-size:.6rem; color:#555; display:inline-block; transition:transform .15s; margin-right:2px; flex-shrink:0; }
+  .proj-folder-section.open .proj-folder-title .pf-arrow { transform:rotate(90deg); }
+  .proj-folder-body { display:none; }
+  .proj-folder-section.open .proj-folder-body { display:block; }
+  .proj-file-list { display:flex; flex-direction:column; gap:0; padding:0 14px 10px; }
+  .proj-file-row { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid #16161e; font-size:.82rem; }
+  .proj-file-name { flex:1; color:#c0c0d0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .proj-file-size { color:#555; font-size:.75rem; min-width:50px; text-align:right; }
+  .proj-file-btn { background:none; border:1px solid #2a2a3a; border-radius:4px; color:#888; font-size:.72rem; padding:2px 7px; cursor:pointer; }
+  .proj-file-btn:hover { border-color:#a78bfa; color:#a78bfa; }
+  .proj-upload-row { padding:8px 14px 12px; display:flex; align-items:center; gap:8px; }
+  .proj-fig-grid { display:flex; flex-wrap:wrap; gap:8px; padding:10px 14px; }
+  .proj-fig-thumb { position:relative; width:100px; height:64px; border-radius:6px; overflow:hidden; border:1px solid #2a2a3a; cursor:pointer; flex-shrink:0; }
+  .proj-fig-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .proj-fig-del { position:absolute; top:2px; right:2px; background:rgba(0,0,0,.7); border:none; color:#f87171; font-size:.6rem; border-radius:3px; padding:1px 4px; cursor:pointer; opacity:0; transition:opacity .15s; }
+  .proj-fig-thumb:hover .proj-fig-del { opacity:1; }
+  .proj-upload-btn { background:#1a1230; border:1px solid #3a2a5a; border-radius:5px; color:#a78bfa; font-size:.78rem; padding:5px 12px; cursor:pointer; }
+  .proj-upload-btn:hover { background:#2a1a40; }
+  .proj-upload-input { display:none; }
+  .proj-ep-list { display:flex; flex-direction:column; gap:6px; padding:10px 14px 14px; }
+  .proj-ep-card { background:#0d0d18; border:1px solid #252535; border-radius:6px; padding:9px 12px; display:flex; align-items:center; gap:10px; }
+  .proj-ep-name { font-weight:600; color:#e0e0e0; font-size:.85rem; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .proj-ep-status { font-size:.75rem; color:#888; white-space:nowrap; }
+  .proj-ep-actions { display:flex; gap:5px; flex-shrink:0; }
+  .proj-ep-btn { background:none; border:1px solid #2a2a3a; border-radius:4px; color:#888; font-size:.72rem; padding:3px 8px; cursor:pointer; white-space:nowrap; }
+  .proj-ep-btn:hover { border-color:#a78bfa; color:#a78bfa; }
+  .proj-ep-btn.run { border-color:#2a4a2a; color:#6fcf6f; }
+  .proj-ep-btn.run:hover { background:#1a2a1a; }
+
+  /* Episode inline detail */
+  .ep-detail-jobs { display:flex; flex-direction:column; gap:4px; padding:10px 14px 14px; }
+  .ep-job-row { background:#0d0d18; border:1px solid #252535; border-radius:6px; overflow:hidden; }
+  .ep-job-summary:hover { background:#11111e; }
+  .ep-job-label { font-size:.82rem; color:#ccc; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; }
+  .ep-job-label { font-size:.83rem; color:#d0d0d0; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ep-job-badge { font-size:.7rem; padding:2px 7px; border-radius:10px; white-space:nowrap; flex-shrink:0; }
+  .ep-job-badge.idle    { background:#1e1e2e; color:#666; border:1px solid #333; }
+  .ep-job-badge.running { background:#2a1e00; color:#f59e0b; border:1px solid #7a4e00; }
+  .ep-job-badge.done    { background:#0a2a0a; color:#6fcf6f; border:1px solid #2a5a2a; }
+  .ep-job-badge.error   { background:#2a0a0a; color:#f87171; border:1px solid #5a2020; }
+  .ep-job-meta { font-size:.72rem; color:#555; white-space:nowrap; flex-shrink:0; }
+  .ep-job-video { font-size:.72rem; color:#7c6fe0; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+  .ep-job-video:hover { color:#a78bfa; }
+
+  /* AI gen button */
+  .proj-upload-btn.ai-gen { background:#1a1230; border-color:#6a3aed; color:#a78bfa; font-weight:600; }
+  .proj-upload-btn.ai-gen:hover { background:#2a1a50; border-color:#9060ff; }
+
+  /* Project config form */
+  .proj-config-form { padding:10px 14px 14px; display:flex; flex-direction:column; gap:10px; }
+  .proj-config-row  { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .proj-config-label { font-size:.75rem; color:#888; text-transform:uppercase; letter-spacing:.04em; margin-bottom:3px; }
+  .proj-config-input {
+    width:100%; background:#0f0f18; border:1px solid #2a2a3a; border-radius:6px;
+    color:#e0e0e0; padding:7px 10px; font-size:.85rem; outline:none; transition:border-color .2s;
+  }
+  .proj-config-input:focus { border-color:#7c3aed; }
+  .proj-config-save { align-self:flex-end; background:#7c3aed; color:#fff; border:none; border-radius:6px;
+    padding:7px 18px; font-size:.85rem; font-weight:600; cursor:pointer; transition:background .2s; }
+  .proj-config-save:hover { background:#6d28d9; }
+
+  /* Gen episode modal */
+  .gen-ep-modal { width:min(640px,95vw); }
+  .gen-ep-step  { display:none; flex-direction:column; gap:12px; }
+  .gen-ep-step.active { display:flex; }
+  .gen-ep-scene-list { display:flex; flex-direction:column; gap:8px; max-height:50vh; overflow-y:auto; }
+  .gen-ep-scene-card {
+    background:#0f0f18; border:1px solid #2a2a3a; border-radius:8px; padding:10px 12px;
+  }
+  .gen-ep-scene-card.has-error { border-color:#4a2020; }
+  .gen-ep-scene-title { font-size:.82rem; font-weight:600; color:#d0c0ff; margin-bottom:4px; }
+  .gen-ep-scene-prompt { font-size:.78rem; color:#888; line-height:1.5; }
+  .gen-ep-scene-prompt textarea {
+    width:100%; background:#0a0a12; border:1px solid #252535; border-radius:4px;
+    color:#ccc; padding:5px 7px; font-size:.78rem; resize:vertical; font-family:inherit;
+    min-height:52px; margin-top:4px;
+  }
+  .gen-ep-status-tag { font-size:.7rem; padding:1px 7px; border-radius:999px; margin-left:4px; }
+  .gen-ep-status-ok  { background:#0d2e1a; color:#4ade80; }
+  .gen-ep-status-err { background:#2e0d0d; color:#f87171; }
+  .gen-ep-status-img { background:#1a2a0a; color:#a3e635; }
+  .gen-ep-status-aud { background:#0a1a2e; color:#60a5fa; }
+  .gen-ep-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .gen-ep-btn {
+    background:#1e1e2e; border:1px solid #2a2a3a; border-radius:6px;
+    color:#aaa; font-size:.8rem; padding:6px 12px; cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .gen-ep-btn:hover:not(:disabled) { border-color:#7c3aed; color:#a78bfa; }
+  .gen-ep-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .gen-ep-btn.primary { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+  .gen-ep-btn.primary:hover:not(:disabled) { background:#6d28d9; }
+  .gen-ep-spinner { display:none; font-size:.8rem; color:#a78bfa; align-items:center; gap:6px; }
+  .gen-ep-spinner.active { display:flex; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .gen-ep-spin { display:inline-block; animation:spin 1s linear infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>INEMA SkyReels V3 <span class="ver">3.<span class="feat" title="49 recursos adicionados">49</span>.<span class="fix" title="19 correções">19</span></span></h1>
+  <span>Interface de Geração de Vídeo</span>
+</header>
+
+<div class="layout">
+  <!-- LEFT: Form -->
+  <div class="panel-left">
+    <div class="form-scroll">
+
+      <div class="field">
+        <label>Tipo de Tarefa</label>
+        <select id="task_type" onchange="onTaskChange()">
+          <option value="reference_to_video">Reference to Video — imagens → vídeo</option>
+          <option value="single_shot_extension">Single Shot Extension — extender vídeo</option>
+          <option value="shot_switching_extension">Shot Switching Extension — troca de plano</option>
+          <option value="talking_avatar">Talking Avatar — retrato + áudio → vídeo</option>
+        </select>
+      </div>
+
+      <!-- Task description card (updates per task) -->
+      <div id="task-desc" class="task-desc"></div>
+
+      <!-- Prompt (all tasks, but hint changes) -->
+      <div class="field">
+        <label id="prompt-label">Prompt</label>
+        <textarea id="prompt" placeholder="Descreva o vídeo que deseja gerar..."></textarea>
+        <div class="hint" id="prompt-hint"></div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- reference_to_video: imagens de referência -->
+      <div id="ref-section" class="cond show">
+        <div class="field">
+          <label>Imagens de Referência <span style="color:#555">(1–4 imagens)</span></label>
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('ref_imgs').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="onDrop(event)">
+            <input type="file" id="ref_imgs" multiple accept="image/*" onchange="onFileSelect(this)">
+            Clique ou arraste imagens aqui
+          </div>
+          <div class="preview-imgs" id="preview-imgs"></div>
+        </div>
+        <div class="field">
+          <label>Ou informe caminhos <span style="color:#555">(separados por vírgula)</span></label>
+          <input type="text" id="ref_imgs_path" placeholder="doc/foto.jpg, uploads/ref2.png">
+        </div>
+      </div>
+
+      <!-- extension: vídeo de entrada -->
+      <div id="ext-section" class="cond">
+        <div class="field">
+          <label>Vídeo de Entrada <span style="color:#555">(path ou URL)</span></label>
+          <input type="text" id="input_video" placeholder="https://... ou caminho local">
+          <div class="hint" id="ext-hint"></div>
+        </div>
+      </div>
+
+      <!-- talking_avatar: retrato + áudio -->
+      <div id="avatar-section" class="cond">
+        <div class="field">
+          <label>Imagem do Retrato <span style="color:#555">(rosto de frente)</span></label>
+          <div class="drop-zone" id="avatar-img-drop"
+               onclick="document.getElementById('input_image_file').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="onAvatarImgDrop(event)">
+            <input type="file" id="input_image_file" accept="image/*" onchange="onAvatarImgSelect(this)">
+            Clique ou arraste a imagem do retrato
+          </div>
+          <input type="text" id="input_image" placeholder="Ou informe URL/path da imagem" style="margin-top:8px">
+        </div>
+        <div class="field">
+          <label>Áudio da Fala <span style="color:#555">(mp3, wav)</span></label>
+          <div class="drop-zone" id="avatar-audio-drop"
+               onclick="document.getElementById('input_audio_file').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="onAvatarAudioDrop(event)">
+            <input type="file" id="input_audio_file" accept="audio/*,video/mp4,video/quicktime,video/x-matroska,video/x-msvideo" onchange="onAvatarAudioSelect(this)">
+            Clique ou arraste o arquivo de áudio
+          </div>
+          <input type="text" id="input_audio" placeholder="Ou informe URL/path do áudio" style="margin-top:8px">
+          <div class="hint warn">Máximo 200 s. O vídeo terá a mesma duração do áudio.<br>Formatos: mp3, wav, m4a, ogg, flac, mp4, mov, mkv (ffmpeg extrai o áudio automaticamente).</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Resolução + Duração -->
+      <div class="row2">
+        <div class="field">
+          <label>Resolução</label>
+          <select id="resolution">
+            <option value="540P" selected>540P</option>
+            <option value="720P">720P</option>
+            <option value="480P">480P</option>
+          </select>
+          <div class="hint" id="res-hint"></div>
+        </div>
+        <div class="field" id="duration-field">
+          <label>Duração (s)</label>
+          <input type="number" id="duration" value="5" min="1" max="200">
+          <div class="hint" id="dur-hint"></div>
+        </div>
+      </div>
+
+      <!-- Duração desabilitada (talking_avatar) -->
+      <div class="field cond" id="duration-disabled-field">
+        <label>Duração</label>
+        <div class="info-box">Determinada pelo <strong>áudio</strong> — este campo não tem efeito no Talking Avatar.</div>
+      </div>
+
+      <!-- Seed -->
+      <div class="field">
+        <label>Seed</label>
+        <input type="number" id="seed" value="42">
+        <div class="hint">Mesmo seed + mesmos inputs = resultado reproduzível.</div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Offload (oculto para talking_avatar) -->
+      <div class="field" id="offload-row">
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="offload" checked>
+            <span class="slider"></span>
+          </label>
+          <div>
+            <span>Offload CPU</span>
+            <div class="hint" style="margin-top:2px">Move modelos para CPU entre os forward passes. Reduz VRAM mas aumenta o tempo.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low VRAM (só para talking_avatar, obrigatório) -->
+      <div class="field cond" id="low-vram-row">
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="low_vram" checked disabled>
+            <span class="slider"></span>
+          </label>
+          <div>
+            <span>Low VRAM <span style="color:#f59e0b;font-size:.75rem">— obrigatório</span></span>
+            <div class="hint" style="margin-top:2px">FP8 (38 GB → 19 GB) + block offload (1 bloco por vez na GPU). Necessário para o modelo 19B.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-scroll -->
+
+    <div style="display:flex;gap:8px;padding:0 20px 20px;">
+      <button class="btn-generate" id="btn-generate" onclick="startGeneration()" style="flex:1;margin:0">
+        Gerar Vídeo
+      </button>
+      <button class="btn-queue-add" id="btn-queue-add" onclick="addToQueue()" title="Adicionar à fila de geração">
+        + Fila
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Output -->
+  <div class="panel-right">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('tab-progress', this)">Progresso</div>
+      <div class="tab" onclick="showTab('tab-videos', this)">Vídeos</div>
+      <div class="tab" onclick="showTab('tab-galeria', this); refreshGaleria()">Galeria</div>
+      <div class="tab" onclick="showTab('tab-queue', this); refreshNamedQueues()">Fila</div>
+      <div class="tab" onclick="showTab('tab-projetos', this); refreshProjects()">Projetos</div>
+    </div>
+
+    <!-- Progress Tab -->
+    <div id="tab-progress" class="tab-content active">
+      <div class="progress-wrap">
+        <div id="status-badge" class="status-badge status-idle">Aguardando</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-label" id="progress-label">—</div>
+        <div class="nq-progress-info" id="nq-progress-info" style="display:none"></div>
+      </div>
+      <div class="log-box" id="log-box"></div>
+    </div>
+
+    <!-- Videos Tab -->
+    <div id="tab-videos" class="tab-content">
+      <div class="vt-body" id="vt-body">
+
+        <!-- Gallery sidebar (left) -->
+        <div class="vt-gallery" id="vt-gallery">
+          <div class="gallery-header">
+            <span class="gallery-title">Vídeos</span>
+            <div class="gallery-pos-row">
+              <button class="gallery-btn pos-btn" data-pos="left"   onclick="setGalleryPos('left')"   title="Galeria à esquerda">▌</button>
+              <button class="gallery-btn pos-btn" data-pos="top"    onclick="setGalleryPos('top')"    title="Galeria em cima">▀</button>
+              <button class="gallery-btn pos-btn" data-pos="bottom" onclick="setGalleryPos('bottom')" title="Galeria em baixo">▄</button>
+              <button class="gallery-btn pos-btn" data-pos="right"  onclick="setGalleryPos('right')"  title="Galeria à direita">▐</button>
+            </div>
+            <button class="gallery-btn" id="btn-layout" onclick="toggleLayout()" title="Lista / Grade">☰</button>
+            <button class="gallery-btn" id="btn-privacy-g" onclick="togglePrivacyAll()" title="Ocultar/revelar todos">🔒</button>
+          </div>
+          <div class="gallery-col" id="gallery-cards">
+            {% for v in videos %}
+            <div class="video-card" data-path="{{ v.path }}">
+              <div class="privacy-mask">
+                <span class="lock-icon">🔒</span>
+                <span class="lock-label">SKYREELS</span>
+                <span class="lock-hint">Clique no 🔒<br>para revelar</span>
+              </div>
+              <div class="card-actions-left">
+                <button class="card-btn card-btn-open" onclick="openCardBtn(event, this)" title="Abrir">▶</button>
+              </div>
+              <div class="card-actions">
+                <button class="card-btn card-btn-lock" onclick="toggleCardPrivacy(event, this)" title="Privado">🔒</button>
+              </div>
+              <video src="/video/{{ v.path }}" muted></video>
+              <div class="video-card-info">
+                <div class="name">{{ v.name }}</div>
+                <div class="meta">{{ v.task }} · {{ v.size }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Player area (right) -->
+        <div class="vt-player" id="vt-player">
+          <div id="player-section" style="display:none">
+            <div class="video-player-wrap">
+              <video id="main-player" controls autoplay loop></video>
+            </div>
+            <div class="video-info" id="video-info"></div>
+            <div class="details-panel" id="details-panel">
+              <h3>Detalhes da Geração</h3>
+              <div id="details-body"><div class="detail-row"><span class="detail-val no-meta">Selecione um vídeo para ver os detalhes.</span></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Galeria Tab -->
+    <div id="tab-galeria" class="tab-content">
+      <div class="galeria-panel">
+        <div class="galeria-top">
+          <span class="galeria-top-title">Galeria de Vídeos</span>
+          <button class="queue-btn" onclick="refreshGaleria()" title="Recarregar">↻</button>
+          <button class="gallery-btn" id="btn-privacy-galeria" onclick="togglePrivacyAll()" title="Ocultar/revelar todos">🔒</button>
+        </div>
+        <div class="galeria-grid" id="galeria-grid"></div>
+      </div>
+    </div>
+
+    <!-- Queue Tab -->
+    <div id="tab-queue" class="tab-content">
+      <div class="queue-panel">
+
+        <!-- Top bar (shared by list and detail views) -->
+        <div class="queue-top">
+          <button id="btn-nq-back" class="queue-btn" style="display:none" onclick="showNqList()">← Voltar</button>
+          <span class="queue-top-title" id="queue-view-title">Filas de Geração</span>
+          <input type="file" id="queue-import-input" accept=".json,.md,.txt" style="display:none"
+                 onchange="importQueueFile(this)">
+          <button id="btn-add-from-form" class="queue-btn add-from-form" style="display:none"
+                  onclick="addFormJobToCurrentQueue()" title="Adicionar cena do formulário à esquerda a esta fila">
+            ＋ Cena do form
+          </button>
+          <button class="queue-btn" onclick="document.getElementById('queue-import-input').click()" title="Importar .json ou .md como nova fila">
+            ↑ Importar
+          </button>
+          <a class="queue-btn" href="/help" target="_blank" title="Ver formato e documentação">? Ajuda</a>
+        </div>
+
+        <!-- Running banner (shown when a named queue is executing) -->
+        <div id="nq-running-banner" class="nq-running-banner">
+          <span class="nq-running-dot"></span>
+          <div class="nq-running-text">
+            <div class="rb-queue" id="rb-queue-name"></div>
+            <div class="rb-scene" id="rb-scene-name"></div>
+          </div>
+          <button class="nq-running-goto" id="rb-goto-btn" onclick="">→ Ver</button>
+        </div>
+
+        <!-- List view: all named queues -->
+        <div id="nq-list-view" class="nq-list">
+          <div class="queue-empty">Nenhuma fila criada.<br>Use <strong>+ Fila</strong> ou <strong>↑ Importar</strong> para começar.</div>
+        </div>
+
+        <!-- Detail view: one named queue -->
+        <div id="nq-detail-view" class="nq-detail-view">
+          <div class="nq-detail-header">
+            <div class="nq-detail-title" id="nq-detail-name"></div>
+            <div class="nq-detail-status" id="nq-detail-status"></div>
+            <div class="nq-detail-time" id="nq-detail-time"></div>
+            <div class="nq-detail-actions">
+              <button id="nq-run-btn"     class="nq-action-btn run"     onclick="runCurrentNq()"     title="Continuar: executar cenas idle, pula erros">▶ Continuar</button>
+              <button id="nq-retry-btn"  class="nq-action-btn reset"   onclick="retryCurrentNq()"   title="Repetir do erro: reseta erros e continua de onde parou" style="display:none">↩ Repetir do erro</button>
+              <button id="nq-restart-btn" class="nq-action-btn danger2" onclick="restartCurrentNq()" title="Reiniciar do zero: apaga tudo e começa do início" style="display:none">↺ Reiniciar do zero</button>
+              <button id="nq-set-bg-btn" class="nq-action-btn" onclick="toggleSetAudioBgPanel()" title="Definir trilha de fundo para todas as cenas" style="border-color:#a855f7;color:#d8b4fe">🎵 Trilha</button>
+              <button id="nq-mix-audio-btn" class="nq-action-btn" onclick="mixAudioCurrentNq()" title="Mixar áudio nos vídeos silenciosos (aplica input_audio de cada cena via ffmpeg)" style="border-color:#22c55e;color:#86efac">🔊 Mix Áudio</button>
+              <button id="nq-finalize-btn" class="nq-action-btn finalize" onclick="finalizeCurrentNq()" title="Concatenar todas as cenas concluídas em um vídeo final" disabled>🎬 Finalizar</button>
+              <button class="nq-action-btn danger" onclick="deleteCurrentNq()" title="Excluir esta fila">🗑</button>
+              <button class="nq-action-btn" onclick="toggleAllScenes(true)"  title="Expandir todas as cenas">⊞</button>
+              <button class="nq-action-btn" onclick="toggleAllScenes(false)" title="Colapsar todas as cenas">⊟</button>
+              <button class="nq-action-btn" id="nq-json-btn"  onclick="exportNqJson()"     title="Baixar JSON da fila">⬇ JSON</button>
+              <button class="nq-action-btn" id="nq-zip-btn"   onclick="downloadNqZip(false)" title="Baixar ZIP dos vídeos gerados">⬇ ZIP</button>
+              <button class="nq-action-btn" id="nq-zip2-btn"  onclick="downloadNqZip(true)"  title="Baixar ZIP com vídeos + origens (imagens, áudio)">⬇ ZIP+origens</button>
+            </div>
+          </div>
+          <!-- Panel: definir trilha de fundo para todas as cenas -->
+          <div id="nq-set-bg-panel" style="display:none;padding:10px 14px;background:#0d0d18;border:1px solid #3730a3;border-radius:6px;margin-bottom:10px;gap:8px;flex-wrap:wrap;align-items:center" class="nq-detail-actions">
+            <span style="font-size:.8rem;color:#c4b5fd;white-space:nowrap">🎵 Trilha de fundo para todas as cenas:</span>
+            <select id="nq-bg-select" class="proj-config-input" style="flex:1;min-width:220px;font-size:.8rem" onchange="document.getElementById('nq-bg-input').value=this.value">
+              <option value="">— selecionar arquivo —</option>
+            </select>
+            <input id="nq-bg-input" class="proj-config-input" style="flex:1;min-width:200px;font-size:.8rem" placeholder="ou cole o path manualmente">
+            <button class="nq-action-btn run" onclick="applyAudioBgToAll()" style="white-space:nowrap">✓ Aplicar</button>
+            <button class="nq-action-btn" onclick="applyAudioBgToAll(true)" style="white-space:nowrap;color:#f87171;border-color:#4a2020" title="Remove audio_bg de todas as cenas">✕ Limpar</button>
+          </div>
+          <div id="nq-scenes" class="nq-scenes"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Projetos Tab -->
+    <div id="tab-projetos" class="tab-content">
+      <div class="proj-panel">
+        <div class="proj-top">
+          <span class="proj-top-title">Projetos</span>
+          <button class="queue-btn" onclick="refreshProjects()" title="Recarregar">&#x21BB;</button>
+          <button class="queue-btn" onclick="openNewProjectModal()" title="Novo projeto">&#xFF0B; Novo</button>
+          <button class="queue-btn" onclick="openGlobalConfigModal()" title="Configurar APIs (FAL, ElevenLabs…)" style="border-color:#4a3a8a;color:#a78bfa">&#x2699; APIs</button>
+        </div>
+        <div id="proj-list" class="proj-list"></div>
+        <div id="proj-detail" class="proj-detail" style="display:none"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let selectedFiles = [];
+let avatarImageFile = null;
+let avatarAudioFile = null;
+let eventSource = null;
+
+const TASK_INFO = {
+  reference_to_video: {
+    desc: 'Gera um vídeo a partir de 1–4 imagens de referência + prompt de texto. Modelo 14B.',
+    time: '~15–20 min (5 s, 540P)',
+    promptHint: '',
+    resHint: '540P recomendado. 720P aumenta qualidade mas dobra o tempo.',
+    durHint: 'Recomendado: 5 s. Valores maiores aumentam proporcionalmente o tempo.',
+    durMax: 30,
+  },
+  single_shot_extension: {
+    desc: 'Estende um vídeo existente preservando o estilo e movimento. Modelo 14B.',
+    time: '~5–8 min (5 s, 540P)',
+    promptHint: 'Descreva o que deve acontecer na extensão.',
+    resHint: '',
+    durHint: 'Intervalo: 5–30 s.',
+    durMax: 30,
+    extHint: 'Aceita path local ou URL pública do vídeo.',
+  },
+  shot_switching_extension: {
+    desc: 'Estende com transição cinemática de plano. Use prefixos no prompt: [ZOOM_IN_CUT], [ZOOM_OUT_CUT], [STATIC_CUT]. Modelo 14B.',
+    time: '~5 min (máx 5 s, 540P)',
+    promptHint: 'Prefixos: [ZOOM_IN_CUT] · [ZOOM_OUT_CUT] · [STATIC_CUT] · [PAN_LEFT_CUT] · [PAN_RIGHT_CUT]',
+    resHint: '',
+    durHint: 'Máximo: 5 s.',
+    durMax: 5,
+    extHint: 'Aceita path local ou URL pública do vídeo.',
+  },
+  talking_avatar: {
+    desc: 'Anima um retrato a falar sincronizado com o áudio. Modelo 19B.',
+    time: '~3 min / 5 s de áudio',
+    promptHint: 'Baixa influência — o modelo é guiado principalmente pelo áudio e pela imagem do rosto.',
+    resHint: 'Somente 480P e 720P são suportados (540P não existe neste modelo).',
+    durHint: null, // hidden
+    durMax: null,
+  },
+};
+
+function onTaskChange() {
+  const t = document.getElementById('task_type').value;
+  const info = TASK_INFO[t];
+  const isRef    = t === 'reference_to_video';
+  const isExt    = t === 'single_shot_extension' || t === 'shot_switching_extension';
+  const isSwitch = t === 'shot_switching_extension';
+  const isAvatar = t === 'talking_avatar';
+
+  // Task description
+  document.getElementById('task-desc').innerHTML =
+    `${info.desc} <span class="time-est">⏱ ${info.time}</span>`;
+
+  // Conditional sections
+  document.getElementById('ref-section').classList.toggle('show', isRef);
+  document.getElementById('ext-section').classList.toggle('show', isExt);
+  document.getElementById('avatar-section').classList.toggle('show', isAvatar);
+
+  // Prompt hint
+  document.getElementById('prompt-hint').textContent = info.promptHint;
+  document.getElementById('prompt-hint').className = 'hint' + (isAvatar ? ' muted' : '');
+
+  // Resolution
+  const resEl = document.getElementById('resolution');
+  // Rebuild options based on task
+  resEl.innerHTML = isAvatar
+    ? '<option value="480P" selected>480P</option><option value="720P">720P</option>'
+    : '<option value="540P" selected>540P</option><option value="720P">720P</option><option value="480P">480P</option>';
+  document.getElementById('res-hint').textContent = info.resHint;
+  document.getElementById('res-hint').className = 'hint' + (isAvatar ? ' warn' : '');
+
+  // Duration: show/hide
+  document.getElementById('duration-field').style.display = isAvatar ? 'none' : '';
+  document.getElementById('duration-disabled-field').classList.toggle('show', isAvatar);
+  if (!isAvatar) {
+    const durEl = document.getElementById('duration');
+    durEl.max = info.durMax;
+    if (isSwitch && parseInt(durEl.value) > 5) durEl.value = 5;
+    document.getElementById('dur-hint').textContent = info.durHint;
+    document.getElementById('dur-hint').className = 'hint' + (isSwitch ? ' warn' : '');
+  }
+
+  // Ext hint
+  if (isExt) document.getElementById('ext-hint').textContent = info.extHint || '';
+
+  // Offload / Low VRAM
+  document.getElementById('offload-row').style.display = isAvatar ? 'none' : '';
+  document.getElementById('low-vram-row').classList.toggle('show', isAvatar);
+}
+
+// Init on load
+onTaskChange();
+
+function onFileSelect(input) {
+  selectedFiles = Array.from(input.files);
+  renderPreviews();
+}
+
+function onDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag');
+  selectedFiles = Array.from(ev.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  renderPreviews();
+}
+
+function onAvatarImgSelect(input) {
+  avatarImageFile = input.files[0] || null;
+  document.getElementById('avatar-img-drop').textContent =
+    avatarImageFile ? avatarImageFile.name : 'Clique ou arraste a imagem do retrato';
+}
+
+function onAvatarImgDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('avatar-img-drop').classList.remove('drag');
+  const f = Array.from(ev.dataTransfer.files).find(f => f.type.startsWith('image/'));
+  if (f) { avatarImageFile = f; document.getElementById('avatar-img-drop').textContent = f.name; }
+}
+
+function onAvatarAudioSelect(input) {
+  avatarAudioFile = input.files[0] || null;
+  document.getElementById('avatar-audio-drop').textContent =
+    avatarAudioFile ? avatarAudioFile.name : 'Clique ou arraste o arquivo de áudio';
+}
+
+function onAvatarAudioDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('avatar-audio-drop').classList.remove('drag');
+  const f = Array.from(ev.dataTransfer.files).find(f => f.type.startsWith('audio/') || f.type.startsWith('video/'));
+  if (f) { avatarAudioFile = f; document.getElementById('avatar-audio-drop').textContent = f.name; }
+}
+
+function renderPreviews() {
+  const wrap = document.getElementById('preview-imgs');
+  wrap.innerHTML = '';
+  selectedFiles.forEach(f => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(f);
+    wrap.appendChild(img);
+  });
+  document.getElementById('drop-zone').textContent = selectedFiles.length
+    ? `${selectedFiles.length} imagem(ns) selecionada(s)`
+    : 'Clique ou arraste imagens aqui';
+}
+
+function showTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+function setStatus(s, text) {
+  const b = document.getElementById('status-badge');
+  b.className = 'status-badge status-' + s;
+  b.textContent = text;
+}
+
+function appendLog(line) {
+  const box = document.getElementById('log-box');
+  const div = document.createElement('div');
+  let cls = '';
+  if (line.includes('ERROR') || line.includes('Traceback') || line.includes('Error')) cls = 'err';
+  else if (line.includes('INFO')) cls = 'info';
+  else if (line.includes('successfully') || line.includes('saved') || line.includes('CONCLUIDO')) cls = 'ok';
+  else if (line.includes('/8 [') || line.includes('/4 [')) cls = 'step';
+  if (cls) div.className = cls;
+  div.textContent = line;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function updateProgress(pct) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = pct > 0 ? `${pct}% completo` : 'Iniciando...';
+}
+
+async function startGeneration() {
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = true;
+  document.getElementById('log-box').innerHTML = '';
+  updateProgress(0);
+  updateNqProgressInfo(null);
+  setStatus('running', 'Gerando...');
+
+  const t = document.getElementById('task_type').value;
+  const isAvatar = t === 'talking_avatar';
+
+  const fd = new FormData();
+  fd.append('task_type', t);
+  fd.append('prompt', document.getElementById('prompt').value);
+  fd.append('resolution', document.getElementById('resolution').value);
+  fd.append('duration', document.getElementById('duration').value);
+  fd.append('seed', document.getElementById('seed').value);
+  fd.append('offload', document.getElementById('offload').checked ? 'true' : 'false');
+  fd.append('low_vram', isAvatar ? 'true' : 'false');
+  fd.append('ref_imgs_path', document.getElementById('ref_imgs_path').value);
+  fd.append('input_video', document.getElementById('input_video')?.value || '');
+  fd.append('input_image', document.getElementById('input_image')?.value || '');
+  fd.append('input_audio', document.getElementById('input_audio')?.value || '');
+
+  selectedFiles.forEach(f => fd.append('ref_imgs', f));
+  if (avatarImageFile) fd.append('input_image_file', avatarImageFile);
+  if (avatarAudioFile) fd.append('input_audio_file', avatarAudioFile);
+
+  const res = await fetch('/generate', { method: 'POST', body: fd });
+  const data = await res.json();
+
+  if (!res.ok) {
+    appendLog('ERRO: ' + data.error);
+    setStatus('error', 'Erro');
+    btn.disabled = false;
+    return;
+  }
+
+  // Switch to progress tab
+  showTab('tab-progress', document.querySelectorAll('.tab')[0]);
+
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource('/stream');
+
+  eventSource.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.log) appendLog(msg.log);
+    if (msg.progress !== undefined) updateProgress(msg.progress);
+    if (msg.done) {
+      eventSource.close();
+      btn.disabled = false;
+      if (msg.done.status === 'done') {
+        setStatus('done', 'Concluído!');
+        updateProgress(100);
+        refreshVideos();
+        if (msg.done.video) {
+          setTimeout(() => {
+            showTab('tab-videos', document.querySelectorAll('.tab')[1]);
+            playVideoByPath(msg.done.video);
+          }, 500);
+        }
+      } else {
+        setStatus('error', 'Erro na geração');
+      }
+    }
+  };
+  eventSource.onerror = () => { eventSource.close(); btn.disabled = false; };
+}
+
+// ---- Per-card privacy ----
+let privacyMap = JSON.parse(localStorage.getItem('skyreels_privmap') || '{}');
+
+function savePrivacyMap() {
+  localStorage.setItem('skyreels_privmap', JSON.stringify(privacyMap));
+}
+
+function applyCardPrivacy(card) {
+  card.dataset.private = privacyMap[card.dataset.path] ? 'true' : 'false';
+}
+
+function applyAllCardsPrivacy() {
+  document.querySelectorAll('.video-card').forEach(applyCardPrivacy);
+  updatePrivacyBtn();
+}
+
+function toggleCardPrivacy(ev, btn) {
+  ev.stopPropagation();
+  const card = btn.closest('.video-card');
+  const path = card.dataset.path;
+  privacyMap[path] = !privacyMap[path];
+  savePrivacyMap();
+  // Apply to every card with this path across all tabs
+  document.querySelectorAll(`.video-card[data-path="${CSS.escape(path)}"]`).forEach(applyCardPrivacy);
+  updatePrivacyBtn();
+}
+
+function togglePrivacyAll() {
+  const cards = Array.from(document.querySelectorAll('.video-card'));
+  const anyUnlocked = cards.some(c => c.dataset.private !== 'true');
+  cards.forEach(card => { privacyMap[card.dataset.path] = anyUnlocked; });
+  savePrivacyMap();
+  applyAllCardsPrivacy();
+}
+
+function updatePrivacyBtn() {
+  const cards = Array.from(document.querySelectorAll('.video-card'));
+  const anyPrivate = cards.some(c => c.dataset.private === 'true');
+  const label = anyPrivate ? '🔓 Revelar tudo' : '🔒 Ocultar tudo';
+  ['btn-privacy-g', 'btn-privacy-galeria'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.classList.toggle('on', anyPrivate);
+    btn.textContent = label;
+  });
+}
+
+function openCardBtn(ev, btn) {
+  ev.stopPropagation();
+  playCardVideo(btn.closest('.video-card'));
+}
+
+function onCardClick(card) {
+  if (card.dataset.private === 'true') return;
+  playCardVideo(card);
+}
+
+// ---- Video details ----
+const TASK_LABELS = {
+  reference_to_video: 'Reference to Video',
+  single_shot_extension: 'Single Shot Extension',
+  shot_switching_extension: 'Shot Switching Extension',
+  talking_avatar: 'Talking Avatar',
+};
+
+async function loadDetails(path) {
+  const body = document.getElementById('details-body');
+  body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Carregando...</span></div>';
+  try {
+    const res = await fetch('/video-meta/' + path);
+    if (!res.ok) {
+      body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Sem metadados — vídeo gerado antes desta versão.</span></div>';
+      return;
+    }
+    const m = await res.json();
+    if (!m || Object.keys(m).length === 0) {
+      body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Sem metadados disponíveis.</span></div>';
+      return;
+    }
+    const rows = [];
+    const add = (key, val, cls='') => {
+      if (val === undefined || val === null) return;
+      rows.push(`<div class="detail-row">
+        <span class="detail-key">${key}</span>
+        <span class="detail-val ${cls}">${val}</span>
+      </div>`);
+    };
+    add('Tarefa', TASK_LABELS[m.task_type] || m.task_type);
+    add('Prompt', m.prompt || '(sem prompt)', 'prompt-val');
+    add('Resolução', m.resolution);
+    add('Duração', m.duration);
+    add('Seed', m.seed);
+    add('Modo', m.low_vram ? 'Low VRAM (FP8 + block offload)' : m.offload ? 'Offload CPU' : 'Padrão');
+    if (m.ref_imgs) add('Imagens ref.', Array.isArray(m.ref_imgs) ? m.ref_imgs.map(p => p.split('/').pop()).join(', ') : m.ref_imgs);
+    if (m.input_video) add('Vídeo entrada', m.input_video.split('/').pop());
+    if (m.input_image) add('Imagem retrato', m.input_image.split('/').pop() || m.input_image);
+    if (m.input_audio) add('Áudio', m.input_audio.split('/').pop() || m.input_audio);
+    add('Gerado em', m.generated_at);
+
+    // Download buttons
+    const dlBtns = [];
+    dlBtns.push(`<a class="dl-btn" href="/download/${path.replace(/\.mp4$/, '.json')}" download>⬇ JSON</a>`);
+    if (m.input_audio) dlBtns.push(`<a class="dl-btn" href="/download/${m.input_audio}" download>⬇ Áudio</a>`);
+    if (m.input_image) dlBtns.push(`<a class="dl-btn" href="/download/${m.input_image}" download>⬇ Imagem</a>`);
+    if (Array.isArray(m.ref_imgs)) {
+      m.ref_imgs.forEach((p, i) =>
+        dlBtns.push(`<a class="dl-btn" href="/download/${p}" download>⬇ Ref ${i+1}</a>`)
+      );
+    }
+    const dlRow = `<div class="detail-downloads">${dlBtns.join('')}</div>`;
+    body.innerHTML = rows.join('') + dlRow;
+  } catch(e) {
+    body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Erro ao carregar metadados.</span></div>';
+  }
+}
+
+// ---- Gallery layout (col = single list, grid = 2-column grid) ----
+let galleryMode = localStorage.getItem('skyreels_galmode') || 'col';
+
+function applyLayout() {
+  const cards = document.getElementById('gallery-cards');
+  const btn = document.getElementById('btn-layout');
+  const isGrid = galleryMode === 'grid';
+  if (cards) cards.className = isGrid ? 'gallery-grid' : 'gallery-col';
+  if (btn) btn.textContent = isGrid ? '☰' : '▦';
+  if (btn) btn.title = isGrid ? 'Vista em lista' : 'Vista em grade';
+}
+
+function toggleLayout() {
+  galleryMode = (galleryMode === 'grid') ? 'col' : 'grid';
+  localStorage.setItem('skyreels_galmode', galleryMode);
+  applyLayout();
+}
+
+applyLayout();
+
+// ---- Gallery position ----
+let galleryPos = localStorage.getItem('skyreels_galpos') || 'left';
+
+function applyGalleryPos() {
+  const body = document.getElementById('vt-body');
+  if (!body) return;
+  body.classList.remove('pos-left', 'pos-right', 'pos-top', 'pos-bottom');
+  body.classList.add('pos-' + galleryPos);
+  document.querySelectorAll('.pos-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.pos === galleryPos);
+  });
+}
+
+function setGalleryPos(pos) {
+  galleryPos = pos;
+  localStorage.setItem('skyreels_galpos', pos);
+  applyGalleryPos();
+}
+
+applyGalleryPos();
+
+function buildCard(v) {
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  card.dataset.path = v.path;
+  card.innerHTML = `
+    <div class="privacy-mask">
+      <span class="lock-icon">🔒</span>
+      <span class="lock-label">SKYREELS</span>
+      <span class="lock-hint">Clique no 🔒<br>para revelar</span>
+    </div>
+    <div class="card-actions-left">
+      <button class="card-btn card-btn-open" onclick="openCardBtn(event, this)" title="Abrir">▶</button>
+    </div>
+    <div class="card-actions">
+      <button class="card-btn card-btn-lock" onclick="toggleCardPrivacy(event, this)" title="Privado">🔒</button>
+    </div>
+    <video src="/video/${v.path}" muted></video>
+    <div class="video-card-info">
+      <div class="name">${v.name}</div>
+      <div class="meta">${v.task} · ${v.size}</div>
+    </div>`;
+  card.addEventListener('click', () => onCardClick(card));
+  applyCardPrivacy(card);
+  return card;
+}
+
+async function refreshVideos() {
+  const res = await fetch('/videos');
+  const videos = await res.json();
+  const container = document.getElementById('gallery-cards');
+  if (!container) return;
+  container.innerHTML = '';
+  videos.forEach(v => container.appendChild(buildCard(v)));
+  updatePrivacyBtn();
+}
+
+// ---- Full gallery tab ----
+function buildGaleriaCard(v) {
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  card.dataset.path = v.path;
+  card.innerHTML = `
+    <div class="privacy-mask">
+      <span class="lock-icon">🔒</span>
+      <span class="lock-label">SKYREELS</span>
+      <span class="lock-hint">Clique no 🔒<br>para revelar</span>
+    </div>
+    <div class="card-actions-left">
+      <button class="card-btn card-btn-open" onclick="openCardBtn(event, this)" title="Abrir no player">▶</button>
+    </div>
+    <div class="card-actions">
+      <button class="card-btn card-btn-lock" onclick="toggleCardPrivacy(event, this)" title="Privado">🔒</button>
+    </div>
+    <video src="/video/${v.path}" muted></video>
+    <div class="video-card-info">
+      <div class="name">${v.name}</div>
+      <div class="meta">${v.task} · ${v.size}</div>
+    </div>`;
+  card.addEventListener('click', () => {
+    if (card.dataset.private === 'true') return;
+    // Switch to Vídeos tab and play
+    showTab('tab-videos', document.querySelectorAll('.tab')[1]);
+    playVideoByPath(v.path);
+  });
+  applyCardPrivacy(card);
+  return card;
+}
+
+async function refreshGaleria() {
+  const grid = document.getElementById('galeria-grid');
+  if (!grid) return;
+  const res = await fetch('/videos');
+  const videos = await res.json();
+  grid.innerHTML = '';
+  if (videos.length === 0) {
+    grid.innerHTML = '<div style="color:#444;font-style:italic;padding:20px;grid-column:1/-1">Nenhum vídeo gerado ainda.</div>';
+    return;
+  }
+  videos.forEach(v => grid.appendChild(buildGaleriaCard(v)));
+  updatePrivacyBtn();
+}
+
+function playCardVideo(card) {
+  const path = card.dataset.path;
+  const name = card.querySelector('.name')?.textContent || path.split('/').pop();
+  const meta = card.querySelector('.meta')?.textContent || '';
+  document.querySelectorAll('.video-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  const player = document.getElementById('main-player');
+  player.src = '/video/' + path;
+  player.play();
+  document.getElementById('player-section').style.display = 'block';
+  document.getElementById('video-info').textContent = name + (meta ? ' · ' + meta : '');
+  loadDetails(path);
+}
+
+function playVideoByPath(path) {
+  const cards = document.querySelectorAll('.video-card');
+  for (const card of cards) {
+    if (card.dataset.path === path) {
+      playCardVideo(card);
+      return;
+    }
+  }
+  // Fallback: play without selecting a card
+  const player = document.getElementById('main-player');
+  player.src = '/video/' + path;
+  player.play();
+  document.getElementById('player-section').style.display = 'block';
+  loadDetails(path);
+}
+
+// Init: restore privacy state for server-rendered cards
+applyAllCardsPrivacy();
+
+// ============================================================
+// NAMED QUEUES
+// ============================================================
+
+const STATUS_LABEL = {
+  idle:    'Pronto',
+  pending: 'Aguardando',
+  running: 'Gerando...',
+  done:    'Concluído',
+  error:   'Erro',
+};
+
+const NQ_STATUS_LABEL = { idle: 'Pronto', running: 'Executando', done: 'Concluído', error: 'Erro' };
+
+// Map: job.id → job object — avoids embedding JSON in HTML onclick attributes
+const _jobCache = new Map();
+
+let currentNqId = null;
+let _nqDetailWasRunning = false;  // controla frequência do polling do detail
+let _lastNqDetailRefresh = 0;     // timestamp do último refreshNqDetail
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function fmtMinutes(m) {
+  if (!m) return '';
+  const h = Math.floor(m / 60);
+  const min = Math.round(m % 60);
+  return h > 0 ? `~${h}h ${min}min` : `~${min}min`;
+}
+
+function buildNqCard(nq) {
+  const div = document.createElement('div');
+  div.className = `nq-card status-${nq.status}`;
+  div.id = `nq-card-${nq.id}`;
+  const pct = nq.job_count > 0 ? Math.round((nq.done_count / nq.job_count) * 100) : 0;
+  const hasIdleJobs  = nq.status !== 'running' && (nq.job_count > (nq.done_count + nq.error_count));
+  const hasErrorJobs = nq.error_count > 0;
+  const runBtn = nq.status === 'running'
+    ? `<span class="nq-mini-btn" style="color:#a78bfa;cursor:default;border-color:#3a2a6a">⏳</span>`
+    : hasIdleJobs
+      ? `<button class="nq-mini-btn run" onclick="event.stopPropagation();runNq(${nq.id})" title="Continuar: executar cenas idle">▶</button>`
+      : '';
+  const retryBtn = hasErrorJobs && nq.status !== 'running'
+    ? `<button class="nq-mini-btn" style="color:#f59e0b;border-color:#b45309" onclick="event.stopPropagation();retryNq(${nq.id})" title="Repetir do erro">↩</button>`
+    : '';
+  const epBadge = nq.ep_code
+    ? `<span style="font-size:.65rem;font-weight:700;color:#818cf8;background:#1e1b4b;border:1px solid #3730a3;border-radius:3px;padding:1px 5px;flex-shrink:0">${nq.ep_code}</span>`
+    : '';
+  div.innerHTML = `
+    <div class="nq-card-header">
+      ${epBadge}<span class="nq-card-name">${nq.name}</span>
+      <div class="nq-card-actions">
+        <button class="nq-mini-btn" onclick="event.stopPropagation();openNq(${nq.id})" title="Abrir fila">📂</button>
+        ${runBtn}
+        ${retryBtn}
+        <button class="nq-mini-btn del" onclick="event.stopPropagation();deleteNq(${nq.id})"
+          title="Excluir" ${nq.status === 'running' ? 'disabled' : ''}>🗑</button>
+      </div>
+    </div>
+    <div class="nq-card-meta">
+      <span class="nq-status-pill">${NQ_STATUS_LABEL[nq.status] || nq.status}</span>
+      ${nq.done_count}/${nq.job_count} cenas${nq.error_count ? ` · ${nq.error_count} erro(s)` : ''}
+      ${nq.remaining_minutes > 0
+        ? ` · ⏱ ${fmtMinutes(nq.remaining_minutes)} restante${nq.status === 'done' ? '' : 's'}`
+        : nq.estimated_minutes > 0 ? ` · ⏱ ${fmtMinutes(nq.estimated_minutes)} total` : ''}
+      · ${nq.created_at}
+    </div>
+    <div class="nq-card-progress-bg">
+      <div class="nq-card-progress-fill" style="width:${pct}%"></div>
+    </div>`;
+  div.dataset.listKey = `${nq.status}|${nq.done_count}|${nq.error_count}|${nq.remaining_minutes}`;
+  div.addEventListener('click', () => openNq(nq.id));
+  return div;
+}
+
+async function refreshNamedQueues() {
+  // Update running banner (universal, regardless of list/detail view)
+  try {
+    const st = await fetch('/status').then(r => r.json());
+    const banner = document.getElementById('nq-running-banner');
+    if (st.running && st.current_nq_id != null) {
+      document.getElementById('rb-queue-name').textContent = '▶ ' + (st.current_nq_name || 'Fila em execução');
+      document.getElementById('rb-scene-name').textContent = st.current_nq_scene || '';
+      document.getElementById('rb-goto-btn').onclick = () => openNq(st.current_nq_id);
+      banner.classList.add('visible');
+    } else {
+      banner.classList.remove('visible');
+    }
+  } catch(_) {}
+
+  const list = document.getElementById('nq-list-view');
+  if (!list || list.style.display === 'none') {
+    if (currentNqId !== null) {
+      const now = Date.now();
+      // Polling rápido (3s) apenas quando a fila está rodando; caso contrário, 20s
+      const interval = _nqDetailWasRunning ? 3000 : 20000;
+      if (now - _lastNqDetailRefresh >= interval) {
+        _lastNqDetailRefresh = now;
+        refreshNqDetail(currentNqId);
+      }
+    }
+    return;
+  }
+  const res = await fetch('/nqueues');
+  const queues = await res.json();
+
+  if (queues.length === 0) {
+    list.innerHTML = '<div class="queue-empty">Nenhuma fila criada.<br>Use <strong>+ Fila</strong> ou <strong>↑ Importar</strong> para começar.</div>';
+    return;
+  }
+
+  // Atualização incremental: só reconstrói o card se os dados mudaram
+  const existing = new Map(
+    Array.from(list.querySelectorAll('.nq-card[id]'))
+      .map(el => [parseInt(el.id.replace('nq-card-', '')), el])
+  );
+  const seen = new Set();
+
+  queues.forEach((nq, idx) => {
+    seen.add(nq.id);
+    const prev = existing.get(nq.id);
+    // Chave de comparação: o que pode mudar visualmente no card da lista
+    const key = `${nq.status}|${nq.done_count}|${nq.error_count}|${nq.remaining_minutes}`;
+    if (!prev) {
+      list.appendChild(buildNqCard(nq));
+    } else {
+      if (prev.dataset.listKey !== key) {
+        prev.dataset.listKey = key;
+        const fresh = buildNqCard(nq);
+        fresh.dataset.listKey = key;
+        list.replaceChild(fresh, prev);
+      }
+      // garante a ordem correta
+      const children = Array.from(list.children);
+      if (children.indexOf(prev) !== idx) list.appendChild(prev);
+    }
+  });
+
+  // Remove cards de filas que não existem mais
+  existing.forEach((el, id) => { if (!seen.has(id)) el.remove(); });
+}
+
+async function openNq(id) {
+  currentNqId = id;
+  _lastNqDetailRefresh = 0;  // força refresh imediato ao abrir
+  document.getElementById('nq-list-view').style.display = 'none';
+  const dv = document.getElementById('nq-detail-view');
+  dv.style.display = 'flex';
+  document.getElementById('btn-nq-back').style.display = '';
+  document.getElementById('btn-add-from-form').style.display = '';
+  const qaBtn = document.getElementById('btn-queue-add');
+  if (qaBtn) qaBtn.classList.add('has-target');
+  await refreshNqDetail(id);
+}
+
+function showNqList() {
+  currentNqId = null;
+  document.getElementById('nq-list-view').style.display = '';
+  document.getElementById('nq-detail-view').style.display = 'none';
+  document.getElementById('btn-nq-back').style.display = 'none';
+  document.getElementById('btn-add-from-form').style.display = 'none';
+  const qaBtn = document.getElementById('btn-queue-add');
+  if (qaBtn) qaBtn.classList.remove('has-target');
+  document.getElementById('queue-view-title').textContent = 'Filas de Geração';
+  refreshNamedQueues();
+}
+
+async function refreshNqDetail(id) {
+  const res = await fetch(`/nqueues/${id}`);
+  if (!res.ok) { showNqList(); return; }
+  const nq = await res.json();
+
+  const epLabel = nq.ep_code ? `[${nq.ep_code}] ` : '';
+  document.getElementById('queue-view-title').textContent = epLabel + nq.name;
+  // Header: badge + nome
+  const nameEl = document.getElementById('nq-detail-name');
+  if (nq.ep_code) {
+    nameEl.innerHTML = `<span style="font-size:.7rem;font-weight:700;color:#818cf8;background:#1e1b4b;border:1px solid #3730a3;border-radius:3px;padding:2px 7px;margin-right:6px;vertical-align:middle">${nq.ep_code}</span>${nq.name}`;
+  } else {
+    nameEl.textContent = nq.name;
+  }
+  const done = nq.jobs.filter(j => j.status === 'done').length;
+  document.getElementById('nq-detail-status').textContent =
+    `${done}/${nq.jobs.length} cenas · ${NQ_STATUS_LABEL[nq.status] || nq.status}`;
+
+  // Tempo estimado
+  const estJob = j => {
+    const res = j.resolution || '720P', dur = j.duration || 5;
+    if (j.task_type === 'reference_to_video')
+      return ({480:8,540:12,720:18}[parseInt(res)] || 14) + dur * 0.5;
+    if (j.task_type === 'talking_avatar')
+      return {480:15,720:22}[parseInt(res)] || 15;
+    if (j.task_type === 'single_shot_extension')   return 8 + dur * 0.4;
+    if (j.task_type === 'shot_switching_extension') return 5 + dur * 0.3;
+    return 10;
+  };
+  const totalMin   = Math.round(nq.jobs.reduce((s, j) => s + estJob(j), 0));
+  const remainMin  = Math.round(nq.jobs.filter(j => j.status !== 'done').reduce((s, j) => s + estJob(j), 0));
+  const timeEl = document.getElementById('nq-detail-time');
+  if (timeEl) {
+    timeEl.textContent = remainMin > 0 && remainMin < totalMin
+      ? `⏱ ${fmtMinutes(remainMin)} restantes  (total ${fmtMinutes(totalMin)})`
+      : `⏱ ${fmtMinutes(totalMin)} estimado`;
+  }
+
+  const runBtn     = document.getElementById('nq-run-btn');
+  const retryBtn   = document.getElementById('nq-retry-btn');
+  const restartBtn = document.getElementById('nq-restart-btn');
+  const isRunning = nq.status === 'running';
+  const hasError  = nq.jobs.some(j => j.status === 'error');
+  const hasIdle   = nq.jobs.some(j => j.status === 'idle');
+  const hasDone   = nq.jobs.some(j => j.status === 'done');
+  if (runBtn) {
+    runBtn.disabled   = isRunning || !hasIdle;
+    runBtn.style.display = hasIdle ? '' : 'none';
+  }
+  if (retryBtn) {
+    retryBtn.style.display = hasError ? '' : 'none';
+    retryBtn.disabled = isRunning;
+  }
+  if (restartBtn) {
+    restartBtn.style.display = hasDone ? '' : 'none';
+    restartBtn.disabled = isRunning;
+  }
+  const finalizeBtn = document.getElementById('nq-finalize-btn');
+  if (finalizeBtn) {
+    finalizeBtn.disabled = !hasDone || isRunning;
+    finalizeBtn.title = hasDone
+      ? `Concatenar ${done} cena(s) concluída(s) em um vídeo final`
+      : 'Nenhuma cena concluída ainda';
+  }
+
+  // Atualiza flag de polling
+  _nqDetailWasRunning = nq.status === 'running';
+  _lastNqDetailRefresh = Date.now();
+
+  // ── Atualização incremental dos cards ───────────────────────
+  // Só reconstrói o card se os dados do job realmente mudaram.
+  const scenes = document.getElementById('nq-scenes');
+  const isFirstLoad = scenes.querySelectorAll('.nq-scene-card').length === 0;
+
+  // Mapa dos cards existentes por jobId
+  const existingCards = new Map(
+    Array.from(scenes.querySelectorAll('.nq-scene-card'))
+      .map(c => [parseInt(c.dataset.jobId), c])
+  );
+
+  function _jobChanged(prev, next) {
+    if (!prev) return true;
+    return prev.status       !== next.status
+        || prev.output_video !== next.output_video
+        || prev.input_audio  !== next.input_audio
+        || prev.duration     !== next.duration
+        || JSON.stringify(prev.ref_imgs) !== JSON.stringify(next.ref_imgs);
+  }
+
+  let rendered = 0;
+  for (let i = 0; i < nq.jobs.length; i++) {
+    const job = nq.jobs[i];
+    const existing = existingCards.get(job.id);
+    const cached   = _jobCache.get(job.id);
+    try {
+      if (!existing) {
+        // Card novo — cria e insere na posição correta
+        const card = buildSceneCard(id, job);
+        // Não expandir automaticamente — usuário abre clicando
+        scenes.appendChild(card);
+      } else if (_jobChanged(cached, job)) {
+        // Dados mudaram — reconstrói preservando expanded + quickview
+        const wasExpanded = existing.classList.contains('expanded');
+        const activeQv    = existing.querySelector('.nq-quickview.visible')?.dataset?.active || null;
+        const newCard = buildSceneCard(id, job);
+        if (wasExpanded) newCard.classList.add('expanded');
+        scenes.replaceChild(newCard, existing);
+        // Reabrir quickview se estava aberto
+        if (activeQv) {
+          const qvPanel = newCard.querySelector('.nq-quickview');
+          const qvBtn   = newCard.querySelector(`.nq-qbtn[title="${
+            activeQv==='video'?'Ver vídeo':activeQv==='imgs'?'Ver imagens':activeQv==='audio'?'Ouvir áudio':'Ver textos'
+          }"]`);
+          if (qvPanel && qvBtn) qvBtn.click();
+        }
+      }
+      // Caso contrário: card inalterado — não toca em nada
+      existingCards.delete(job.id);
+      rendered++;
+    } catch(err) {
+      const errDiv = document.createElement('div');
+      errDiv.style.cssText = 'color:#f88;padding:8px;font-size:.8rem;border:1px solid #f44;margin:4px;border-radius:4px';
+      errDiv.textContent = `Erro job ${job.id} (${job.label}): ${err.message}`;
+      if (existing) scenes.replaceChild(errDiv, existing);
+      else scenes.appendChild(errDiv);
+      existingCards.delete(job.id);
+    }
+  }
+  // Remove cards de jobs que não existem mais
+  existingCards.forEach(card => card.remove());
+
+  if (rendered === 0 && nq.jobs.length > 0) {
+    scenes.innerHTML = `<div style="color:#f88;padding:16px">Erro ao renderizar cenas. Verifique o console.</div>`;
+  }
+}
+
+function buildSceneCard(nqId, job) {
+  _jobCache.set(job.id, job);
+
+  const card = document.createElement('div');
+  card.className = 'nq-scene-card status-' + job.status;
+  card.dataset.jobId = job.id;
+
+  const canRun  = !['running', 'pending'].includes(job.status);
+  const canEdit = !['running', 'pending'].includes(job.status);
+
+  // ── Header (pure DOM, no innerHTML) ─────────────────────────
+  const header = document.createElement('div');
+  header.className = 'nq-scene-header';
+  header.addEventListener('click', () => toggleScene(card));
+
+  const dot = document.createElement('div');
+  dot.className = 'job-status-dot';
+
+  const info = document.createElement('div');
+  info.className = 'nq-scene-info';
+
+  const lbl = document.createElement('div');
+  lbl.className = 'job-label';
+  lbl.textContent = job.label;
+
+  const meta = document.createElement('div');
+  meta.className = 'job-meta';
+  const statusSpan = document.createElement('span');
+  statusSpan.textContent = STATUS_LABEL[job.status] || job.status;
+  meta.appendChild(statusSpan);
+  meta.appendChild(document.createTextNode(
+    ' · ' + job.task_type +
+    ' · ' + (job.resolution || '') +
+    ' · seed ' + (job.seed != null ? job.seed : 42) +
+    (job.duration ? ' · ' + job.duration + 's' : '')
+  ));
+
+  info.appendChild(lbl);
+  info.appendChild(meta);
+
+  header.appendChild(dot);
+  header.appendChild(info);
+
+  if (canRun) {
+    const runBtn = document.createElement('button');
+    runBtn.className = 'nq-mini-btn run';
+    runBtn.title = 'Executar esta cena';
+    runBtn.textContent = '▶';
+    runBtn.addEventListener('click', e => { e.stopPropagation(); runNqJob(nqId, job.id); });
+    header.appendChild(runBtn);
+  }
+  if (canEdit) {
+    const editBtn = document.createElement('button');
+    editBtn.className = 'nq-mini-btn edit';
+    editBtn.title = 'Editar cena';
+    editBtn.textContent = '✏️';
+    editBtn.addEventListener('click', e => { e.stopPropagation(); openEditJobModal(nqId, _jobCache.get(job.id)); });
+    header.appendChild(editBtn);
+  }
+
+  // Botões de regeneração — voz e imagem
+  if (job.audio_text) {
+    const rAudBtn = document.createElement('button');
+    rAudBtn.className = 'nq-mini-btn';
+    rAudBtn.title = 'Regenerar voz';
+    rAudBtn.textContent = '🎤';
+    rAudBtn.style.cssText = 'font-size:.75rem';
+    rAudBtn.addEventListener('click', async e => {
+      e.stopPropagation();
+      rAudBtn.disabled = true; rAudBtn.textContent = '⏳';
+      try {
+        const r = await fetch(`/nqueues/${nqId}/jobs/${job.id}/generate-audio`, { method: 'POST' });
+        const d = await r.json();
+        if (d.ok) {
+          rAudBtn.textContent = '✅';
+          setTimeout(() => { rAudBtn.textContent = '🎤'; rAudBtn.disabled = false; }, 2000);
+          refreshNqDetail(nqId);
+        } else {
+          alert(d.error || 'Erro ao gerar áudio');
+          rAudBtn.textContent = '🎤'; rAudBtn.disabled = false;
+        }
+      } catch(err) { alert('Erro: ' + err.message); rAudBtn.textContent = '🎤'; rAudBtn.disabled = false; }
+    });
+    header.appendChild(rAudBtn);
+  }
+
+  if (job.image_prompt || job.prompt) {
+    const rImgBtn = document.createElement('button');
+    rImgBtn.className = 'nq-mini-btn';
+    rImgBtn.title = 'Regenerar imagem';
+    rImgBtn.textContent = '🖼';
+    rImgBtn.style.cssText = 'font-size:.75rem';
+    rImgBtn.addEventListener('click', async e => {
+      e.stopPropagation();
+      rImgBtn.disabled = true; rImgBtn.textContent = '⏳';
+      try {
+        const r = await fetch(`/nqueues/${nqId}/jobs/${job.id}/generate-image`, { method: 'POST' });
+        const d = await r.json();
+        if (d.ok) {
+          rImgBtn.textContent = '✅';
+          setTimeout(() => { rImgBtn.textContent = '🖼'; rImgBtn.disabled = false; }, 2000);
+          refreshNqDetail(nqId);
+        } else {
+          alert(d.error || 'Erro ao gerar imagem');
+          rImgBtn.textContent = '🖼'; rImgBtn.disabled = false;
+        }
+      } catch(err) { alert('Erro: ' + err.message); rImgBtn.textContent = '🖼'; rImgBtn.disabled = false; }
+    });
+    header.appendChild(rImgBtn);
+  }
+
+  // ── Quick-view buttons ────────────────────────────────────
+  const qvPanel = document.createElement('div');
+  qvPanel.className = 'nq-quickview';
+
+  const refs = Array.isArray(job.ref_imgs) ? job.ref_imgs : (job.ref_imgs ? [job.ref_imgs] : []);
+  const hasVideo = !!job.output_video;
+  const hasImgs  = refs.length > 0;
+  const hasAudio = !!job.input_audio;
+  const hasText  = !!(job.audio_text || job.prompt);
+
+  function _buildQvContent(type) {
+    qvPanel.innerHTML = '';
+    if (type === 'video') {
+      if (job.output_video) {
+        const v = document.createElement('video');
+        v.src = '/video/' + job.output_video;
+        v.controls = true; v.autoplay = false;
+        qvPanel.appendChild(v);
+      }
+    } else if (type === 'imgs') {
+      const wrap = document.createElement('div');
+      wrap.className = 'nq-qv-imgs';
+      if (refs.length) {
+        refs.forEach(p => {
+          const img = document.createElement('img');
+          img.src = '/file/' + p;
+          img.title = p.split('/').pop();
+          img.addEventListener('click', () => window.open('/file/' + p, '_blank'));
+          wrap.appendChild(img);
+        });
+      } else {
+        const na = document.createElement('span');
+        na.className = 'qv-no-img'; na.textContent = 'Sem imagens de referência.';
+        wrap.appendChild(na);
+      }
+      qvPanel.appendChild(wrap);
+    } else if (type === 'audio') {
+      if (job.input_audio) {
+        const aud = document.createElement('audio');
+        aud.src = '/file/' + job.input_audio;
+        aud.controls = true;
+        qvPanel.appendChild(aud);
+        if (job.audio_bg) {
+          const bgLbl = document.createElement('div');
+          bgLbl.style.cssText = 'font-size:.7rem;color:#666;margin-top:6px';
+          bgLbl.textContent = '🎵 Trilha de fundo: ' + job.audio_bg.split('/').pop();
+          qvPanel.appendChild(bgLbl);
+          const bgAud = document.createElement('audio');
+          bgAud.src = '/file/' + job.audio_bg;
+          bgAud.controls = true;
+          qvPanel.appendChild(bgAud);
+        }
+      }
+    } else if (type === 'text') {
+      const wrap = document.createElement('div');
+      wrap.className = 'nq-qv-text';
+      const sections = [
+        job.audio_text ? ['🇧🇷 Narração / Diálogo (PT-BR)', job.audio_text, 'pt'] : null,
+        job.prompt     ? ['🎬 Prompt de Vídeo (EN)', job.prompt, 'en'] : null,
+        job.image_prompt ? ['🖼 Prompt de Imagem (EN)', job.image_prompt, 'en'] : null,
+      ];
+      sections.forEach(s => {
+        if (!s) return;
+        const lbl = document.createElement('div'); lbl.className = 'qvt-label'; lbl.textContent = s[0];
+        const cnt = document.createElement('div'); cnt.className = 'qvt-content ' + s[2]; cnt.textContent = s[1];
+        wrap.appendChild(lbl); wrap.appendChild(cnt);
+      });
+      if (!job.audio_text && !job.prompt) {
+        const na = document.createElement('div'); na.className = 'qvt-empty'; na.textContent = 'Sem texto nesta cena.';
+        wrap.appendChild(na);
+      }
+      qvPanel.appendChild(wrap);
+    }
+  }
+
+  if (hasVideo || hasImgs || hasAudio || hasText) {
+    const qvBtns = document.createElement('div');
+    qvBtns.className = 'nq-qbtns';
+
+    const btnDefs = [
+      hasVideo ? ['🎬', 'video', 'Ver vídeo']   : null,
+      hasImgs  ? ['🖼',  'imgs',  'Ver imagens'] : null,
+      hasAudio ? ['🔊', 'audio', 'Ouvir áudio'] : null,
+      hasText  ? ['📝',  'text',  'Ver textos']  : null,
+    ];
+    btnDefs.forEach(def => {
+      if (!def) return;
+      const [icon, type, title] = def;
+      const btn = document.createElement('button');
+      btn.className = 'nq-qbtn';
+      btn.textContent = icon;
+      btn.title = title;
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const already = qvPanel.classList.contains('visible') && qvPanel.dataset.active === type;
+        // Desativa todos os botões do grupo
+        qvBtns.querySelectorAll('.nq-qbtn').forEach(b => b.classList.remove('qv-active'));
+        if (already) {
+          qvPanel.classList.remove('visible');
+          qvPanel.dataset.active = '';
+        } else {
+          btn.classList.add('qv-active');
+          _buildQvContent(type);
+          qvPanel.dataset.active = type;
+          qvPanel.classList.add('visible');
+        }
+      });
+      qvBtns.appendChild(btn);
+    });
+    header.appendChild(qvBtns);
+  }
+
+  const expand = document.createElement('span');
+  expand.className = 'nq-scene-expand';
+  expand.textContent = '▾';
+  header.appendChild(expand);
+
+  // ── Body ────────────────────────────────────────────────────
+  const body = document.createElement('div');
+  body.className = 'nq-scene-body';
+
+  if (job.output_video) {
+    const vid = document.createElement('video');
+    vid.className = 'nq-scene-video';
+    vid.src = '/video/' + job.output_video;
+    vid.controls = true;
+    body.appendChild(vid);
+  } else {
+    const nov = document.createElement('div');
+    nov.className = 'nq-no-video';
+    nov.textContent = 'Vídeo não gerado ainda.';
+    body.appendChild(nov);
+  }
+
+  const det = document.createElement('div');
+  det.className = 'nq-scene-details';
+  const detailRows = [
+    job.prompt       ? ['Prompt',          job.prompt] : null,
+    job.ref_imgs     ? ['Imagens ref.',    (Array.isArray(job.ref_imgs) ? job.ref_imgs : [job.ref_imgs]).map(p => p.split('/').pop()).join(', ')] : null,
+    job.input_video  ? ['Vídeo entrada',   job.input_video.split('/').pop()] : null,
+    job.input_image  ? ['Imagem retrato',  job.input_image.split('/').pop()] : null,
+    job.input_audio  ? ['Áudio',           job.input_audio.split('/').pop()] : null,
+    job.output_video ? ['Saída',           job.output_video] : null,
+  ];
+  detailRows.forEach(row => {
+    if (!row) return;
+    const dr = document.createElement('div'); dr.className = 'detail-row';
+    const dk = document.createElement('span'); dk.className = 'detail-key'; dk.textContent = row[0];
+    const dv = document.createElement('span'); dv.className = 'detail-val'; dv.textContent = row[1];
+    dr.appendChild(dk); dr.appendChild(dv);
+    det.appendChild(dr);
+  });
+  body.appendChild(det);
+
+  card.appendChild(header);
+  card.appendChild(qvPanel);
+  card.appendChild(body);
+  return card;
+}
+
+function toggleScene(card) { card.classList.toggle('expanded'); }
+
+function toggleAllScenes(expand) {
+  document.querySelectorAll('.nq-scene-card').forEach(c => {
+    if (expand) c.classList.add('expanded');
+    else c.classList.remove('expanded');
+  });
+}
+
+async function runNq(id) {
+  const res = await fetch(`/nqueues/${id}/run`, { method: 'POST' });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error); return; }
+  document.getElementById('log-box').innerHTML = '';
+  updateProgress(0);
+  setStatus('running', 'Iniciando fila...');
+  updateNqProgressInfo(null);
+  showTab('tab-progress', document.querySelectorAll('.tab')[0]);
+  connectStreamForNq(id);
+  refreshNamedQueues();
+}
+
+async function runCurrentNq() { if (currentNqId) runNq(currentNqId); }
+
+async function retryNq(id) {
+  const res = await fetch(`/nqueues/${id}/reset`, { method: 'POST' });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error); return; }
+  document.getElementById('log-box').innerHTML = '';
+  updateProgress(0);
+  setStatus('running', 'Repetindo do erro...');
+  updateNqProgressInfo(null);
+  showTab('tab-progress', document.querySelectorAll('.tab')[0]);
+  connectStreamForNq(id);
+  refreshNamedQueues();
+}
+
+async function retryCurrentNq() { if (currentNqId) retryNq(currentNqId); }
+
+async function restartNq(id) {
+  if (!confirm('Reiniciar do zero? Todas as cenas (incluindo as concluídas) serão resetadas e a fila começará do início.')) return;
+  const res = await fetch(`/nqueues/${id}/restart`, { method: 'POST' });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error); return; }
+  document.getElementById('log-box').innerHTML = '';
+  updateProgress(0);
+  setStatus('running', 'Reiniciando do zero...');
+  updateNqProgressInfo(null);
+  showTab('tab-progress', document.querySelectorAll('.tab')[0]);
+  connectStreamForNq(id);
+  refreshNamedQueues();
+}
+
+async function restartCurrentNq() { if (currentNqId) restartNq(currentNqId); }
+
+async function runNqJob(nqId, jobId) {
+  const res = await fetch(`/nqueues/${nqId}/jobs/${jobId}/run`, { method: 'POST' });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error); return; }
+  document.getElementById('log-box').innerHTML = '';
+  updateProgress(0);
+  setStatus('running', 'Executando cena...');
+  updateNqProgressInfo(null);
+  showTab('tab-progress', document.querySelectorAll('.tab')[0]);
+  connectStreamForNq(nqId);
+  refreshNqDetail(nqId);
+}
+
+async function deleteNq(id) {
+  if (!confirm('Excluir esta fila?')) return;
+  const res = await fetch(`/nqueues/${id}?force=true`, { method: 'DELETE' });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error); return; }
+  if (currentNqId === id) showNqList();
+  else refreshNamedQueues();
+}
+
+async function deleteCurrentNq() { if (currentNqId) deleteNq(currentNqId); }
+
+function exportNqJson() {
+  if (!currentNqId) return;
+  const a = document.createElement('a');
+  a.href = `/nqueues/${currentNqId}/export-json`;
+  a.download = '';
+  a.click();
+}
+
+async function toggleSetAudioBgPanel() {
+  if (!currentNqId) return;
+  const panel = document.getElementById('nq-set-bg-panel');
+  const open  = panel.style.display === 'none';
+  panel.style.display = open ? 'flex' : 'none';
+  if (!open) return;
+
+  // Carregar áudios disponíveis do projeto vinculado
+  const select = document.getElementById('nq-bg-select');
+  select.innerHTML = '<option value="">— selecionar arquivo —</option>';
+  try {
+    const res = await fetch(`/nqueues/${currentNqId}`);
+    const nq  = await res.json();
+    const proj = nq.project;
+    if (proj) {
+      const pr = await fetch(`/projects/${encodeURIComponent(proj)}`);
+      const pd = await pr.json();
+      const audios = (pd.files || []).filter(f => f.subfolder === 'audios');
+      audios.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.path;
+        opt.textContent = f.name;
+        select.appendChild(opt);
+      });
+    }
+  } catch(e) { /* sem projeto ou erro — fica só o input manual */ }
+}
+
+async function applyAudioBgToAll(clear = false) {
+  if (!currentNqId) return;
+  const path = clear ? '' : (document.getElementById('nq-bg-input').value.trim() ||
+                              document.getElementById('nq-bg-select').value.trim());
+  if (!clear && !path) { alert('Selecione um arquivo ou cole o path da trilha.'); return; }
+
+  const btn = document.querySelector('#nq-set-bg-panel button.run');
+  const origText = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+  try {
+    const res  = await fetch(`/nqueues/${currentNqId}/set-audio-bg`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ audio_bg: path })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || 'Erro'); return; }
+    const msg = clear
+      ? `✓ audio_bg removido de ${data.updated} cenas.`
+      : `✓ Trilha "${path.split('/').pop()}" aplicada em ${data.updated} cenas.\n\nClique em 🔊 Mix Áudio para mixar nos vídeos já gerados.`;
+    alert(msg);
+    document.getElementById('nq-set-bg-panel').style.display = 'none';
+  } catch(e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
+}
+
+function downloadNqZip(includeSources) {
+  if (!currentNqId) return;
+  const a = document.createElement('a');
+  a.href = `/nqueues/${currentNqId}/download-zip${includeSources ? '?include_sources=1' : ''}`;
+  a.download = '';
+  a.click();
+}
+
+async function mixAudioCurrentNq() {
+  if (!currentNqId) return;
+  const btn = document.getElementById('nq-mix-audio-btn');
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '\u23F3 Mixando...';
+  try {
+    const res  = await fetch(`/nqueues/${currentNqId}/mix-audio`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || 'Erro ao mixar'); return; }
+    let msg = `\u2713 Mixado: ${data.mixed} vídeo(s)  |  Já com áudio/sem áudio: ${data.skipped}`;
+    if (data.errors?.length) msg += '\n\nErros:\n' + data.errors.join('\n');
+    alert(msg);
+  } catch(e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+async function finalizeCurrentNq() {
+  if (!currentNqId) return;
+  const btn = document.getElementById('nq-finalize-btn');
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Concatenando...';
+  try {
+    const res = await fetch(`/nqueues/${currentNqId}/finalize`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || 'Erro ao finalizar'); return; }
+    showFinalizedVideo(data.output_video, data.scene_count);
+  } catch(e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+function showFinalizedVideo(path, sceneCount) {
+  const existing = document.getElementById('nq-finalized-panel');
+  if (existing) existing.remove();
+  const panel = document.createElement('div');
+  panel.id = 'nq-finalized-panel';
+  panel.className = 'nq-finalized-panel';
+  panel.innerHTML = `
+    <div class="nq-finalized-header">
+      <span>🎬 Vídeo final — ${sceneCount} cena(s) concatenada(s)</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a class="dl-btn" href="/download/${path}" download style="font-size:.75rem">⬇ Download</a>
+        <button onclick="this.closest('#nq-finalized-panel').remove()">✕</button>
+      </div>
+    </div>
+    <video src="/video/${path}" controls style="width:100%;border-radius:6px;margin-top:8px"></video>
+    <div style="margin-top:6px;font-size:.75rem;color:#666">${path}</div>
+  `;
+  document.getElementById('nq-detail-view').insertBefore(
+    panel,
+    document.getElementById('nq-scenes')
+  );
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateNqProgressInfo(scene) {
+  const el = document.getElementById('nq-progress-info');
+  if (!el) return;
+  if (scene) { el.style.display = ''; el.textContent = scene; }
+  else        { el.style.display = 'none'; el.textContent = ''; }
+}
+
+function connectStreamForNq(nqId) {
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource('/stream');
+  document.getElementById('btn-generate').disabled = true;
+
+  eventSource.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.log) appendLog(msg.log);
+    if (msg.progress !== undefined) updateProgress(msg.progress);
+    if (msg.nq_scene !== undefined) updateNqProgressInfo(msg.nq_scene);
+    if (msg.done) {
+      eventSource.close();
+      if (msg.done.status === 'done') { updateProgress(100); refreshVideos(); }
+      setTimeout(() => checkNqContinue(nqId), 200);
+    }
+  };
+  eventSource.onerror = () => { eventSource.close(); setTimeout(() => checkNqContinue(nqId), 1000); };
+}
+
+async function checkNqContinue(nqId) {
+  const nqRes = await fetch(`/nqueues/${nqId}`);
+  if (!nqRes.ok) {
+    document.getElementById('btn-generate').disabled = false;
+    updateNqProgressInfo(null);
+    return;
+  }
+  const nq = await nqRes.json();
+  if (nq.status === 'running') {
+    // Wait for next job to start then reconnect
+    let attempts = 0;
+    while (attempts < 30) {
+      const sr = await fetch('/status');
+      const st = await sr.json();
+      if (st.running) { connectStreamForNq(nqId); return; }
+      await sleep(300);
+      attempts++;
+    }
+    setStatus('error', 'Timeout aguardando próxima cena');
+    document.getElementById('btn-generate').disabled = false;
+    updateNqProgressInfo(null);
+    refreshNamedQueues();
+  } else {
+    const isDone = nq.status === 'done';
+    setStatus(isDone ? 'done' : 'error', isDone ? 'Fila concluída!' : 'Fila com erros');
+    if (isDone) updateProgress(100);
+    refreshVideos();
+    refreshNamedQueues();
+    updateNqProgressInfo(null);
+    document.getElementById('btn-generate').disabled = false;
+    if (currentNqId === nqId) refreshNqDetail(nqId);
+  }
+}
+
+// ---- Form job helpers ----
+
+function collectFormJob() {
+  const t = document.getElementById('task_type').value;
+  const isAvatar = t === 'talking_avatar';
+  const job = {
+    task_type:  t,
+    prompt:     document.getElementById('prompt').value,
+    resolution: document.getElementById('resolution').value,
+    duration:   parseInt(document.getElementById('duration').value) || 5,
+    seed:       parseInt(document.getElementById('seed').value) || 42,
+    offload:    document.getElementById('offload').checked,
+    low_vram:   isAvatar,
+  };
+  if (t === 'reference_to_video') {
+    const manual = document.getElementById('ref_imgs_path').value.trim();
+    if (manual) job.ref_imgs = manual.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  if (t === 'single_shot_extension' || t === 'shot_switching_extension') {
+    job.input_video = document.getElementById('input_video').value.trim();
+  }
+  if (isAvatar) {
+    job.input_image = document.getElementById('input_image').value.trim();
+    job.input_audio = document.getElementById('input_audio').value.trim();
+  }
+  return job;
+}
+
+function _validateFormJob(job) {
+  if (job.task_type === 'reference_to_video' && (!job.ref_imgs || job.ref_imgs.length === 0)) {
+    alert('Para adicionar à fila, informe os caminhos das imagens (campo "Ou informe caminhos").'); return false;
+  }
+  if ((job.task_type === 'single_shot_extension' || job.task_type === 'shot_switching_extension') && !job.input_video) {
+    alert('Informe o vídeo de entrada.'); return false;
+  }
+  if (job.task_type === 'talking_avatar' && (!job.input_image || !job.input_audio)) {
+    alert('Informe a imagem do retrato e o áudio.'); return false;
+  }
+  return true;
+}
+
+async function addFormJobToCurrentQueue() {
+  if (!currentNqId) return;
+  const job = collectFormJob();
+  if (!_validateFormJob(job)) return;
+  const res = await fetch(`/nqueues/${currentNqId}/jobs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(job),
+  });
+  const data = await res.json();
+  if (data.ok) {
+    refreshNqDetail(currentNqId);
+  } else {
+    alert('Erro: ' + data.error);
+  }
+}
+
+async function addToQueue() {
+  const job = collectFormJob();
+  if (!_validateFormJob(job)) return;
+
+  if (currentNqId !== null) {
+    // Fila já aberta → adiciona direto nela
+    const nqName = document.getElementById('nq-detail-name').textContent || 'fila aberta';
+    if (!confirm(`Adicionar cena à fila "${nqName}"?`)) return;
+    const res = await fetch(`/nqueues/${currentNqId}/jobs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(job),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showTab('tab-queue', document.querySelectorAll('.tab')[3]);
+      refreshNqDetail(currentNqId);
+    } else {
+      alert('Erro: ' + data.error);
+    }
+  } else {
+    // Sem fila aberta → cria nova fila
+    const defaultName = `${job.task_type} — seed ${job.seed}`;
+    const name = prompt('Nome da fila:', defaultName);
+    if (name === null) return;
+    const res = await fetch('/nqueues', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name || defaultName, jobs: [job] }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showTab('tab-queue', document.querySelectorAll('.tab')[3]);
+      refreshNamedQueues();
+    } else {
+      alert('Erro: ' + data.error);
+    }
+  }
+}
+
+async function importQueueFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const defaultName = file.name.replace(/\.[^.]+$/, '');
+  const name = prompt('Nome da fila:', defaultName);
+  if (name === null) { input.value = ''; return; }
+
+  const res = await fetch(`/nqueues/import?name=${encodeURIComponent(name || defaultName)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: text,
+  });
+  const data = await res.json();
+  input.value = '';
+  if (data.ok) {
+    showTab('tab-queue', document.querySelectorAll('.tab')[3]);
+    refreshNamedQueues();
+    alert(`Fila "${data.name}" criada com ${data.job_count} cena(s).`);
+  } else {
+    alert('Erro ao importar: ' + data.error);
+  }
+}
+
+// ── Edit job modal ──────────────────────────────────────────
+let _editJob = null;
+
+function openEditJobModal(nqId, job) {
+  _editJob = job;
+  document.getElementById('edit-nq-id').value = nqId;
+  document.getElementById('edit-job-id').value = job.id;
+  document.getElementById('edit-job-title').textContent =
+    job.status === 'done' ? `✏️ Re-executar: ${job.label}` : `✏️ Editar: ${job.label}`;
+  document.getElementById('edit-label').value      = job.label || '';
+  document.getElementById('edit-prompt').value     = job.prompt || '';
+  document.getElementById('edit-resolution').value = job.resolution || '720P';
+  document.getElementById('edit-seed').value       = job.seed ?? 42;
+  document.getElementById('edit-offload').checked  = !!job.offload;
+  document.getElementById('edit-low-vram').checked = !!job.low_vram;
+
+  const isAvatar = job.task_type === 'talking_avatar';
+  const isExt    = ['single_shot_extension','shot_switching_extension'].includes(job.task_type);
+  const isRef    = job.task_type === 'reference_to_video';
+
+  document.getElementById('edit-duration-row').style.display    = isAvatar ? 'none' : '';
+  document.getElementById('edit-duration').value                = job.duration ?? 5;
+  document.getElementById('edit-ref-imgs-row').style.display    = isRef ? '' : 'none';
+  document.getElementById('edit-ref-imgs').value                = (job.ref_imgs || []).join(', ');
+  document.getElementById('edit-input-video-row').style.display = isExt ? '' : 'none';
+  document.getElementById('edit-input-video').value             = job.input_video || '';
+  document.getElementById('edit-input-image-row').style.display = isAvatar ? '' : 'none';
+  document.getElementById('edit-input-image').value             = job.input_image || '';
+  document.getElementById('edit-input-audio-row').style.display = isAvatar ? '' : 'none';
+  document.getElementById('edit-input-audio').value             = job.input_audio || '';
+
+  document.getElementById('edit-job-modal').style.display = 'flex';
+}
+
+function closeEditJobModal() {
+  document.getElementById('edit-job-modal').style.display = 'none';
+  _editJob = null;
+}
+
+async function saveEditJob() {
+  const nqId  = document.getElementById('edit-nq-id').value;
+  const jobId = document.getElementById('edit-job-id').value;
+  const isAvatar = _editJob && _editJob.task_type === 'talking_avatar';
+  const isExt    = _editJob && ['single_shot_extension','shot_switching_extension'].includes(_editJob.task_type);
+  const isRef    = _editJob && _editJob.task_type === 'reference_to_video';
+
+  const payload = {
+    label:      document.getElementById('edit-label').value,
+    prompt:     document.getElementById('edit-prompt').value,
+    resolution: document.getElementById('edit-resolution').value,
+    seed:       parseInt(document.getElementById('edit-seed').value) || 42,
+    offload:    document.getElementById('edit-offload').checked,
+    low_vram:   document.getElementById('edit-low-vram').checked,
+  };
+  if (!isAvatar) payload.duration = parseInt(document.getElementById('edit-duration').value) || 5;
+  if (isRef) {
+    const raw = document.getElementById('edit-ref-imgs').value;
+    payload.ref_imgs = raw.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  if (isExt)    payload.input_video = document.getElementById('edit-input-video').value.trim();
+  if (isAvatar) payload.input_image = document.getElementById('edit-input-image').value.trim();
+  if (isAvatar) payload.input_audio = document.getElementById('edit-input-audio').value.trim();
+
+  const res = await fetch(`/nqueues/${nqId}/jobs/${jobId}`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.error || 'Erro ao salvar');
+    return;
+  }
+  closeEditJobModal();
+  refreshNqDetail(parseInt(nqId));
+}
+// ────────────────────────────────────────────────────────────
+
+// === Projetos ===
+let _currentProject = null;
+
+async function refreshProjects() {
+  const res = await fetch('/projects');
+  const projs = await res.json();
+  const el = document.getElementById('proj-list');
+  document.getElementById('proj-detail').style.display = 'none';
+  el.style.display = 'flex';
+  if (!projs.length) {
+    el.innerHTML = '<div style="color:#555;padding:24px">Nenhum projeto. Clique em ＋ Novo para criar.</div>';
+    return;
+  }
+  el.innerHTML = projs.map(p => `
+    <div class="proj-card" onclick="openProject('${p.name}')">
+      <div class="proj-card-name">${p.name}</div>
+      <div class="proj-card-meta">📁 ${p.name}</div>
+    </div>`).join('');
+}
+
+async function openProject(name) {
+  _currentProject = name;
+  document.getElementById('proj-list').style.display = 'none';
+  const detail = document.getElementById('proj-detail');
+  detail.style.display = 'flex';
+  detail.innerHTML = '<div style="color:#555;padding:24px">Carregando\u2026</div>';
+  await loadProjectDetail(name);
+}
+
+async function loadProjectDetail(name) {
+  const res = await fetch(`/projects/${encodeURIComponent(name)}`);
+  const data = await res.json();
+  const detail = document.getElementById('proj-detail');
+  const FOLDER_LABELS = { imagens: '🖼 Imagens', audios: '🎵 Áudios', docs: '📄 Docs', figurantes: '👥 Figurantes' };
+  const FOLDER_ACCEPT = { imagens: 'image/*', audios: 'audio/*', docs: '*/*', figurantes: 'image/*' };
+
+  let html = `<div class="proj-detail-header">
+    <button class="nq-action-btn" onclick="refreshProjects()">\u2190 Voltar</button>
+    <span class="proj-detail-name">${name}</span>
+    <button class="nq-action-btn" onclick="confirmDeleteProject('${name}')" style="background:#2a1010;border-color:#4a2020;color:#f87171">\uD83D\uDDD1 Excluir projeto</button>
+  </div>`;
+
+  for (const sub of ['imagens', 'figurantes', 'audios', 'docs']) {
+    const files = data.folders[sub] || [];
+    const isImgs = sub === 'imagens';
+    const isFig  = sub === 'figurantes';
+    const toggleBtn = isImgs && files.length
+      ? `<span onclick="event.stopPropagation()">
+           <button class="proj-file-btn" id="proj-img-view-btn" onclick="toggleProjImgView('${name}')" style="font-size:.7rem;padding:2px 8px">\u25A6 Visual</button>
+           <button class="proj-file-btn" onclick="toggleProjImgSelectAll('${name}',true)" style="font-size:.7rem;padding:2px 6px" title="Selecionar todas">\u2713</button>
+           <button class="proj-file-btn" onclick="toggleProjImgSelectAll('${name}',false)" style="font-size:.7rem;padding:2px 6px" title="Desmarcar todas">\u25A1</button>
+         </span>` : '';
+    const subId = `proj-files-${sub}`;
+    const bodyContent = isImgs && files.length
+      ? `<div id="proj-img-body" data-view="list" data-proj="${name}"></div>`
+      : isFig
+        ? `<div class="proj-fig-grid" id="${subId}">
+             ${files.length
+               ? files.map(f => `<div class="proj-fig-thumb" title="${f.name}">
+                   <img src="/file/${f.path}" onclick="window.open('/file/${f.path}','_blank')">
+                   <button class="proj-fig-del" onclick="deleteProjectFile('${name}','${sub}','${f.name}',this)" title="Remover">✕</button>
+                 </div>`).join('')
+               : '<div style="color:#444;padding:4px 14px;font-size:.8rem">Vazio — adicione imagens de figurantes ou serão gerados automaticamente</div>'}
+           </div>`
+        : `<div class="proj-file-list" id="${subId}">
+             ${files.map(f => buildProjectFileRow(f, sub)).join('') || '<div style="color:#444;padding:4px 0 4px 14px;font-size:.8rem">Vazio</div>'}
+           </div>`;
+    html += `<div class="proj-folder-section">
+      <div class="proj-folder-title" onclick="toggleProjSection(this)">
+        <span class="pf-arrow">&#9654;</span>
+        ${FOLDER_LABELS[sub]} <span style="color:#444;font-weight:400">(${files.length})</span>
+        <span style="margin-left:auto">${toggleBtn}</span>
+      </div>
+      <div class="proj-folder-body">
+        ${bodyContent}
+        <div class="proj-upload-row">
+          <input type="file" id="proj-upload-${sub}" class="proj-upload-input" multiple accept="${FOLDER_ACCEPT[sub]}"
+                 onchange="uploadProjectFiles('${name}','${sub}',this)">
+          <button class="proj-upload-btn" onclick="document.getElementById('proj-upload-${sub}').click()">\u2B06 Upload</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+
+  // Episodes section
+  const eps = data.episodes || [];
+  html += `<div class="proj-folder-section">
+    <div class="proj-folder-title" onclick="toggleProjSection(this)">
+      <span class="pf-arrow">&#9654;</span>
+      \uD83C\uDFAC Epis\xF3dios <span style="color:#444;font-weight:400">(${eps.length})</span>
+      <span style="margin-left:auto;display:flex;gap:6px" onclick="event.stopPropagation()">
+        <button class="proj-upload-btn ai-gen" onclick="openGenEpisodeModal('${name}')">&#x26A1; IA</button>
+        <button class="proj-upload-btn" onclick="openNewEpisodeModal('${name}')">&#xFF0B; Criar</button>
+        <input type="file" id="proj-ep-import-${name.replace(/\s/g,'_')}" class="proj-upload-input" accept=".json,.md,.txt"
+               onchange="importEpisodeFile('${name}',this)">
+        <button class="proj-upload-btn" onclick="document.getElementById('proj-ep-import-${name.replace(/\s/g,'_')}').click()">\u2191 Importar</button>
+      </span>
+    </div>
+    <div class="proj-folder-body">
+      <div class="proj-ep-list">
+        ${eps.length ? eps.map(ep => buildEpisodeCard(ep, name)).join('') : '<div style="color:#444;padding:4px 14px;font-size:.8rem">Nenhum epis\xF3dio. Crie ou importe.</div>'}
+      </div>
+    </div>
+  </div>`;
+
+  detail.innerHTML = html;
+
+  if ((data.folders?.imagens || []).length) {
+    window._projImgFiles = data.folders.imagens;
+  }
+}
+
+function renderProjImgView(projName, view) {
+  const body = document.getElementById('proj-img-body');
+  if (!body) return;
+  const files = window._projImgFiles || [];
+  body.dataset.view = view;
+  const btn = document.getElementById('proj-img-view-btn');
+
+  if (view === 'visual') {
+    if (btn) btn.textContent = '\u2630 Lista';
+    body.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px">
+      ${files.map(f => {
+        const safeName = f.name.replace(/'/g, "\\'");
+        return `<div style="position:relative;flex-shrink:0;cursor:pointer" title="${f.name}"
+                     onclick="showProjImgPreview('/file/${f.path}','${safeName}')">
+          <img src="/file/${f.path}" style="height:90px;width:135px;object-fit:cover;border-radius:6px;border:1px solid #2a2a3a;display:block;transition:border-color .15s"
+               onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#2a2a3a'">
+          <button onclick="event.stopPropagation();deleteProjectFile('${projName}','imagens','${safeName}')"
+                  style="position:absolute;top:3px;right:3px;background:#1a0a0a;border:1px solid #4a2020;border-radius:3px;color:#f87171;font-size:.65rem;padding:1px 5px;cursor:pointer;opacity:0;transition:opacity .15s"
+                  onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">\uD83D\uDDD1</button>
+        </div>`;
+      }).join('')}
+    </div>`;
+  } else {
+    if (btn) btn.textContent = '\u25A6 Visual';
+    body.innerHTML = `<div class="proj-file-list">
+      ${files.map(f => buildProjectFileRow(f, 'imagens')).join('')}
+    </div>`;
+  }
+}
+
+function toggleProjImgView(projName) {
+  const body = document.getElementById('proj-img-body');
+  if (!body) return;
+  renderProjImgView(projName, body.dataset.view === 'visual' ? 'list' : 'visual');
+}
+
+function toggleProjImgSelectAll(projName, select) {
+  document.querySelectorAll('#proj-img-body input[type="checkbox"]').forEach(c => { c.checked = select; });
+}
+
+let _projImgPreview = null;
+function showProjImgPreview(src, name) {
+  // Lightbox simples
+  if (_projImgPreview) _projImgPreview.remove();
+  const div = document.createElement('div');
+  div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:zoom-out';
+  div.onclick = () => { div.remove(); _projImgPreview = null; };
+  div.innerHTML = `<div style="font-size:.85rem;color:#aaa">${name}</div>
+    <img src="${src}" style="max-width:90vw;max-height:80vh;border-radius:8px;border:1px solid #333;object-fit:contain">
+    <div style="font-size:.75rem;color:#555">Clique para fechar</div>`;
+  document.body.appendChild(div);
+  _projImgPreview = div;
+}
+
+function toggleProjSection(titleEl) {
+  const section = titleEl.closest('.proj-folder-section');
+  section.classList.toggle('open');
+  // Renderiza imagens ao abrir pela primeira vez
+  if (section.classList.contains('open')) {
+    const imgBody = section.querySelector('#proj-img-body');
+    if (imgBody && !imgBody.innerHTML.trim() && window._projImgFiles?.length) {
+      renderProjImgView(imgBody.dataset.proj, imgBody.dataset.view || 'list');
+    }
+  }
+}
+
+function buildProjectFileRow(f, sub) {
+  const size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+'MB' : (f.size/1024).toFixed(0)+'KB';
+  return `<div class="proj-file-row">
+    <span class="proj-file-name" title="${f.name}">${f.name}</span>
+    <span class="proj-file-size">${size}</span>
+    <a class="proj-file-btn" href="/download/${f.path}" download>\u2B07</a>
+    <button class="proj-file-btn" onclick="deleteProjectFile('${_currentProject}','${sub}','${f.name.replace(/'/g, "\\'")}')">🗑</button>
+  </div>`;
+}
+
+async function uploadProjectFiles(name, sub, input) {
+  if (!input.files.length) return;
+  const form = new FormData();
+  for (const f of input.files) form.append('files', f);
+  const res = await fetch(`/projects/${encodeURIComponent(name)}/upload/${sub}`, {method:'POST', body:form});
+  input.value = '';
+  if (!res.ok) { alert('Erro no upload'); return; }
+  await loadProjectDetail(name);
+}
+
+async function deleteProjectFile(name, sub, filename) {
+  if (!confirm(`Excluir ${filename}?`)) return;
+  const res = await fetch(`/projects/${encodeURIComponent(name)}/files/${sub}/${encodeURIComponent(filename)}`, {method:'DELETE'});
+  if (!res.ok) { alert('Erro ao excluir'); return; }
+  await loadProjectDetail(name);
+}
+
+async function confirmDeleteProject(name) {
+  if (!confirm(`Excluir projeto "${name}" e todos os seus arquivos?`)) return;
+  const res = await fetch(`/projects/${encodeURIComponent(name)}`, {method:'DELETE'});
+  if (!res.ok) { alert('Erro ao excluir projeto'); return; }
+  refreshProjects();
+}
+
+function openNewProjectModal() {
+  document.getElementById('new-project-modal').style.display = 'flex';
+  document.getElementById('new-project-name').value = '';
+  setTimeout(() => document.getElementById('new-project-name').focus(), 50);
+}
+
+function closeNewProjectModal() {
+  document.getElementById('new-project-modal').style.display = 'none';
+}
+
+async function createNewProject() {
+  const name = document.getElementById('new-project-name').value.trim();
+  if (!name) return;
+  const res = await fetch('/projects', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name})
+  });
+  const data = await res.json();
+  if (!res.ok) { alert(data.error || 'Erro ao criar projeto'); return; }
+  closeNewProjectModal();
+  await refreshProjects();
+  openProject(data.name);
+}
+
+// -- Episódios --
+
+function buildEpisodeCard(ep, projectName) {
+  const clr = ep.running ? '#f59e0b' : ep.error ? '#ef4444'
+              : (ep.done === ep.total && ep.total > 0) ? '#6fcf6f' : '#888';
+  const txt = ep.running ? '\u25B6 Rodando' : `${ep.done}/${ep.total} cenas`;
+  const safeName     = ep.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const safeProjName = (projectName||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const code = ep.ep_code ? `<span style="font-size:.68rem;color:#6366f1;background:#1a1a3a;border:1px solid #3a3a6a;border-radius:4px;padding:1px 6px;margin-right:4px;flex-shrink:0">${ep.ep_code}</span>` : '';
+  return `<div class="proj-ep-card" style="cursor:pointer" onclick="openEpisodeDetail(${ep.id},'${safeProjName}')">
+    ${code}<span class="proj-ep-name" title="${ep.name}">${ep.name}</span>
+    <span class="proj-ep-status" style="color:${clr}">${txt}</span>
+    <div class="proj-ep-actions" onclick="event.stopPropagation()">
+      <button class="proj-ep-btn" onclick="openEpisodeDetail(${ep.id},'${safeProjName}')" title="Ver cenas">\uD83D\uDCC4 Abrir</button>
+      <button class="proj-ep-btn" onclick="confirmRemoveEpisode(${ep.id},'${safeName}','${safeProjName}',${ep.running})" style="border-color:#4a2020;color:#f87171" title="Remover">\uD83D\uDDD1</button>
+    </div>
+  </div>`;
+}
+
+async function runEpisode(nqId, projectName) {
+  const res = await fetch(`/nqueues/${nqId}/run`, {method:'POST'});
+  if (!res.ok) { const e = await res.json(); alert(e.error || 'Erro ao rodar'); return; }
+  if (projectName) {
+    await openEpisodeDetail(nqId, projectName);
+  } else {
+    openEpisodeInFila(nqId);
+  }
+}
+
+async function epGenImages(nqId, projName, btn) {
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '⏳ Imgs';
+  try {
+    const res = await fetch(`/nqueues/${nqId}/generate-images`, {method:'POST'});
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || 'Erro ao gerar imagens'); return; }
+    if (data.errors?.length) alert('Avisos:\n' + data.errors.join('\n'));
+    if (projName) await openEpisodeDetail(nqId, projName);
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+}
+
+async function epGenAudio(nqId, projName, btn) {
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '⏳ Áudios';
+  try {
+    const res = await fetch(`/nqueues/${nqId}/generate-audio`, {method:'POST'});
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || 'Erro ao gerar áudios'); return; }
+    if (data.errors?.length) alert('Avisos:\n' + data.errors.join('\n'));
+    if (projName) await openEpisodeDetail(nqId, projName);
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+}
+
+function openEpisodeInFila(nqId) {
+  showTab('tab-queue', document.querySelectorAll('.tab')[3]);
+  openNq(nqId);
+}
+
+// -- Detalhe do episódio inline no projeto --
+async function openEpisodeDetail(nqId, projectName) {
+  const detail = document.getElementById('proj-detail');
+  detail.style.display = 'flex';
+  detail.innerHTML = '<div style="color:#555;padding:24px">Carregando\u2026</div>';
+
+  const res = await fetch(`/nqueues/${nqId}`);
+  if (!res.ok) { detail.innerHTML = '<div style="color:#f87171;padding:24px">Erro ao carregar epis\xF3dio.</div>'; return; }
+  const nq = await res.json();
+  const jobs = nq.jobs || [];
+
+  const STATUS_LABEL = { idle:'Aguardando', running:'Rodando', done:'Conclu\xEDdo', error:'Erro', pending:'Aguardando' };
+  const STATUS_CLS   = { idle:'idle', running:'running', done:'done', error:'error', pending:'idle' };
+
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  let jobsHtml = '';
+  if (!jobs.length) {
+    jobsHtml = '<div style="color:#444;padding:12px 14px;font-size:.8rem">Nenhuma cena. Gere o episódio com IA ou adicione cenas na aba Fila.</div>';
+  } else {
+    jobsHtml = jobs.map((j, i) => {
+      const st   = j.status || 'idle';
+      const cls  = STATUS_CLS[st]  || 'idle';
+      const lbl  = STATUS_LABEL[st] || st;
+      const refs = Array.isArray(j.ref_imgs) ? j.ref_imgs.join(', ') : (j.ref_imgs || '');
+      const vidBtn = j.output_video
+        ? `<button class="proj-ep-btn run" onclick="playVideoByPath('${j.output_video}')" style="padding:2px 8px;font-size:.72rem">\u25B6 Ver vídeo</button>`
+        : '';
+      return `
+      <div class="ep-job-row" id="epjob-${nqId}-${j.id}">
+        <div class="ep-job-summary" onclick="toggleEpJob(${nqId},${j.id})" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 12px">
+          <span style="color:#555;font-size:.75rem;min-width:20px">${i+1}.</span>
+          <span class="ep-job-label" style="flex:1">${esc(j.label || j.task_type)}</span>
+          <span class="ep-job-badge ${cls}">${lbl}</span>
+          <span style="color:#555;font-size:.7rem">${j.resolution||''} ${j.duration ? j.duration+'s' : ''}</span>
+          ${vidBtn}
+          <span style="color:#555;font-size:.8rem">\u25BE</span>
+        </div>
+        <div class="ep-job-edit" id="epjob-edit-${nqId}-${j.id}" style="display:none;padding:10px 14px 14px;border-top:1px solid #1a1a2a;background:#09090f">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div>
+              <div class="proj-config-label">Título da cena</div>
+              <input class="proj-config-input" id="ej-label-${nqId}-${j.id}" value="${esc(j.label||'')}">
+            </div>
+            <div style="display:flex;gap:6px">
+              <div style="flex:1">
+                <div class="proj-config-label">Resolução</div>
+                <select class="proj-config-input" id="ej-res-${nqId}-${j.id}">
+                  ${['480P','540P','720P'].map(r=>`<option${j.resolution===r?' selected':''}>${r}</option>`).join('')}
+                </select>
+              </div>
+              <div style="flex:1">
+                <div class="proj-config-label">Duração (s)</div>
+                <input type="number" class="proj-config-input" id="ej-dur-${nqId}-${j.id}" value="${esc(j.duration||5)}" min="1" max="30">
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom:8px">
+            <div class="proj-config-label">Prompt de vídeo</div>
+            <textarea class="proj-config-input" id="ej-prompt-${nqId}-${j.id}" rows="3">${esc(j.prompt||'')}</textarea>
+          </div>
+          ${j.image_prompt !== undefined ? `
+          <div style="margin-bottom:8px">
+            <div class="proj-config-label">Prompt de imagem</div>
+            <textarea class="proj-config-input" id="ej-imgprompt-${nqId}-${j.id}" rows="2">${esc(j.image_prompt||'')}</textarea>
+          </div>` : ''}
+          ${j.audio_text !== undefined ? `
+          <div style="margin-bottom:8px">
+            <div class="proj-config-label">Texto de áudio (narração / fala)</div>
+            <textarea class="proj-config-input" id="ej-audio-${nqId}-${j.id}" rows="2">${esc(j.audio_text||'')}</textarea>
+          </div>` : ''}
+          <div style="margin-bottom:8px">
+            <div class="proj-config-label">Voice ID — ElevenLabs (voz do personagem desta cena)</div>
+            <input class="proj-config-input" id="ej-voice-${nqId}-${j.id}" value="${esc(j.voice_id||'')}" placeholder="ex: FIEA0c5UHH9JnvWaQrXS (Valen)">
+          </div>
+          <div style="margin-bottom:8px">
+            <div class="proj-config-label">Trilha de fundo — audio_bg (path do arquivo de música do projeto)</div>
+            <input class="proj-config-input" id="ej-audiobg-${nqId}-${j.id}" value="${esc(j.audio_bg||'')}" placeholder="ex: projetos/INETUSX/audios/tema.mp3 (ou vazio)">
+          </div>
+          <div style="margin-bottom:10px">
+            <div class="proj-config-label">Imagens de referência (paths separados por vírgula)</div>
+            <input class="proj-config-input" id="ej-refs-${nqId}-${j.id}" value="${esc(refs)}" placeholder="uploads/foto.jpg, uploads/bg.png">
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="nq-action-btn run" onclick="saveEpJob(${nqId},${j.id},'${esc(j.image_prompt!==undefined?'1':'')}','${esc(j.audio_text!==undefined?'1':'')}')">💾 Salvar</button>
+            <button class="nq-action-btn" onclick="toggleEpJob(${nqId},${j.id})">Cancelar</button>
+            <button class="nq-action-btn" style="margin-left:auto;border-color:#4a2020;color:#f87171" onclick="deleteEpJob(${nqId},${j.id},'${esc(projectName)}')">🗑 Remover cena</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  const safeProjName = projectName.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  detail.innerHTML = `
+    <div class="proj-detail-header">
+      <button class="nq-action-btn" onclick="loadProjectDetail('${safeProjName}')">\u2190 Projeto</button>
+      <span class="proj-detail-name">${nq.name}</span>
+      <button class="nq-action-btn" onclick="openEpisodeInFila(${nqId})" title="Gerenciar na aba Fila">\uD83D\uDD17 Fila</button>
+    </div>
+    <div style="display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid #1a1a2a;flex-wrap:wrap">
+      <button class="proj-ep-btn" onclick="epGenImages(${nqId},'${safeProjName}',this)" title="Gerar imagens via fal.ai">\uD83D\uDDBC Imagens</button>
+      <button class="proj-ep-btn" onclick="epGenAudio(${nqId},'${safeProjName}',this)" title="Gerar \xE1udios via ElevenLabs">\uD83C\uDFB5 \xC1udios</button>
+      <button class="proj-ep-btn" style="opacity:.5;cursor:not-allowed" title="Em breve">\uD83C\uDFB6 M\xFAsica</button>
+      <button class="proj-ep-btn run" onclick="runEpisode(${nqId},'${safeProjName}')" title="Gerar v\xEDdeos (rodar fila)">\uD83C\uDFAC V\xEDdeos</button>
+      <button class="proj-ep-btn" onclick="openEpisodeGallery(${nqId})" id="ep-gallery-btn-${nqId}" title="Ver assets gerados">\uD83D\uDDC2 Galeria</button>
+    </div>
+    <div id="ep-gallery-${nqId}" style="display:none;border-bottom:1px solid #1a1a2a;background:#07070d;padding:10px 14px"></div>
+    <div class="ep-detail-jobs">${jobsHtml}</div>`;
+}
+
+function toggleEpJob(nqId, jobId) {
+  const el = document.getElementById(`epjob-edit-${nqId}-${jobId}`);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function saveEpJob(nqId, jobId, hasImgPrompt, hasAudioText) {
+  const g = id => { const e = document.getElementById(id); return e ? e.value : null; };
+  const payload = {
+    label:      g(`ej-label-${nqId}-${jobId}`),
+    resolution: g(`ej-res-${nqId}-${jobId}`),
+    duration:   Number(g(`ej-dur-${nqId}-${jobId}`)),
+    prompt:     g(`ej-prompt-${nqId}-${jobId}`),
+    ref_imgs:   (g(`ej-refs-${nqId}-${jobId}`) || '').split(',').map(s=>s.trim()).filter(Boolean),
+  };
+  if (hasImgPrompt) payload.image_prompt = g(`ej-imgprompt-${nqId}-${jobId}`) || '';
+  if (hasAudioText) payload.audio_text   = g(`ej-audio-${nqId}-${jobId}`)    || '';
+  const voiceVal = g(`ej-voice-${nqId}-${jobId}`);
+  if (voiceVal !== null) payload.voice_id = voiceVal.trim();
+  const bgVal = g(`ej-audiobg-${nqId}-${jobId}`);
+  if (bgVal !== null) payload.audio_bg = bgVal.trim();
+
+  const res = await fetch(`/nqueues/${nqId}/jobs/${jobId}`, {
+    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) { const e = await res.json(); alert(e.error || 'Erro ao salvar'); return; }
+  toggleEpJob(nqId, jobId);
+  // Atualiza só o label e badge sem recarregar tudo
+  const row = document.getElementById(`epjob-${nqId}-${jobId}`);
+  if (row) {
+    const labelEl = row.querySelector('.ep-job-label');
+    if (labelEl) labelEl.textContent = payload.label || '';
+    const badge = row.querySelector('.ep-job-badge');
+    if (badge) { badge.className = 'ep-job-badge idle'; badge.textContent = 'Aguardando'; }
+  }
+}
+
+async function deleteEpJob(nqId, jobId, projectName) {
+  if (!confirm('Remover esta cena do episódio?')) return;
+  const res = await fetch(`/nqueues/${nqId}/jobs/${jobId}`, {method:'DELETE'});
+  if (!res.ok) { const e = await res.json(); alert(e.error || 'Erro ao remover'); return; }
+  await openEpisodeDetail(nqId, projectName);
+}
+
+// -- Galeria do episódio --
+async function openEpisodeGallery(nqId) {
+  const panel = document.getElementById(`ep-gallery-${nqId}`);
+  const btn   = document.getElementById(`ep-gallery-btn-${nqId}`);
+  if (!panel) return;
+  if (panel.style.display !== 'none') { panel.style.display = 'none'; if (btn) btn.textContent = '\uD83D\uDDC2 Galeria'; return; }
+  panel.innerHTML = '<span style="color:#555;font-size:.8rem">Carregando\u2026</span>';
+  panel.style.display = 'block';
+  if (btn) btn.textContent = '\u2716 Fechar Galeria';
+  const res = await fetch(`/nqueues/${nqId}/gallery`);
+  if (!res.ok) { panel.innerHTML = '<span style="color:#f87171;font-size:.8rem">Erro ao carregar galeria.</span>'; return; }
+  const g = await res.json();
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  let html = '';
+
+  if (g.images && g.images.length) {
+    html += `<div style="margin-bottom:10px"><div style="color:#7c7caa;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">\uD83D\uDDBC Imagens (${g.images.length})</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">`;
+    for (const p of g.images) {
+      const name = p.split('/').pop();
+      html += `<div style="position:relative" title="${esc(name)}">
+        <img src="/file/${encodeURIComponent(p)}" style="width:100px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #1a1a2a;cursor:pointer" onclick="window.open('/file/${encodeURIComponent(p)}','_blank')">
+        <div style="font-size:.6rem;color:#555;text-align:center;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  if (g.audios && g.audios.length) {
+    html += `<div style="margin-bottom:10px"><div style="color:#7c7caa;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">\uD83C\uDFB5 \xC1udios (${g.audios.length})</div>
+    <div style="display:flex;flex-direction:column;gap:4px">`;
+    for (const p of g.audios) {
+      const name = p.split('/').pop().replace(/\.mp3$/i,'');
+      html += `<div style="display:flex;align-items:center;gap:8px;background:#0d0d1a;border-radius:4px;padding:4px 8px">
+        <span style="color:#888;font-size:.75rem;min-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</span>
+        <audio controls src="/file/${encodeURIComponent(p)}" style="height:26px;flex:1;min-width:0"></audio>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  if (g.videos && g.videos.length) {
+    html += `<div style="margin-bottom:10px"><div style="color:#7c7caa;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">\uD83C\uDFAC V\xEDdeos (${g.videos.length})</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">`;
+    for (const p of g.videos) {
+      const name = p.split('/').pop();
+      html += `<div style="text-align:center">
+        <video src="/file/${encodeURIComponent(p)}" style="width:160px;height:90px;object-fit:cover;border-radius:4px;border:1px solid #1a1a2a;cursor:pointer" onclick="playVideoByPath('${p.replace(/'/g,"\\'")}')"></video>
+        <div style="font-size:.6rem;color:#555;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  if (!g.images?.length && !g.audios?.length && !g.videos?.length) {
+    html = '<span style="color:#444;font-size:.8rem">Nenhum asset gerado ainda. Use os bot\xF5es acima para gerar imagens e \xE1udios.</span>';
+  }
+
+  panel.innerHTML = html;
+}
+
+// -- Remover episódio do projeto --
+let _removeEpState = null;
+
+function confirmRemoveEpisode(nqId, epName, projectName, isRunning) {
+  if (isRunning) { alert('Não é possível remover um episódio em execução.'); return; }
+  _removeEpState = { nqId, projectName };
+  document.getElementById('rem-ep-name').textContent = epName;
+  document.getElementById('remove-episode-modal').style.display = 'flex';
+}
+
+function closeRemoveEpisodeModal() {
+  document.getElementById('remove-episode-modal').style.display = 'none';
+  _removeEpState = null;
+}
+
+async function removeEpisodeFromProject(alsoDeleteFromQueue) {
+  if (!_removeEpState) return;
+  const { nqId, projectName } = _removeEpState;
+  closeRemoveEpisodeModal();
+  const url = alsoDeleteFromQueue
+    ? `/nqueues/${nqId}?force=true`
+    : `/nqueues/${nqId}/project-link`;
+  const res = await fetch(url, { method: 'DELETE' });
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    alert(e.error || 'Erro ao remover episódio');
+    return;
+  }
+  await loadProjectDetail(projectName);
+}
+
+function openNewEpisodeModal(projectName) {
+  document.getElementById('new-episode-project').value = projectName;
+  document.getElementById('new-episode-name').value = '';
+  document.getElementById('new-episode-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('new-episode-name').focus(), 50);
+}
+
+function closeNewEpisodeModal() {
+  document.getElementById('new-episode-modal').style.display = 'none';
+}
+
+async function createNewEpisode() {
+  const projectName = document.getElementById('new-episode-project').value;
+  const name = document.getElementById('new-episode-name').value.trim();
+  if (!name) return;
+  const res = await fetch('/nqueues', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name, project: projectName, jobs:[]})
+  });
+  const data = await res.json();
+  if (!res.ok) { alert(data.error || 'Erro ao criar epis\xF3dio'); return; }
+  closeNewEpisodeModal();
+  openEpisodeInFila(data.id);
+}
+
+async function importEpisodeFile(projectName, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const defaultName = file.name.replace(/\.[^.]+$/, '');
+  const epName = prompt('Nome do epis\xF3dio:', defaultName);
+  if (epName === null) { input.value = ''; return; }
+  const res = await fetch(
+    `/nqueues/import?name=${encodeURIComponent(epName||defaultName)}&project=${encodeURIComponent(projectName)}`,
+    {method:'POST', headers:{'Content-Type':'text/plain'}, body:text}
+  );
+  const data = await res.json();
+  input.value = '';
+  if (data.ok) {
+    await loadProjectDetail(projectName);
+  } else {
+    alert('Erro ao importar: ' + data.error);
+  }
+}
+// ────────────────────────────────────────────────────────────
+
+// ── Global Config Modal ─────────────────────────────────────
+
+async function openGlobalConfigModal() {
+  const res = await fetch('/config');
+  const cfg = res.ok ? await res.json() : {};
+  _projConfig = cfg;
+  document.getElementById('gcfg-fal-key').value    = cfg.fal_key || '';
+  document.getElementById('gcfg-image-model').value = cfg.image_model || 'fal-ai/flux/dev';
+  document.getElementById('gcfg-el-key').value     = cfg.elevenlabs_key || '';
+  document.getElementById('gcfg-el-voice').value   = cfg.elevenlabs_voice_id || '';
+  document.getElementById('global-config-modal').style.display = 'flex';
+}
+
+function closeGlobalConfigModal() {
+  document.getElementById('global-config-modal').style.display = 'none';
+}
+
+async function saveGlobalConfig() {
+  const cfg = {
+    fal_key:             document.getElementById('gcfg-fal-key').value.trim(),
+    image_model:         document.getElementById('gcfg-image-model').value.trim() || 'fal-ai/flux/dev',
+    elevenlabs_key:      document.getElementById('gcfg-el-key').value.trim(),
+    elevenlabs_voice_id: document.getElementById('gcfg-el-voice').value.trim(),
+  };
+  const res = await fetch('/config', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(cfg)
+  });
+  if (res.ok) {
+    _projConfig = cfg;
+    const btn = document.getElementById('gcfg-save-btn');
+    btn.textContent = '\u2713 Salvo';
+    setTimeout(() => { btn.textContent = 'Salvar'; closeGlobalConfigModal(); }, 1000);
+  } else {
+    alert('Erro ao salvar');
+  }
+}
+
+// ── Gen Episode Modal ────────────────────────────────────────
+
+let _genEpisodeProject = null;
+let _genEpisodeTitle   = null;
+let _genJobId          = null;
+let _genPollTimer      = null;
+let _genJobs = [];
+let _projConfig = {};
+
+function _showGenStep(n) {
+  document.getElementById('gen-ep-step1').classList.toggle('active', n === 1);
+  document.getElementById('gen-ep-step2').classList.toggle('active', n === 2);
+  document.getElementById('gen-ep-step1-footer').style.display = n === 1 ? 'flex' : 'none';
+  document.getElementById('gen-ep-step2-footer').style.display = n === 2 ? 'flex' : 'none';
+}
+
+function onGenTaskChange() {
+  const isAvatar = document.getElementById('gen-ep-task')?.value === 'talking_avatar';
+  const imgsSection  = document.getElementById('gen-ep-imgs-section');
+  const avatarNote   = document.getElementById('gen-ep-avatar-note');
+  if (imgsSection) imgsSection.style.display  = isAvatar ? 'none' : '';
+  if (avatarNote)  avatarNote.style.display   = isAvatar ? ''     : 'none';
+  const resEl = document.getElementById('gen-ep-res');
+  if (resEl) {
+    if (isAvatar) {
+      resEl.innerHTML = '<option value="480P" selected>480P</option><option value="720P">720P</option>';
+    } else if (!resEl.querySelector('[value="540P"]')) {
+      resEl.innerHTML = '<option value="540P" selected>540P</option><option value="720P">720P</option><option value="480P">480P</option>';
+    }
+  }
+}
+
+async function openGenEpisodeModal(projName) {
+  // Restore existing jobs for the same project instead of rebuilding
+  if (_genEpisodeProject === projName && _genJobs.length > 0) {
+    renderGenPreview();
+    _showGenStep(2);
+    document.getElementById('gen-ep-modal').style.display = 'flex';
+    return;
+  }
+  // Resume in-progress background generation for the same project
+  if (_genEpisodeProject === projName && _genJobId) {
+    document.getElementById('gen-ep-modal').style.display = 'flex';
+    _startGenPoll(projName, _genJobId);
+    return;
+  }
+
+  _genEpisodeProject = projName;
+  _genEpisodeTitle   = null;
+  _genJobId          = null;
+  _genJobs           = [];
+
+  // Load global config, project files and upload list in parallel
+  const [cfgRes, projRes, uplRes] = await Promise.all([
+    fetch('/config'),
+    fetch(`/projects/${encodeURIComponent(projName)}`),
+    fetch('/uploads/list'),
+  ]);
+  _projConfig = cfgRes.ok ? await cfgRes.json() : {};
+  const projData  = projRes.ok ? await projRes.json() : {};
+  const uplData   = uplRes.ok  ? await uplRes.json()  : {};
+  const images    = (projData.folders?.imagens || []).map(f => f.path);  // imagens do projeto
+  const tempDocs  = (projData.folders?.temp    || []);                   // arquivos em projetos/<name>/temp/
+  const nAudios   = (projData.folders?.audios || []).length;
+  const nDocs     = (projData.folders?.docs   || []).length;
+
+  const resourceSummary = [
+    images.length ? `${images.length} imagem${images.length !== 1 ? 'ns' : ''}` : '',
+    nAudios       ? `${nAudios} \xE1udio${nAudios !== 1 ? 's' : ''}` : '',
+    nDocs         ? `${nDocs} doc${nDocs !== 1 ? 's' : ''}` : '',
+  ].filter(Boolean).join(' \xB7 ') || 'Nenhum arquivo no projeto';
+
+  // Renderização das imagens — chamada por toggleGenImgView()
+  window._genEpImages = images;
+
+  const imgSection = images.length ? `
+    <div id="gen-img-container" data-view="visual" style="background:#0a0a12;border:1px solid #2a2a3a;border-radius:6px;overflow:hidden">
+      <!-- conteúdo preenchido por renderGenImgView() -->
+    </div>` : '<div style="color:#555;font-size:.8rem;padding:6px 0">Nenhuma imagem no projeto</div>';
+
+  const docOptions = tempDocs.length
+    ? `<option value="">— novo —</option>` + tempDocs.map(f =>
+        `<option value="${f.path}">${f.name}</option>`).join('')
+    : null;
+
+  document.getElementById('gen-ep-step1').innerHTML = `
+    <div class="proj-config-row" style="align-items:flex-end;gap:8px">
+      <div style="flex:1">
+        <div class="proj-config-label">T\xEDtulo do epis\xF3dio *</div>
+        <input id="gen-ep-title" type="text" class="proj-config-input" placeholder="Ex: Ep01 — Rob\xF4 da Turma">
+      </div>
+    </div>
+    <div>
+      <div class="proj-config-label" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <span>Descri\xE7\xE3o do epis\xF3dio *
+          <span style="font-size:.7rem;color:#555;text-transform:none;font-weight:400"> — salva automaticamente em docs/</span>
+        </span>
+        <span style="display:flex;gap:6px;align-items:center">
+          ${docOptions ? `<select id="gen-ep-doc-sel" style="background:#1a1a2a;border:1px solid #333;border-radius:4px;color:#aaa;font-size:.75rem;padding:3px 6px;cursor:pointer" onchange="loadGenEpDoc(this.value)">
+            ${docOptions}
+          </select>` : ''}
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;background:#1a1a2a;border:1px solid #333;border-radius:4px;padding:3px 8px;font-size:.75rem;color:#aaa;white-space:nowrap" title="Carregar arquivo do seu computador">
+            \uD83D\uDCC2 Computador
+            <input type="file" accept=".txt,.md,.json,.doc,.docx" style="display:none" onchange="loadGenEpFromFile(this)">
+          </label>
+          <span style="font-size:.72rem;color:#4caf88;white-space:nowrap" title="A IA usa todos os docs, imagens e \xE1udios do projeto como base de conhecimento">\uD83D\uDCCE ${resourceSummary}</span>
+        </span>
+      </div>
+      <textarea id="gen-ep-concept" class="proj-config-input" rows="8"
+        placeholder="Escreva o roteiro ou descri\xE7\xE3o completa do epis\xF3dio. A IA usa todos os documentos, imagens e \xE1udios do projeto como base de conhecimento para manter consist\xEAncia."></textarea>
+      <div style="font-size:.72rem;color:#555;margin-top:3px">\uD83D\uDCA1 Todos os documentos do projeto s\xE3o sempre lidos pela IA como base de conhecimento — independentemente do que voc\xEA escrever aqui.</div>
+    </div>
+    <div class="proj-config-row">
+      <div>
+        <div class="proj-config-label">Resolu\xE7\xE3o</div>
+        <select id="gen-ep-res" class="proj-config-input">
+          <option value="540P">540P</option>
+          <option value="720P">720P</option>
+          <option value="480P">480P</option>
+        </select>
+      </div>
+      <div>
+        <div class="proj-config-label">~Dura\xE7\xE3o/cena (s)</div>
+        <input type="number" id="gen-ep-dur" class="proj-config-input" value="5" min="1" max="30">
+      </div>
+    </div>
+    <div id="gen-ep-imgs-section">
+      <div class="proj-config-label" style="display:flex;align-items:center;gap:8px">
+        <span>Imagens de refer\xEAncia</span>
+        <span style="font-size:.7rem;color:#555;text-transform:none;flex:1">(todas selecionadas por padr\xE3o)</span>
+        ${images.length ? `
+        <button class="gen-ep-btn" onclick="toggleGenImgView()" id="gen-img-view-btn" style="padding:2px 8px;font-size:.7rem">\u22EE Lista</button>
+        <button class="gen-ep-btn" onclick="toggleGenImgSelectAll(true)" style="padding:2px 7px;font-size:.7rem" title="Selecionar todas">\u2713 Todas</button>
+        <button class="gen-ep-btn" onclick="toggleGenImgSelectAll(false)" style="padding:2px 7px;font-size:.7rem" title="Desmarcar todas">\u25A1 Nenhuma</button>
+        ` : ''}
+      </div>
+      ${imgSection}
+    </div>
+  `;
+
+  _showGenStep(1);
+  document.getElementById('gen-ep-modal').style.display = 'flex';
+  if (images.length) renderGenImgView('visual');
+}
+
+function renderGenImgView(view) {
+  const container = document.getElementById('gen-img-container');
+  if (!container) return;
+  const images = window._genEpImages || [];
+  // Preservar estado dos checkboxes existentes
+  const checked = new Set(
+    Array.from(document.querySelectorAll('input[name="gen-ref-img"]:checked')).map(c => c.value)
+  );
+  // Se ainda não há estado, marcar todas
+  const hasState = document.querySelectorAll('input[name="gen-ref-img"]').length > 0;
+  const isChecked = p => hasState ? checked.has(p) : true;
+
+  container.dataset.view = view;
+  const btn = document.getElementById('gen-img-view-btn');
+
+  if (view === 'visual') {
+    if (btn) btn.textContent = '\u2630 Lista';
+    container.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px;max-height:180px;overflow-y:auto">
+      ${images.map(p => {
+        const name = p.split('/').pop();
+        const chk = isChecked(p) ? 'checked' : '';
+        return `<label style="cursor:pointer;position:relative;flex-shrink:0" title="${name}">
+          <input type="checkbox" name="gen-ref-img" value="${p}" ${chk} style="position:absolute;top:3px;left:3px;z-index:1;accent-color:#7c3aed">
+          <img src="/file/${p}" style="height:72px;width:108px;object-fit:cover;border-radius:5px;border:2px solid ${isChecked(p)?'#7c3aed':'#333'};display:block;transition:border-color .15s"
+               onload="this.previousElementSibling.addEventListener('change',e=>this.style.borderColor=e.target.checked?'#7c3aed':'#333')">
+        </label>`;
+      }).join('')}
+    </div>`;
+  } else {
+    if (btn) btn.textContent = '\u25A6 Visual';
+    container.innerHTML = `<div style="display:flex;flex-direction:column;max-height:180px;overflow-y:auto">
+      ${images.map((p, i) => {
+        const name = p.split('/').pop();
+        const chk = isChecked(p) ? 'checked' : '';
+        const bg = i % 2 === 0 ? '#0a0a12' : '#0d0d18';
+        return `<label style="display:flex;align-items:center;gap:10px;padding:6px 10px;cursor:pointer;background:${bg};border-bottom:1px solid #1a1a28">
+          <input type="checkbox" name="gen-ref-img" value="${p}" ${chk} style="accent-color:#7c3aed;flex-shrink:0">
+          <img src="/file/${p}" style="height:36px;width:54px;object-fit:cover;border-radius:3px;border:1px solid #333;flex-shrink:0">
+          <span style="font-size:.8rem;color:#ccc;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+        </label>`;
+      }).join('')}
+    </div>`;
+  }
+}
+
+function toggleGenImgView() {
+  const container = document.getElementById('gen-img-container');
+  if (!container) return;
+  const current = container.dataset.view || 'visual';
+  renderGenImgView(current === 'visual' ? 'list' : 'visual');
+}
+
+function toggleGenImgSelectAll(select) {
+  document.querySelectorAll('input[name="gen-ref-img"]').forEach(c => {
+    c.checked = select;
+    // Atualizar borda na view visual
+    const img = c.nextElementSibling;
+    if (img && img.tagName === 'IMG') img.style.borderColor = select ? '#7c3aed' : '#333';
+  });
+}
+
+function closeGenEpisodeModal() {
+  // Não cancela o poll — geração continua em background
+  if (_genPollTimer) clearInterval(_genPollTimer);
+  _genPollTimer = null;
+  document.getElementById('gen-ep-modal').style.display = 'none';
+}
+
+async function openSysPromptModal() {
+  const res = await fetch('/system-prompt/episode');
+  const data = res.ok ? await res.json() : {};
+  const ta = document.getElementById('sys-prompt-ta');
+  if (ta) ta.value = data.prompt || '';
+  document.getElementById('sys-prompt-modal').style.display = 'flex';
+}
+
+function closeSysPromptModal() {
+  document.getElementById('sys-prompt-modal').style.display = 'none';
+}
+
+async function saveSysPrompt() {
+  const text = document.getElementById('sys-prompt-ta').value.trim();
+  if (!text) return;
+  const res = await fetch('/system-prompt/episode', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({prompt: text}),
+  });
+  if (!res.ok) { const e = await res.json(); alert(e.error || 'Erro ao salvar'); return; }
+  closeSysPromptModal();
+}
+
+async function resetSysPrompt() {
+  if (!confirm('Restaurar o system prompt padrão? O prompt atual será perdido.')) return;
+  const res = await fetch('/system-prompt/episode/reset', {method:'POST'});
+  const data = res.ok ? await res.json() : {};
+  const ta = document.getElementById('sys-prompt-ta');
+  if (ta && data.prompt) ta.value = data.prompt;
+}
+
+function resetGenEpisodeModal() {
+  if (_genPollTimer) { clearInterval(_genPollTimer); _genPollTimer = null; }
+  _genJobs          = [];
+  _genJobId         = null;
+  _genEpisodeTitle  = null;
+  _clearGenStatusMsg();
+  _showGenStep(1);
+  if (window._genEpImages?.length) renderGenImgView(document.getElementById('gen-img-container')?.dataset.view || 'visual');
+}
+
+async function loadGenEpDoc(path) {
+  if (!path) return;
+  try {
+    const res = await fetch(`/file/${path}`);
+    if (!res.ok) return;
+    const text = await res.text();
+    const ta = document.getElementById('gen-ep-concept');
+    if (ta) { ta.value = text; ta.focus(); }
+    const titleEl = document.getElementById('gen-ep-title');
+    if (titleEl && !titleEl.value)
+      titleEl.value = path.split('/').pop().replace(/\.[^.]+$/, '');
+  } catch (e) { console.warn('loadGenEpDoc:', e); }
+}
+
+function loadGenEpFromFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const ta = document.getElementById('gen-ep-concept');
+    if (ta) { ta.value = e.target.result; ta.focus(); }
+    const titleEl = document.getElementById('gen-ep-title');
+    if (titleEl && !titleEl.value)
+      titleEl.value = file.name.replace(/\.[^.]+$/, '');
+  };
+  reader.readAsText(file, 'UTF-8');
+  input.value = ''; // reset para permitir reler o mesmo arquivo
+}
+
+async function generateEpisodePrompts() {
+  const description = document.getElementById('gen-ep-concept').value.trim();
+  if (!description) { alert('Escreva a descri\xE7\xE3o do epis\xF3dio'); return; }
+  const doc_title = (document.getElementById('gen-ep-title')?.value || '').trim();
+  if (!doc_title) { alert('Informe o t\xEDtulo do epis\xF3dio'); return; }
+
+  _genEpisodeTitle = doc_title;
+
+  // Imagens selecionadas — se nenhuma marcada, envia [] e o backend usa todas do projeto
+  const allImgBoxes = Array.from(document.querySelectorAll('input[name="gen-ref-img"]'));
+  const checkedImgs = allImgBoxes.filter(c => c.checked).map(c => c.value);
+  const payload = {
+    description,
+    doc_title,
+    task_type:  document.getElementById('gen-ep-task')?.value || 'reference_to_video',
+    resolution: document.getElementById('gen-ep-res').value,
+    duration:   parseInt(document.getElementById('gen-ep-dur').value) || 5,
+    ref_imgs:   checkedImgs,
+  };
+
+  const spinner = document.getElementById('gen-ep-spinner');
+  const genBtn  = document.getElementById('gen-ep-gen-btn');
+  spinner.classList.add('active');
+  genBtn.disabled = true;
+
+  try {
+    const res = await fetch(`/projects/${encodeURIComponent(_genEpisodeProject)}/generate-episode`, {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      const msg = data.error || 'Falha ao iniciar gera\xE7\xE3o';
+      alert(msg);
+      spinner.classList.remove('active');
+      genBtn.disabled = false;
+      return;
+    }
+    _genJobId = data.job_id;
+    // Mostra mensagem de background e inicia polling
+    _setGenStatusMsg('\u23F3 Gerando cenas com IA em background\u2026 voc\xEA pode fechar o modal e voltar depois.');
+    _startGenPoll(_genEpisodeProject, _genJobId);
+  } catch (e) {
+    alert('Erro de conex\xE3o: ' + e.message);
+    spinner.classList.remove('active');
+    genBtn.disabled = false;
+  }
+}
+
+function _setGenStatusMsg(msg) {
+  let el = document.getElementById('gen-ep-status-msg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'gen-ep-status-msg';
+    el.style.cssText = 'font-size:.78rem;color:#a78bfa;padding:6px 0;text-align:center';
+    const footer = document.getElementById('gen-ep-step1-footer');
+    if (footer) footer.before(el);
+  }
+  el.textContent = msg;
+}
+
+function _clearGenStatusMsg() {
+  const el = document.getElementById('gen-ep-status-msg');
+  if (el) el.remove();
+}
+
+function _startGenPoll(projName, jobId) {
+  if (_genPollTimer) clearInterval(_genPollTimer);
+  const spinner = document.getElementById('gen-ep-spinner');
+  const genBtn  = document.getElementById('gen-ep-gen-btn');
+  if (spinner) spinner.classList.add('active');
+  if (genBtn)  genBtn.disabled = true;
+
+  _genPollTimer = setInterval(async () => {
+    try {
+      const res  = await fetch(`/projects/${encodeURIComponent(projName)}/generate-episode-status/${jobId}`);
+      const data = await res.json();
+      if (data.status === 'done') {
+        clearInterval(_genPollTimer); _genPollTimer = null;
+        if (spinner) spinner.classList.remove('active');
+        if (genBtn)  genBtn.disabled = false;
+        _clearGenStatusMsg();
+        _genJobs = data.jobs;
+        renderGenPreview();
+        _showGenStep(2);
+        // Resumo de geração (doc salvo + novas referências criadas)
+        const sl = document.getElementById('gen-ep-scene-list');
+        if (sl && (data.saved_doc || (data.new_refs && data.new_refs.length))) {
+          const info = document.createElement('div');
+          info.style.cssText = 'font-size:.75rem;color:#6fcf6f;padding:4px 0 8px;line-height:1.6';
+          let html = '';
+          if (data.saved_doc) html += `✓ Descrição salva em ${data.saved_doc}<br>`;
+          if (data.environments && data.environments.length) {
+            html += `🗺 ${data.environments.length} ambiente(s) mapeado(s) · `;
+          }
+          if (data.new_refs && data.new_refs.length) {
+            html += `🖼 ${data.new_refs.length} referência(s) nova(s) gerada(s): `;
+            html += data.new_refs.map(r => `<span style="color:#a78bfa">${r.name}</span>`).join(', ');
+          }
+          info.innerHTML = html;
+          sl.before(info);
+        }
+      } else if (data.status === 'error') {
+        clearInterval(_genPollTimer); _genPollTimer = null;
+        if (spinner) spinner.classList.remove('active');
+        if (genBtn)  genBtn.disabled = false;
+        _clearGenStatusMsg();
+        const msg = data.error || 'Falha na gera\xE7\xE3o';
+        const friendly = msg.includes('timed out')
+          ? '\u23F1 Timeout: o Claude demorou demais. Tente com um conceito mais curto.\n\nDetalhe: ' + msg
+          : msg;
+        alert(friendly + (data.raw ? '\n\n' + data.raw : ''));
+      }
+      // status === 'running' → atualiza mensagem de fase e continua polling
+      if (data.status === 'running' && data.phase_msg) {
+        const phaseIcons = {
+          phase1: '🔍',
+          generating_refs: '🖼',
+          phase2: '✍️',
+        };
+        const icon = phaseIcons[data.phase] || '⏳';
+        _setGenStatusMsg(`${icon} ${data.phase_msg}`);
+      }
+    } catch (e) { /* rede falhou, tenta de novo no próximo tick */ }
+  }, 3000);
+}
+
+function renderGenPreview() {
+  const container = document.getElementById('gen-ep-scene-list');
+  container.innerHTML = '';
+
+  _genJobs.forEach((job, i) => {
+    const card = document.createElement('div');
+    card.className = 'gen-ep-scene-card' + (job._img_error || job._audio_error ? ' has-error' : '');
+
+    let tags = '';
+    if (job._img_error)        tags += `<span class="gen-ep-status-tag gen-ep-status-err" title="${job._img_error}">\u26A0 img</span>`;
+    else if (job.ref_imgs?.length) tags += `<span class="gen-ep-status-tag gen-ep-status-img">\uD83D\uDDBC img</span>`;
+    if (job._audio_error)      tags += `<span class="gen-ep-status-tag gen-ep-status-err" title="${job._audio_error}">\u26A0 \xE1udio</span>`;
+    else if (job.input_audio)  tags += `<span class="gen-ep-status-tag gen-ep-status-aud">\uD83C\uDFB5 \xE1udio</span>`;
+
+    // Image thumbnails
+    const refs = Array.isArray(job.ref_imgs) ? job.ref_imgs : [];
+    let thumbs = '';
+    if (refs.length) {
+      thumbs = '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">' +
+        refs.slice(0, 4).map(p =>
+          `<img src="/file/${p}" style="height:44px;width:66px;object-fit:cover;border-radius:4px;border:1px solid #333" title="${p.split('/').pop()}">`
+        ).join('') +
+        '</div>';
+    }
+
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+        <span class="gen-ep-scene-title" style="flex:1;margin-bottom:0">${job.label || 'Cena '+(i+1)}</span>
+        ${tags}
+        <button class="gen-ep-btn" id="gen-regen-btn-${i}" onclick="regenerateGenScene(${i})" title="Refazer esta cena via IA" style="padding:2px 6px;font-size:.7rem">&#x21BB;</button>
+        <button class="gen-ep-btn" onclick="removeGenScene(${i})" title="Remover esta cena" style="padding:2px 6px;font-size:.7rem;color:#f87171;border-color:#4a2020">&#x2715;</button>
+      </div>
+      <div class="gen-ep-scene-prompt">
+        <textarea id="gen-job-prompt-${i}" onchange="_genJobs[${i}].prompt=this.value">${job.prompt||''}</textarea>
+      </div>
+      ${thumbs}
+      <div style="font-size:.72rem;color:#555;margin-top:5px">
+        ${job.task_type} \xB7 ${job.resolution} \xB7 ${job.duration}s \xB7 seed ${job.seed}
+        ${refs.length ? ' \xB7 ' + refs.length + ' ref(s)' : ''}
+        ${job.input_image ? ' \xB7 img: ' + job.input_image.split('/').pop() : ''}
+        ${job.input_audio ? ' \xB7 \xE1udio: ' + job.input_audio.split('/').pop() : ''}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  const hasFalKey = !!_projConfig.fal_key;
+  const hasElKey  = !!(_projConfig.elevenlabs_key && _projConfig.elevenlabs_voice_id);
+  const imgBtn = document.getElementById('gen-ep-img-btn');
+  const audBtn = document.getElementById('gen-ep-aud-btn');
+  imgBtn.disabled = !hasFalKey;
+  imgBtn.title    = hasFalKey ? 'Gerar imagens com fal.ai' : 'Configure FAL_KEY em \u2699 Configura\xE7\xF5es';
+  audBtn.disabled = !hasElKey;
+  audBtn.title    = hasElKey  ? 'Gerar \xE1udios com ElevenLabs' : 'Configure ElevenLabs em \u2699 Configura\xE7\xF5es';
+}
+
+function removeGenScene(i) {
+  _genJobs.splice(i, 1);
+  renderGenPreview();
+}
+
+async function regenerateGenScene(i) {
+  const job = _genJobs[i];
+  if (!job) return;
+  const btn = document.getElementById(`gen-regen-btn-${i}`);
+  if (btn) { btn.disabled = true; btn.textContent = '\u23F3'; }
+  try {
+    const checkedImgs = Array.from(document.querySelectorAll('input[name="gen-ref-img"]:checked')).map(c => c.value);
+    const payload = {
+      label:      job.label || `Cena ${i+1}`,
+      resolution: job.resolution || '720P',
+      duration:   job.duration || 5,
+      ref_imgs:   checkedImgs.length ? checkedImgs : (job.ref_imgs || []),
+    };
+    const res = await fetch(`/projects/${encodeURIComponent(_genEpisodeProject)}/regenerate-scene`, {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('Erro: ' + (data.error || 'Falha na regenera\xE7\xE3o') + (data.raw ? '\n\n' + data.raw : '')); return; }
+    _genJobs[i] = { ..._genJobs[i], ...data.job };
+    renderGenPreview();
+  } finally {
+    const b = document.getElementById(`gen-regen-btn-${i}`);
+    if (b) { b.disabled = false; b.textContent = '\u21BB'; }
+  }
+}
+
+async function genEpisodeImages() {
+  const btn = document.getElementById('gen-ep-img-btn');
+  btn.disabled = true; btn.textContent = '\u23F3 Gerando imagens...';
+  try {
+    const res = await fetch(`/projects/${encodeURIComponent(_genEpisodeProject)}/generate-images`, {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({jobs: _genJobs})
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('Erro: ' + data.error); return; }
+    _genJobs = data.jobs;
+    renderGenPreview();
+  } finally {
+    btn.disabled = !_projConfig.fal_key;
+    btn.textContent = '\uD83D\uDDBC Gerar Imagens';
+  }
+}
+
+async function genEpisodeAudio() {
+  const hasTexts = _genJobs.some(j => j.audio_text);
+  if (!hasTexts) {
+    const text = prompt('Texto para narra\xE7\xE3o (aplicado a todas as cenas sem audio_text definido):\n(Deixe vazio para cancelar)');
+    if (!text) return;
+    _genJobs = _genJobs.map(j => ({...j, audio_text: j.audio_text || text}));
+  }
+  const btn = document.getElementById('gen-ep-aud-btn');
+  btn.disabled = true; btn.textContent = '\u23F3 Gerando \xE1udios...';
+  try {
+    const res = await fetch(`/projects/${encodeURIComponent(_genEpisodeProject)}/generate-audio`, {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({jobs: _genJobs})
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('Erro: ' + data.error); return; }
+    _genJobs = data.jobs;
+    renderGenPreview();
+  } finally {
+    const hasElKey = !!(_projConfig.elevenlabs_key && _projConfig.elevenlabs_voice_id);
+    btn.disabled = !hasElKey;
+    btn.textContent = '\uD83C\uDFB5 Gerar \xC1udios';
+  }
+}
+
+async function createEpisodeFromGen() {
+  const name = _genEpisodeTitle || `Ep \u2014 ${_genEpisodeProject} \u2014 ${new Date().toLocaleDateString('pt-BR')}`;
+  const res = await fetch('/nqueues', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ name, project: _genEpisodeProject, jobs: _genJobs })
+  });
+  const data = await res.json();
+  if (!res.ok) { alert(data.error || 'Erro ao criar epis\xF3dio'); return; }
+  closeGenEpisodeModal();
+  showTab('tab-queue', document.querySelectorAll('.tab')[3]);
+  openNq(data.id);
+}
+
+// Poll every 3 seconds
+setInterval(refreshNamedQueues, 3000);
+refreshNamedQueues();
+</script>
+
+<!-- Edit job modal -->
+<div id="edit-job-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeEditJobModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="edit-job-title">Editar Cena</span>
+      <button onclick="closeEditJobModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-nq-id">
+      <input type="hidden" id="edit-job-id">
+      <label>Label<input id="edit-label" type="text" class="modal-input"></label>
+      <label>Prompt<textarea id="edit-prompt" class="modal-input" rows="3"></textarea></label>
+      <label>Resolução
+        <select id="edit-resolution" class="modal-input">
+          <option>480P</option><option>540P</option><option>720P</option>
+        </select>
+      </label>
+      <label id="edit-duration-row">Duração (s)<input id="edit-duration" type="number" min="1" max="30" class="modal-input"></label>
+      <label>Seed<input id="edit-seed" type="number" class="modal-input"></label>
+      <div class="modal-checks">
+        <label><input id="edit-offload" type="checkbox"> offload</label>
+        <label><input id="edit-low-vram" type="checkbox"> low_vram</label>
+      </div>
+      <label id="edit-ref-imgs-row">Imagens de referência (caminhos separados por vírgula)
+        <input id="edit-ref-imgs" type="text" class="modal-input">
+      </label>
+      <label id="edit-input-video-row">Vídeo de entrada
+        <input id="edit-input-video" type="text" class="modal-input">
+      </label>
+      <label id="edit-input-image-row">Imagem de entrada
+        <input id="edit-input-image" type="text" class="modal-input">
+      </label>
+      <label id="edit-input-audio-row">Áudio de entrada
+        <input id="edit-input-audio" type="text" class="modal-input">
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="nq-action-btn" onclick="closeEditJobModal()">Cancelar</button>
+      <button class="nq-action-btn run" onclick="saveEditJob()">Salvar</button>
+    </div>
+  </div>
+</div>
+<!-- New episode modal -->
+<div id="new-episode-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeNewEpisodeModal()">
+  <div class="modal-box" style="width:min(400px,95vw)">
+    <div class="modal-header">
+      <span>Criar Episódio</span>
+      <button onclick="closeNewEpisodeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="new-episode-project">
+      <label>Nome do episódio
+        <input id="new-episode-name" type="text" class="modal-input" placeholder="ex: Ep01 — Abertura"
+               onkeydown="if(event.key==='Enter')createNewEpisode()">
+      </label>
+      <div style="font-size:.78rem;color:#666">Cria uma fila de geração vazia vinculada ao projeto. Adicione cenas na aba Fila.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="nq-action-btn" onclick="closeNewEpisodeModal()">Cancelar</button>
+      <button class="nq-action-btn run" onclick="createNewEpisode()">Criar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Global config modal -->
+<div id="global-config-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeGlobalConfigModal()">
+  <div class="modal-box" style="width:min(480px,95vw)">
+    <div class="modal-header">
+      <span>&#x2699; Configura&#xE7;&#xF5;es de APIs</span>
+      <button onclick="closeGlobalConfigModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:.78rem;color:#666;margin-bottom:4px">Configurações globais — valem para todos os projetos.</div>
+      <label style="font-size:.78rem;color:#888">FAL_KEY <span style="color:#555">(fal.ai — geração de imagens)</span>
+        <input id="gcfg-fal-key" type="password" class="modal-input" placeholder="key_xxxx..." style="margin-top:4px">
+      </label>
+      <label style="font-size:.78rem;color:#888">Modelo de imagem
+        <input id="gcfg-image-model" type="text" class="modal-input" placeholder="fal-ai/flux/dev" style="margin-top:4px">
+      </label>
+      <label style="font-size:.78rem;color:#888">ElevenLabs API Key <span style="color:#555">(geração de áudio / TTS)</span>
+        <input id="gcfg-el-key" type="password" class="modal-input" placeholder="sk_xxxx..." style="margin-top:4px">
+      </label>
+      <label style="font-size:.78rem;color:#888">ElevenLabs Voice ID
+        <input id="gcfg-el-voice" type="text" class="modal-input" placeholder="EXAVITQu4vr4xnSDxMaL" style="margin-top:4px">
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="nq-action-btn" onclick="closeGlobalConfigModal()">Cancelar</button>
+      <button id="gcfg-save-btn" class="nq-action-btn run" onclick="saveGlobalConfig()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gen Episode modal -->
+<div id="gen-ep-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeGenEpisodeModal()">
+  <div class="modal-box gen-ep-modal">
+    <div class="modal-header">
+      <span>⚡ Gerar Episódio com IA</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="gen-ep-btn" onclick="openSysPromptModal()" title="Ver e editar o system prompt da IA" style="font-size:.72rem;padding:3px 9px">✏ System Prompt</button>
+        <button onclick="closeGenEpisodeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: Concept form -->
+      <div id="gen-ep-step1" class="gen-ep-step"></div>
+      <!-- Step 2: Preview / Approval -->
+      <div id="gen-ep-step2" class="gen-ep-step">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:.8rem;color:#666;flex:1">Revise os prompts. Clique &#x21BB; para refazer uma cena via IA ou &#x2715; para remov\xEA-la.</span>
+          <button class="gen-ep-btn" id="gen-ep-img-btn" onclick="genEpisodeImages()" disabled>&#x1F5BC; Gerar Imagens</button>
+          <button class="gen-ep-btn" id="gen-ep-aud-btn" onclick="genEpisodeAudio()" disabled>&#x1F3B5; Gerar \xC1udios</button>
+        </div>
+        <div class="gen-ep-scene-list" id="gen-ep-scene-list"></div>
+      </div>
+    </div>
+    <!-- Step 1 footer -->
+    <div class="modal-footer" id="gen-ep-step1-footer" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div class="gen-ep-spinner" id="gen-ep-spinner"><span class="gen-ep-spin">⏳</span> Gerando prompts via Claude CLI...</div>
+      <div style="flex:1"></div>
+      <button class="gen-ep-btn" onclick="closeGenEpisodeModal()">Cancelar</button>
+      <button class="gen-ep-btn primary" id="gen-ep-gen-btn" onclick="generateEpisodePrompts()">Gerar Prompts ⚡</button>
+    </div>
+    <!-- Step 2 footer -->
+    <div class="modal-footer" id="gen-ep-step2-footer" style="display:none;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="gen-ep-btn" onclick="_showGenStep(1)">&#x2190; Voltar</button>
+      <button class="gen-ep-btn" onclick="resetGenEpisodeModal()" title="Descartar cenas geradas e recomeçar do passo 1" style="color:#f59e0b;border-color:#b45309">&#x21BA; Nova gera&#x00E7;&#x00E3;o</button>
+      <div style="flex:1"></div>
+      <button class="gen-ep-btn primary" onclick="createEpisodeFromGen()">Criar Fila &#x25BA;</button>
+    </div>
+  </div>
+</div>
+
+<!-- System Prompt modal -->
+<div id="sys-prompt-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeSysPromptModal()">
+  <div class="modal-box" style="width:min(780px,96vw);max-height:92vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <span>✏ System Prompt — Gerador de Episódio</span>
+      <button onclick="closeSysPromptModal()">✕</button>
+    </div>
+    <div class="modal-body" style="flex:1;display:flex;flex-direction:column;gap:8px;overflow:auto">
+      <div style="font-size:.75rem;color:#666;line-height:1.5">
+        Variáveis disponíveis (serão substituídas automaticamente na hora de gerar):
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{description}</code>
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{resources}</code>
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{task_type}</code>
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{resolution}</code>
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{duration}</code>
+        <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{json_template}</code>
+      </div>
+      <textarea id="sys-prompt-ta" class="proj-config-input" style="flex:1;min-height:420px;font-size:.78rem;font-family:monospace;line-height:1.6;resize:vertical"></textarea>
+    </div>
+    <div class="modal-footer" style="display:flex;gap:8px">
+      <button class="gen-ep-btn" onclick="resetSysPrompt()" style="color:#f59e0b;border-color:#b45309">↺ Restaurar padrão</button>
+      <div style="flex:1"></div>
+      <button class="gen-ep-btn" onclick="closeSysPromptModal()">Cancelar</button>
+      <button class="gen-ep-btn primary" onclick="saveSysPrompt()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Remove episode modal -->
+<div id="remove-episode-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeRemoveEpisodeModal()">
+  <div class="modal-box" style="width:min(420px,95vw)">
+    <div class="modal-header">
+      <span>Remover Episódio</span>
+      <button onclick="closeRemoveEpisodeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:.88rem;color:#e0e0e0">Remover <strong id="rem-ep-name"></strong> do projeto?</div>
+      <div style="font-size:.78rem;color:#888;margin-top:4px">Esta ação não pode ser desfeita.</div>
+    </div>
+    <div class="modal-footer" style="flex-direction:column;gap:8px;align-items:stretch">
+      <button class="nq-action-btn" onclick="removeEpisodeFromProject(false)">Remover do projeto (manter na fila)</button>
+      <button class="nq-action-btn" onclick="removeEpisodeFromProject(true)" style="background:#2a1010;border-color:#4a2020;color:#f87171">Remover do projeto e excluir da fila</button>
+      <button class="nq-action-btn" onclick="closeRemoveEpisodeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- New project modal -->
+<div id="new-project-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeNewProjectModal()">
+  <div class="modal-box" style="width:min(400px,95vw)">
+    <div class="modal-header">
+      <span>Novo Projeto</span>
+      <button onclick="closeNewProjectModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <label>Nome do projeto
+        <input id="new-project-name" type="text" class="modal-input" placeholder="ex: Episodio_01"
+               onkeydown="if(event.key==='Enter')createNewProject()">
+      </label>
+      <div style="font-size:.78rem;color:#666">Serão criadas subpastas: imagens/, audios/, docs/</div>
+    </div>
+    <div class="modal-footer">
+      <button class="nq-action-btn" onclick="closeNewProjectModal()">Cancelar</button>
+      <button class="nq-action-btn run" onclick="createNewProject()">Criar</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

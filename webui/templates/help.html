@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INEMA SkyReels V3 3.10.4 — Ajuda da Fila</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, sans-serif;
+    background: #0f0f13;
+    color: #d0d0e0;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ---- HEADER ---- */
+  .page-header {
+    background: #1a1a24;
+    border-bottom: 1px solid #2a2a3a;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .page-header a {
+    font-size: 0.8rem;
+    color: #7c3aed;
+    text-decoration: none;
+    padding: 5px 12px;
+    border: 1px solid #3a2a6a;
+    border-radius: 6px;
+    transition: all .2s;
+  }
+  .page-header a:hover { background: #2a1a4a; border-color: #7c3aed; }
+  .page-header h1 { font-size: 1.1rem; color: #a78bfa; flex: 1; }
+  .page-header span { font-size: 0.78rem; color: #555; }
+
+  /* ---- LAYOUT ---- */
+  .content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 36px 32px 80px;
+  }
+
+  /* ---- NAV ---- */
+  .toc {
+    background: #14141e;
+    border: 1px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+  }
+  .toc-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em; color: #555; margin-bottom: 10px; }
+  .toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .toc a { font-size: 0.82rem; color: #7c7caa; text-decoration: none; }
+  .toc a:hover { color: #a78bfa; }
+
+  /* ---- SECTIONS ---- */
+  h2 {
+    font-size: 1.1rem;
+    color: #a78bfa;
+    border-bottom: 1px solid #2a2a3a;
+    padding-bottom: 8px;
+    margin: 40px 0 18px;
+  }
+  h3 { font-size: 0.9rem; color: #c4b5fd; margin: 24px 0 10px; }
+  p { font-size: 0.88rem; color: #999; margin-bottom: 12px; }
+  strong { color: #d0d0e0; }
+
+  /* ---- TABLES ---- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 20px;
+  }
+  th {
+    background: #1a1a28;
+    color: #888;
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #2a2a3a;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  td { padding: 8px 12px; border-bottom: 1px solid #1a1a28; color: #bbb; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #16161f; }
+  td code { background: #1e1e2e; border-radius: 4px; padding: 1px 6px; font-size: 0.8rem; color: #a78bfa; }
+  td.req { color: #f59e0b; font-size: 0.75rem; font-weight: 600; }
+  td.opt { color: #555; font-size: 0.75rem; }
+
+  /* ---- CODE BLOCKS ---- */
+  .code-wrap {
+    background: #0a0a10;
+    border: 1px solid #1e1e2e;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    background: #14141e;
+    border-bottom: 1px solid #1e1e2e;
+    gap: 10px;
+  }
+  .code-header .lang {
+    font-size: 0.7rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    flex: 1;
+  }
+  .code-header .fname { font-size: 0.72rem; color: #666; font-family: monospace; }
+  pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    font-family: 'Courier New', 'Consolas', monospace;
+    color: #c0c0d8;
+  }
+
+  /* JSON syntax colours */
+  .j-key   { color: #7dd3fc; }
+  .j-str   { color: #86efac; }
+  .j-num   { color: #fcd34d; }
+  .j-bool  { color: #f9a8d4; }
+  .j-null  { color: #94a3b8; }
+  .j-punct { color: #555; }
+  .j-comment { color: #4a5568; font-style: italic; }
+
+  /* ---- EXAMPLE CARDS ---- */
+  .example-card {
+    background: #14141e;
+    border: 1px solid #2a2a3a;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .example-card-header {
+    padding: 14px 18px;
+    background: #1a1a28;
+    border-bottom: 1px solid #2a2a3a;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .example-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .example-info { flex: 1; }
+  .example-title { font-size: 0.95rem; color: #e0e0f0; font-weight: 600; margin-bottom: 4px; }
+  .example-desc { font-size: 0.8rem; color: #666; line-height: 1.5; }
+  .example-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .btn-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .btn-dl:hover { background: #6d28d9; }
+  .btn-copy {
+    padding: 8px 12px;
+    background: #1e1e2e;
+    color: #888;
+    border: 1px solid #333;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-copy:hover { border-color: #7c3aed; color: #a78bfa; }
+  .btn-copy.copied { border-color: #4ade80; color: #4ade80; }
+
+  .example-scenes {
+    padding: 14px 18px 6px;
+    border-bottom: 1px solid #1a1a28;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .scene-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 99px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .badge-r2v { color: #818cf8; border-color: #2e2a5a; background: #0d0d1e; }
+  .badge-sse { color: #34d399; border-color: #1a3a2a; background: #0a1a12; }
+  .badge-sw  { color: #fbbf24; border-color: #3a2e10; background: #1a1208; }
+  .badge-av  { color: #f472b6; border-color: #3a1a2a; background: #1a0d14; }
+
+  /* ---- NOTE BOX ---- */
+  .note {
+    background: #1a1a28;
+    border-left: 3px solid #7c3aed;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #888;
+    margin: 16px 0;
+    line-height: 1.55;
+  }
+  .note.warn { border-color: #f59e0b; }
+  .note code { background: #0a0a14; border-radius: 4px; padding: 1px 6px; color: #fcd34d; font-size: 0.8rem; }
+
+  /* ---- INLINE CODE ---- */
+  code { background: #1e1e2e; border-radius: 4px; padding: 1px 6px; font-size: 0.82rem; color: #a78bfa; }
+
+  /* ---- TAGS ---- */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 16px; }
+  .tag {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: #1a1a28;
+    border: 1px solid #2a2a3a;
+    color: #888;
+    font-family: monospace;
+  }
+  .tag.purple { color: #a78bfa; border-color: #3a2a6a; background: #12102a; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="/">← Voltar</a>
+  <h1>Ajuda — Fila de Geração</h1>
+  <span>INEMA SkyReels V3 3.10.4</span>
+</div>
+
+<div class="content">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Nesta página</div>
+    <ul>
+      <li><a href="#como-usar">Como usar a fila</a></li>
+      <li><a href="#formato-json">Formato JSON</a></li>
+      <li><a href="#formato-md">Formato Markdown</a></li>
+      <li><a href="#campos">Campos por tarefa</a></li>
+      <li><a href="#limites">Limites e regras</a></li>
+      <li><a href="#prompts">Prompts e imagens de referência</a></li>
+      <li><a href="#caminhos">Caminhos de arquivo</a></li>
+      <li><a href="#referencias">Referências entre cenas</a></li>
+      <li><a href="#exemplos">Exemplos prontos</a></li>
+      <li><a href="/doc/CHANGELOG.md" target="_blank">📋 Changelog completo</a></li>
+    </ul>
+  </div>
+
+  <!-- COMO USAR -->
+  <h2 id="como-usar">Como usar a fila</h2>
+  <p>A aba <strong>Fila</strong> permite enfileirar múltiplos jobs de geração que rodam automaticamente um após o outro, sem que você precise ficar monitorando.</p>
+
+  <table>
+    <tr><th>Ação</th><th>Como fazer</th></tr>
+    <tr><td><strong>Adicionar job manual</strong></td><td>Preencha o formulário no painel esquerdo e clique em <strong>+ Fila</strong></td></tr>
+    <tr><td><strong>Importar arquivo</strong></td><td>Aba Fila → botão <strong>↑ Importar</strong> → selecione um <code>.json</code> ou <code>.md</code></td></tr>
+    <tr><td><strong>Remover job</strong></td><td>Clique no <strong>✕</strong> ao lado do job (só funciona em jobs pendentes)</td></tr>
+    <tr><td><strong>Limpar fila</strong></td><td>Botão <strong>Limpar</strong> remove todos os jobs pendentes</td></tr>
+    <tr><td><strong>Gerar imediatamente</strong></td><td>Botão <strong>Gerar Vídeo</strong> também usa a fila — começa agora se não há nada rodando</td></tr>
+  </table>
+
+  <div class="note">
+    A fila roda os jobs na ordem em que foram adicionados. O próximo job começa automaticamente quando o anterior termina (ou falha).
+  </div>
+
+  <!-- FORMATO JSON -->
+  <h2 id="formato-json">Formato JSON</h2>
+  <p>Um array de objetos. Cada objeto é um job. Salve com extensão <code>.json</code>.</p>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">JSON</span>
+      <span class="fname">minha_fila.json</span>
+    </div>
+<pre><span class="j-punct">[</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 1 — Abertura"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"reference_to_video"</span><span class="j-punct">,</span>
+    <span class="j-key">"prompt"</span><span class="j-punct">:</span>      <span class="j-str">"A woman walks through a sunlit forest, cinematic."</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">5</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">42</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>     <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>    <span class="j-bool">false</span><span class="j-punct">,</span>
+    <span class="j-key">"ref_imgs"</span><span class="j-punct">:</span>    <span class="j-punct">[</span><span class="j-str">"uploads/personagem.jpg"</span><span class="j-punct">,</span> <span class="j-str">"uploads/floresta.jpg"</span><span class="j-punct">]</span>
+  <span class="j-punct">},</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensão"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"single_shot_extension"</span><span class="j-punct">,</span>
+    <span class="j-key">"prompt"</span><span class="j-punct">:</span>      <span class="j-str">"She stops to look at a deer in the distance."</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">10</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">43</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>     <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"input_video"</span><span class="j-punct">:</span> <span class="j-str">"{{ "{{prev}}" }}"</span>
+  <span class="j-punct">},</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 3 — Avatar narrador"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"talking_avatar"</span><span class="j-punct">,</span>
+    <span class="j-key">"prompt"</span><span class="j-punct">:</span>      <span class="j-str">"A narrator speaking calmly."</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"480P"</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">99</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>    <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"input_image"</span><span class="j-punct">:</span> <span class="j-str">"uploads/retrato.jpg"</span><span class="j-punct">,</span>
+    <span class="j-key">"input_audio"</span><span class="j-punct">:</span> <span class="j-str">"uploads/narracao.mp3"</span>
+  <span class="j-punct">}</span>
+<span class="j-punct">]</span></pre>
+  </div>
+
+  <!-- FORMATO MD -->
+  <h2 id="formato-md">Formato Markdown</h2>
+  <p>Cada job é uma seção <code>##</code>. Os campos são linhas <code>- chave: valor</code>. Salve com extensão <code>.md</code> ou <code>.txt</code>.</p>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Markdown</span>
+      <span class="fname">minha_fila.md</span>
+    </div>
+<pre><span style="color:#6b7280"># Meu Roteiro</span>
+
+<span style="color:#a78bfa">## Cena 1 — Abertura</span>
+<span style="color:#c4b5fd">- task_type:</span> <span style="color:#86efac">reference_to_video</span>
+<span style="color:#c4b5fd">- prompt:</span> <span style="color:#86efac">A woman walks through a sunlit forest, cinematic.</span>
+<span style="color:#c4b5fd">- resolution:</span> <span style="color:#fcd34d">540P</span>
+<span style="color:#c4b5fd">- duration:</span> <span style="color:#fcd34d">5</span>
+<span style="color:#c4b5fd">- seed:</span> <span style="color:#fcd34d">42</span>
+<span style="color:#c4b5fd">- offload:</span> <span style="color:#f9a8d4">true</span>
+<span style="color:#c4b5fd">- ref_imgs:</span> <span style="color:#86efac">uploads/personagem.jpg, uploads/floresta.jpg</span>
+
+<span style="color:#a78bfa">## Cena 2 — Avatar</span>
+<span style="color:#c4b5fd">- task_type:</span> <span style="color:#86efac">talking_avatar</span>
+<span style="color:#c4b5fd">- prompt:</span> <span style="color:#86efac">Narrator speaking.</span>
+<span style="color:#c4b5fd">- resolution:</span> <span style="color:#fcd34d">480P</span>
+<span style="color:#c4b5fd">- seed:</span> <span style="color:#fcd34d">99</span>
+<span style="color:#c4b5fd">- low_vram:</span> <span style="color:#f9a8d4">true</span>
+<span style="color:#c4b5fd">- input_image:</span> <span style="color:#86efac">uploads/retrato.jpg</span>
+<span style="color:#c4b5fd">- input_audio:</span> <span style="color:#86efac">uploads/narracao.mp3</span></pre>
+  </div>
+
+  <!-- CAMPOS -->
+  <h2 id="campos">Campos por tarefa</h2>
+
+  <table>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>reference_to_video</th>
+      <th>single/shot_extension</th>
+      <th>talking_avatar</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td><code>task_type</code></td><td>string</td>
+      <td class="req">✔ obrigatório</td><td class="req">✔ obrigatório</td><td class="req">✔ obrigatório</td>
+      <td>Nome da tarefa (ver valores abaixo)</td>
+    </tr>
+    <tr>
+      <td><code>prompt</code></td><td>string</td>
+      <td class="req">✔ obrigatório</td><td class="req">✔ obrigatório</td><td class="opt">opcional</td>
+      <td>Descrição do vídeo. No talking_avatar tem baixa influência</td>
+    </tr>
+    <tr>
+      <td><code>resolution</code></td><td>string</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">opcional</td>
+      <td><code>480P</code> / <code>540P</code> / <code>720P</code>. talking_avatar só aceita 480P e 720P</td>
+    </tr>
+    <tr>
+      <td><code>duration</code></td><td>int</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">ignorado</td>
+      <td>Duração em segundos. talking_avatar usa a duração do áudio</td>
+    </tr>
+    <tr>
+      <td><code>seed</code></td><td>int</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">opcional</td>
+      <td>Semente. Mesmo seed + mesmos inputs = mesmo resultado</td>
+    </tr>
+    <tr>
+      <td><code>offload</code></td><td>bool</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">n/a</td>
+      <td>CPU offload entre passes. Reduz VRAM mas aumenta tempo</td>
+    </tr>
+    <tr>
+      <td><code>low_vram</code></td><td>bool</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="req">✔ obrigatório</td>
+      <td>FP8 + block offload. Obrigatório no talking_avatar (modelo 19B)</td>
+    </tr>
+    <tr>
+      <td><code>ref_imgs</code></td><td>array</td>
+      <td class="req">✔ obrigatório</td><td>—</td><td>—</td>
+      <td>1–4 caminhos ou URLs de imagens de referência</td>
+    </tr>
+    <tr>
+      <td><code>input_video</code></td><td>string</td>
+      <td>—</td><td class="req">✔ obrigatório</td><td>—</td>
+      <td>Caminho, URL ou referência (<code>{{ "{{prev}}" }}</code>, <code>{{ "{{job:N}}" }}</code>) do vídeo a estender. Não aceita imagens — só vídeo.</td>
+    </tr>
+    <tr>
+      <td><code>input_image</code></td><td>string</td>
+      <td>—</td><td>—</td><td class="req">✔ obrigatório</td>
+      <td>Caminho ou URL do retrato (jpg, png, gif, bmp)</td>
+    </tr>
+    <tr>
+      <td><code>input_audio</code></td><td>string</td>
+      <td>—</td><td>—</td><td class="req">✔ obrigatório</td>
+      <td>Caminho ou URL do áudio (mp3, wav, m4a, mp4, mov, mkv…)</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td><td>string</td>
+      <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">opcional</td>
+      <td>Nome amigável exibido na lista da fila</td>
+    </tr>
+  </table>
+
+  <div class="tag-list">
+    <span class="tag purple">reference_to_video</span>
+    <span class="tag purple">single_shot_extension</span>
+    <span class="tag purple">shot_switching_extension</span>
+    <span class="tag purple">talking_avatar</span>
+  </div>
+
+  <!-- LIMITES -->
+  <h2 id="limites">Limites e regras</h2>
+
+  <table>
+    <tr><th>Tarefa</th><th>Duração</th><th>Resolução</th><th>Observação</th></tr>
+    <tr>
+      <td><code>reference_to_video</code></td>
+      <td>1–30 s (recomendado 5 s)</td>
+      <td>480P / 540P / 720P</td>
+      <td>1–4 imagens de referência</td>
+    </tr>
+    <tr>
+      <td><code>single_shot_extension</code></td>
+      <td>5–30 s</td>
+      <td>480P / 540P / 720P</td>
+      <td>Vídeo de entrada obrigatório</td>
+    </tr>
+    <tr>
+      <td><code>shot_switching_extension</code></td>
+      <td>máx 5 s</td>
+      <td>480P / 540P / 720P</td>
+      <td>Prefixo no prompt obrigatório (ver tabela abaixo)</td>
+    </tr>
+    <tr>
+      <td><code>talking_avatar</code></td>
+      <td>= duração do áudio (máx 200 s)</td>
+      <td>480P / 720P</td>
+      <td><code>low_vram: true</code> obrigatório</td>
+    </tr>
+  </table>
+
+  <h3>Diferença entre as extensões</h3>
+
+  <table>
+    <tr>
+      <th></th>
+      <th><code>single_shot_extension</code></th>
+      <th><code>shot_switching_extension</code></th>
+    </tr>
+    <tr>
+      <td><strong>O que faz</strong></td>
+      <td>Continua a cena de forma fluida — a câmera segue gravando o mesmo plano</td>
+      <td>Simula um corte de câmera — muda de perspectiva como em filme</td>
+    </tr>
+    <tr>
+      <td><strong>Contexto do input</strong></td>
+      <td>Usa os últimos frames para continuar o movimento e a narrativa</td>
+      <td>Usa os últimos frames para herdar aparência e iluminação no novo ângulo</td>
+    </tr>
+    <tr>
+      <td><strong>Duração</strong></td>
+      <td>5–30 s</td>
+      <td>máx 5 s</td>
+    </tr>
+    <tr>
+      <td><strong>Prompt</strong></td>
+      <td>Descreve o que acontece a seguir na cena</td>
+      <td>Deve começar com prefixo de corte: <code>[ZOOM_IN_CUT]</code> etc.</td>
+    </tr>
+    <tr>
+      <td><strong>ref_imgs</strong></td>
+      <td>Não aceita — só <code>input_video</code></td>
+      <td>Não aceita — só <code>input_video</code></td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Quando preferir <code>reference_to_video</code> no lugar de <code>shot_switching_extension</code>:</strong>
+    se você quer mudar de plano mas tem imagens de referência do personagem/cenário,
+    <code>reference_to_video</code> dá mais controle visual, não tem limite de 5 s e é mais
+    estável em hardware com pouca VRAM. O <code>shot_switching_extension</code> vale a pena
+    quando você quer que o novo plano herde automaticamente a aparência exata do clip
+    anterior sem precisar preparar imagens adicionais.
+  </div>
+
+  <!-- PROMPTS E IMAGENS DE REFERÊNCIA -->
+  <h2 id="prompts">Prompts e imagens de referência</h2>
+
+  <h3>A imagem de referência é uma guia, não uma cópia</h3>
+  <p>
+    Quando você passa imagens em <code>ref_imgs</code>, o modelo aprende a <strong>identidade visual</strong>
+    do sujeito (rosto, cor, forma) e tenta mantê-la nos frames gerados — mas não copia pixels.
+    O resultado é sempre uma geração nova com movimento, iluminação e composição definidos pelo prompt.
+  </p>
+
+  <table>
+    <tr><th>Aspecto</th><th>Comportamento</th></tr>
+    <tr>
+      <td><strong>Identidade</strong> (rosto, cor, roupa)</td>
+      <td>Alta fidelidade — o modelo tenta preservar</td>
+    </tr>
+    <tr>
+      <td><strong>Postura / expressão</strong></td>
+      <td>Varia conforme o movimento gerado e o prompt</td>
+    </tr>
+    <tr>
+      <td><strong>Iluminação / fundo</strong></td>
+      <td>Adapta-se ao contexto da cena descrita no prompt</td>
+    </tr>
+    <tr>
+      <td><strong>Composição / enquadramento</strong></td>
+      <td>Controlada pelo prompt, não pela imagem</td>
+    </tr>
+    <tr>
+      <td><strong>Pixels exatos</strong></td>
+      <td>Nunca — é geração, não compositing ou copy-paste</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Mais imagens = mais consistência.</strong>
+    Você pode passar até 4 imagens de referência. Imagens do mesmo personagem em ângulos
+    diferentes (frente, perfil, corpo) ajudam o modelo a manter consistência em cenas com movimento.
+    A métrica interna de <em>Reference Consistency</em> do modelo é 0,67 (escala 0–1) — alta, mas
+    não perfeita, pois o objetivo é gerar movimento natural, não congelar a imagem.
+  </div>
+
+  <div class="note warn">
+    <strong>Prompt vs imagem:</strong> se o prompt contradiz a referência (ex: imagem de cabelo preto
+    mas prompt diz "blonde hair"), o <strong>prompt tende a ganhar</strong>. Use o prompt para descrever
+    a cena e a ação; deixe a identidade do personagem para a imagem de referência.
+  </div>
+
+  <h3>Como escrever prompts por tarefa</h3>
+
+  <table>
+    <tr>
+      <th>Tarefa</th>
+      <th>O que colocar no prompt</th>
+      <th>Exemplo</th>
+    </tr>
+    <tr>
+      <td><code>reference_to_video</code></td>
+      <td>Descreva a cena, ação e câmera. Não precisa re-descrever o personagem (ele vem da imagem).</td>
+      <td><em>"A woman walks through a sunlit forest, cinematic wide shot."</em></td>
+    </tr>
+    <tr>
+      <td><code>single_shot_extension</code></td>
+      <td>Descreva o que acontece <strong>a seguir</strong> na mesma cena. O modelo já tem o contexto do vídeo anterior.</td>
+      <td><em>"She stops to look at a deer in the distance, slow motion."</em></td>
+    </tr>
+    <tr>
+      <td><code>shot_switching_extension</code></td>
+      <td>Comece com <strong>prefixo de corte</strong>, depois descreva a nova perspectiva. O modelo herda aparência e iluminação do vídeo anterior.</td>
+      <td><em>"[ZOOM_IN_CUT] Close-up of the woman's face, determined expression."</em></td>
+    </tr>
+    <tr>
+      <td><code>talking_avatar</code></td>
+      <td>Descreva postura, expressão e movimento de câmera. O áudio sincroniza o lábio automaticamente — não precisa transcrever a fala.</td>
+      <td><em>"A woman giving a speech. Confident, poised. Use a static shot."</em></td>
+    </tr>
+  </table>
+
+  <h3>Prefixos obrigatórios para shot_switching_extension</h3>
+  <p>O prompt <strong>deve começar</strong> com um destes prefixos, exatamente como escrito:</p>
+  <table>
+    <tr><th>Prefixo</th><th>Efeito</th></tr>
+    <tr><td><code>[ZOOM_IN_CUT]</code></td><td>Câmera aproxima após o corte (plano fechado)</td></tr>
+    <tr><td><code>[ZOOM_OUT_CUT]</code></td><td>Câmera afasta após o corte (plano aberto)</td></tr>
+    <tr><td><code>[STATIC_CUT]</code></td><td>Corte simples, câmera estática no novo ângulo</td></tr>
+    <tr><td><code>[PAN_LEFT_CUT]</code></td><td>Panorâmica para a esquerda após o corte</td></tr>
+    <tr><td><code>[PAN_RIGHT_CUT]</code></td><td>Panorâmica para a direita após o corte</td></tr>
+  </table>
+
+  <div class="note">
+    <strong>Dica:</strong> o próprio README do projeto recomenda usar um LLM (ex: ChatGPT, Claude)
+    para redigir e otimizar prompts para <code>shot_switching_extension</code>, garantindo direção
+    cinematográfica clara e precisa.
+  </div>
+
+  <h3>Links de documentação oficial</h3>
+  <table>
+    <tr><th>Recurso</th><th>Link</th></tr>
+    <tr><td>Technical Report (artigo científico)</td><td><a href="https://arxiv.org/abs/2601.17323" target="_blank" style="color:#7c3aed">arxiv.org/abs/2601.17323</a></td></tr>
+    <tr><td>HuggingFace — Reference to Video</td><td><a href="https://huggingface.co/Skywork/SkyReels-V3-R2V-14B" target="_blank" style="color:#7c3aed">Skywork/SkyReels-V3-R2V-14B</a></td></tr>
+    <tr><td>HuggingFace — Video Extension</td><td><a href="https://huggingface.co/Skywork/SkyReels-V3-V2V-14B" target="_blank" style="color:#7c3aed">Skywork/SkyReels-V3-V2V-14B</a></td></tr>
+    <tr><td>HuggingFace — Talking Avatar</td><td><a href="https://huggingface.co/Skywork/SkyReels-V3-A2V-19B" target="_blank" style="color:#7c3aed">Skywork/SkyReels-V3-A2V-19B</a></td></tr>
+    <tr><td>Playground online</td><td><a href="https://huggingface.co/spaces/Skywork/SkyReels-V3" target="_blank" style="color:#7c3aed">huggingface.co/spaces/Skywork/SkyReels-V3</a></td></tr>
+  </table>
+
+  <!-- CAMINHOS -->
+  <h2 id="caminhos">Caminhos de arquivo</h2>
+  <p>Todos os caminhos são relativos à <strong>raiz do projeto</strong> (<code>SkyReels-V3/</code>).</p>
+
+  <table>
+    <tr><th>Local</th><th>Onde fica</th></tr>
+    <tr><td>Uploads da interface web</td><td><code>uploads/nome_do_arquivo.jpg</code></td></tr>
+    <tr><td>Vídeos gerados</td><td><code>result/&lt;task_type&gt;/&lt;seed&gt;_&lt;data&gt;.mp4</code></td></tr>
+    <tr><td>URL pública</td><td><code>https://exemplo.com/arquivo.mp3</code> (baixado automaticamente)</td></tr>
+    <tr><td>Caminho absoluto</td><td><code>/home/usuario/arquivo.png</code></td></tr>
+  </table>
+
+  <!-- REFERÊNCIAS ENTRE CENAS -->
+  <h2 id="referencias">Referências entre cenas</h2>
+  <p>
+    Os campos <code>input_video</code>, <code>input_image</code> e <code>input_audio</code>
+    aceitam três formas de valor:
+  </p>
+
+  <table>
+    <tr>
+      <th>Forma</th>
+      <th>Exemplo</th>
+      <th>Quando usar</th>
+    </tr>
+    <tr>
+      <td><strong>Caminho fixo</strong></td>
+      <td><code>uploads/meu_video.mp4</code></td>
+      <td>arquivo já existe no servidor; não muda entre gerações</td>
+    </tr>
+    <tr>
+      <td><code>{{ "{{prev}}" }}</code></td>
+      <td><code>"input_video": "{{ "{{prev}}" }}"</code></td>
+      <td>output da cena imediatamente anterior — caso mais comum</td>
+    </tr>
+    <tr>
+      <td><code>{{ "{{job:N}}" }}</code></td>
+      <td><code>"input_video": "{{ "{{job:0}}" }}"</code></td>
+      <td>output de qualquer cena pelo índice N (base 0)</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Resolução em tempo de execução:</strong> referências dinâmicas (<code>{{ "{{prev}}" }}</code>,
+    <code>{{ "{{job:N}}" }}</code>) são substituídas pelo caminho real do vídeo no momento
+    em que o job começa. Se a cena referenciada falhou ou ainda não rodou, o job falha
+    com aviso no log.
+  </div>
+
+  <h3 style="margin:20px 0 8px;font-size:.95rem;color:#c4b5fd">Quais campos aceitam referências?</h3>
+  <table>
+    <tr><th>Campo</th><th>Tarefas</th><th>Aceita referência?</th></tr>
+    <tr>
+      <td><code>input_video</code></td>
+      <td><code>single_shot_extension</code>, <code>shot_switching_extension</code></td>
+      <td>✔ sim — <code>{{ "{{prev}}" }}</code>, <code>{{ "{{job:N}}" }}</code> ou caminho fixo</td>
+    </tr>
+    <tr>
+      <td><code>input_image</code></td>
+      <td><code>talking_avatar</code></td>
+      <td>✔ sim — caminho fixo ou referência</td>
+    </tr>
+    <tr>
+      <td><code>input_audio</code></td>
+      <td><code>talking_avatar</code></td>
+      <td>✔ sim — caminho fixo ou referência</td>
+    </tr>
+    <tr>
+      <td><code>ref_imgs</code></td>
+      <td><code>reference_to_video</code></td>
+      <td>⚠ apenas caminhos fixos — não aceita <code>{{ "{{prev}}" }}</code></td>
+    </tr>
+  </table>
+
+  <div class="note warn">
+    <strong>Extension tasks não aceitam imagens de referência.</strong>
+    <code>single_shot_extension</code> e <code>shot_switching_extension</code> só recebem
+    <code>input_video</code> — o campo <code>ref_imgs</code> é ignorado nessas tarefas.
+    Para guiar o estilo visual use o prompt de texto.
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="lang">JSON</span><span class="fname">exemplos de referência</span></div>
+<pre><span class="j-punct">[</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>      <span class="j-str">"Cena 1 — Abertura"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>  <span class="j-str">"reference_to_video"</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span> <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>   <span class="j-num">5</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>       <span class="j-num">42</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>    <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>   <span class="j-bool">false</span><span class="j-punct">,</span>
+    <span class="j-key">"ref_imgs"</span><span class="j-punct">:</span>   <span class="j-punct">[</span><span class="j-str">"uploads/personagem.jpg"</span><span class="j-punct">]</span>   <span class="j-comment">← caminho fixo</span>
+  <span class="j-punct">},</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensão"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"single_shot_extension"</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">10</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">43</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>     <span class="j-bool">false</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>    <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"input_video"</span><span class="j-punct">:</span> <span class="j-str">"{{ "{{prev}}" }}"</span>    <span class="j-comment">← output da Cena 1</span>
+  <span class="j-punct">},</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 3 — Transição"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"shot_switching_extension"</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">5</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">44</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>     <span class="j-bool">false</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>    <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"input_video"</span><span class="j-punct">:</span> <span class="j-str">"{{ "{{prev}}" }}"</span>    <span class="j-comment">← output da Cena 2</span>
+  <span class="j-punct">},</span>
+  <span class="j-punct">{</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 4 — Volta à Cena 1"</span><span class="j-punct">,</span>
+    <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"single_shot_extension"</span><span class="j-punct">,</span>
+    <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
+    <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">8</span><span class="j-punct">,</span>
+    <span class="j-key">"seed"</span><span class="j-punct">:</span>        <span class="j-num">45</span><span class="j-punct">,</span>
+    <span class="j-key">"offload"</span><span class="j-punct">:</span>     <span class="j-bool">false</span><span class="j-punct">,</span>
+    <span class="j-key">"low_vram"</span><span class="j-punct">:</span>    <span class="j-bool">true</span><span class="j-punct">,</span>
+    <span class="j-key">"input_video"</span><span class="j-punct">:</span> <span class="j-str">"{{ "{{job:0}}" }}"</span>   <span class="j-comment">← output da Cena 1 (índice 0)</span>
+  <span class="j-punct">}</span>
+<span class="j-punct">]</span></pre>
+  </div>
+
+  <div class="note warn">
+    <strong>Importante:</strong> índices começam em 0 e seguem a ordem da fila.
+    <code>{{ "{{prev}}" }}</code> é equivalente a <code>{{ "{{job:N-1}}" }}</code> onde N é o índice da cena atual.
+    A fila processa em sequência — a cena referenciada deve vir antes desta.
+  </div>
+
+  <!-- EXEMPLOS -->
+  <h2 id="exemplos">Exemplos prontos para download</h2>
+  <p>Clique em <strong>↓ Baixar</strong> para salvar o arquivo e importá-lo na aba Fila.</p>
+
+  <!-- Exemplo 1 -->
+  <div class="example-card">
+    <div class="example-card-header">
+      <div class="example-icon">🎬</div>
+      <div class="example-info">
+        <div class="example-title">Roteiro — 5 cenas</div>
+        <div class="example-desc">
+          Uma história coerente: personagem acorda, olha pela janela, close cinemático, sai para a rua, narra para câmera.
+          Demonstra o uso de todas as quatro tarefas em sequência.
+        </div>
+      </div>
+      <div class="example-actions">
+        <button class="btn-copy" id="copy-btn-exemplo_roteiro" onclick="copyExample('exemplo_roteiro')">⎘ Copiar</button>
+        <a class="btn-dl" href="/doc/download/exemplo_roteiro.json" download="exemplo_roteiro.json">↓ Baixar</a>
+      </div>
+    </div>
+    <div class="example-scenes">
+      <span class="scene-badge badge-r2v">Cena 1 · reference_to_video</span>
+      <span class="scene-badge badge-sse">Cena 2 · single_shot_extension</span>
+      <span class="scene-badge badge-sw">Cena 3 · shot_switching [ZOOM_IN_CUT]</span>
+      <span class="scene-badge badge-r2v">Cena 4 · reference_to_video</span>
+      <span class="scene-badge badge-av">Cena 5 · talking_avatar</span>
+    </div>
+    <div class="code-wrap" style="border:none;border-radius:0;margin:0">
+      <div class="code-header">
+        <span class="lang">JSON</span>
+        <span class="fname">exemplo_roteiro.json</span>
+      </div>
+      <pre id="code-exemplo_roteiro"></pre>
+    </div>
+  </div>
+
+  <!-- Exemplo 2 -->
+  <div class="example-card">
+    <div class="example-card-header">
+      <div class="example-icon">🏔️</div>
+      <div class="example-info">
+        <div class="example-title">Vídeo de 10 cenas — Trilha de montanha</div>
+        <div class="example-desc">
+          Uma jornada épica: paisagem ao amanhecer, caminhante, acampamento, fogueira noturna, chegada ao cume e narração final.
+          Uso avançado com transições cinemáticas e variação de resolução.
+        </div>
+      </div>
+      <div class="example-actions">
+        <button class="btn-copy" id="copy-btn-exemplo_10_cenas" onclick="copyExample('exemplo_10_cenas')">⎘ Copiar</button>
+        <a class="btn-dl" href="/doc/download/exemplo_10_cenas.json" download="exemplo_10_cenas.json">↓ Baixar</a>
+      </div>
+    </div>
+    <div class="example-scenes">
+      <span class="scene-badge badge-r2v">01 · reference_to_video</span>
+      <span class="scene-badge badge-sse">02 · single_shot_extension</span>
+      <span class="scene-badge badge-r2v">03 · reference_to_video</span>
+      <span class="scene-badge badge-sw">04 · shot_switching [ZOOM_IN_CUT]</span>
+      <span class="scene-badge badge-r2v">05 · reference_to_video</span>
+      <span class="scene-badge badge-sse">06 · single_shot_extension</span>
+      <span class="scene-badge badge-sw">07 · shot_switching [PAN_RIGHT_CUT]</span>
+      <span class="scene-badge badge-r2v">08 · reference_to_video</span>
+      <span class="scene-badge badge-sse">09 · single_shot_extension</span>
+      <span class="scene-badge badge-av">10 · talking_avatar</span>
+    </div>
+    <div class="code-wrap" style="border:none;border-radius:0;margin:0">
+      <div class="code-header">
+        <span class="lang">JSON</span>
+        <span class="fname">exemplo_10_cenas.json</span>
+      </div>
+      <pre id="code-exemplo_10_cenas"></pre>
+    </div>
+  </div>
+
+  <!-- Exemplo 3 -->
+  <div class="example-card">
+    <div class="example-card-header">
+      <div class="example-icon">🎭</div>
+      <div class="example-info">
+        <div class="example-title">Episódio — "Primeiro Dia" (59 jobs · 4 personagens)</div>
+        <div class="example-desc">
+          10 cenas completas com diálogos entre Valen, Lumi, Maya e Caio.
+          Cada cena tem plano de estabelecimento + falas (talking_avatar) + plano de fechamento.
+          Requer imagens de retrato dos 4 personagens, imagens de cena (cena1–cena10) e 38 arquivos de áudio.
+        </div>
+      </div>
+      <div class="example-actions">
+        <button class="btn-copy" id="copy-btn-ep01_primeiro_dia" onclick="copyExample('ep01_primeiro_dia')">⎘ Copiar</button>
+        <a class="btn-dl" href="/doc/download/ep01_primeiro_dia.json" download="ep01_primeiro_dia.json">↓ Baixar</a>
+      </div>
+    </div>
+    <div class="example-scenes">
+      <span class="scene-badge badge-r2v">C01-A · reference_to_video</span>
+      <span class="scene-badge badge-av">C01-B,C,D,E · talking_avatar ×4</span>
+      <span class="scene-badge badge-r2v">C01-F · reference_to_video</span>
+      <span style="font-size:.7rem;color:#555;padding:3px 8px">… padrão se repete nas 10 cenas</span>
+      <span class="scene-badge badge-av">38 × talking_avatar</span>
+      <span class="scene-badge badge-r2v">21 × reference_to_video</span>
+    </div>
+    <div class="note" style="margin:0;border-radius:0;border-left:none;border-top:1px solid #1a1a28">
+      <strong>Imagens necessárias:</strong>
+      <code>uploads/valen.png</code> <code>uploads/lumi.png</code> <code>uploads/maya.png</code> <code>uploads/caio.png</code>
+      · <code>uploads/cena1.png</code> … <code>uploads/cena10.png</code><br>
+      <strong>Áudios necessários (38):</strong>
+      <code>uploads/audio/c01_valen_01.mp3</code> … <code>uploads/audio/c10_valen_01.mp3</code>
+      — um arquivo por fala, nomeados como <code>c{cena}_{personagem}_{número}.mp3</code>
+    </div>
+    <div class="code-wrap" style="border:none;border-radius:0;margin:0">
+      <div class="code-header">
+        <span class="lang">JSON</span>
+        <span class="fname">ep01_primeiro_dia.json</span>
+      </div>
+      <pre id="code-ep01_primeiro_dia"></pre>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// Load and display example JSON files
+async function loadExamples() {
+  for (const name of ['exemplo_roteiro', 'exemplo_10_cenas', 'ep01_primeiro_dia']) {
+    try {
+      const res = await fetch(`/doc/${name}.json`);
+      const text = await res.text();
+      document.getElementById(`code-${name}`).innerHTML = highlightJson(text);
+    } catch(e) {
+      document.getElementById(`code-${name}`).textContent = 'Erro ao carregar arquivo.';
+    }
+  }
+}
+
+async function copyExample(name) {
+  try {
+    const res = await fetch(`/doc/${name}.json`);
+    const text = await res.text();
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById(`copy-btn-${name}`);
+    btn.textContent = '✔ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘ Copiar'; btn.classList.remove('copied'); }, 2000);
+  } catch(e) { alert('Não foi possível copiar.'); }
+}
+
+// Simple JSON syntax highlighter
+function highlightJson(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"([^"]+)"(\s*:)/g,
+      '<span class="j-key">"$1"</span><span class="j-punct">$2</span>')
+    .replace(/:\s*"([^"]*)"/g,
+      ': <span class="j-str">"$1"</span>')
+    .replace(/:\s*(-?\d+\.?\d*)/g,
+      ': <span class="j-num">$1</span>')
+    .replace(/:\s*(true|false)/g,
+      ': <span class="j-bool">$1</span>')
+    .replace(/:\s*(null)/g,
+      ': <span class="j-null">$1</span>')
+    .replace(/([{}\[\],])/g,
+      '<span class="j-punct">$1</span>');
+}
+
+loadExamples();
+</script>
+</body>
+</html>
