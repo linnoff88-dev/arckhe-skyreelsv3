@@ -2,7 +2,7 @@
   <img src="assets/logo2.png" alt="SkyReels Logo" width="40%">
 </p>
 
-<h1 align="center">SkyReels V3 ê¢â¬â INEMA Web UI</h1>
+<h1 align="center">SkyReels V3 ê¢â¬â ARCKHÉ Web UI</h1>
 
 <p align="center">
   Fork do <a href="https://github.com/SkyworkAI/SkyReels-V3">SkyworkAI/SkyReels-V3</a> com Web UI completa para produêÂ§êÂ£o de episêÂ³dios em batch.
@@ -15,7 +15,7 @@
 Este repositêÂ³rio êÂ© um fork do modelo de geraêÂ§êÂ£o de vêÂ­deo **SkyReels V3**, com uma interface Web (Web UI) construêÂ­da sobre ele para produêÂ§êÂ£o de vêÂ­deos em escala ê¢â¬â especialmente sêÂ©ries animadas com mêÂºltiplos personagens e cenas.
 
 > **Em uso:** este projeto êÂ© consumido hoje pela plataforma
-> [`imkt4`](https://github.com/inematds/imkt4) (orquestrador multi-tenant de
+> [`imkt4`](https://github.com/linnoff88-dev/imkt4) (orquestrador multi-tenant de
 > pipelines de mêÂ­dia) como worker macro de geraêÂ§êÂ£o de vêÂ­deo por roteiro.
 > A partir da v3.49, a Web UI expêÂµe `/health`, webhook callback em
 > `/nqueues/<id>/run?callback_url=...` e `resume-from-error` justamente
@@ -48,7 +48,7 @@ Este repositêÂ³rio êÂ© um fork do modelo de geraêÂ§êÂ£o de v
 ## InstalaêÂ§êÂ£o
 
 ```bash
-git clone https://github.com/inematds/skyreelsv3
+git clone https://github.com/linnoff88-dev/skyreelsv3
 cd skyreelsv3
 
 python3.12 -m venv .venv

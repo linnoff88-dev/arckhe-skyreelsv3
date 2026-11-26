@@ -26,7 +26,7 @@
 | Image-to-Video | ✅ 5B | ✅ | ✅ (R2V com até 4 imagens ref.) |
 | **Multi-referência (1–4 imagens)** | ❌ | ❌ | ✅ **NOVO** |
 | **Extensêo de vídeo (5–30s)** | ❌ | ❌ | ✅ **NOVO** |
-| **Troca de planos cinematográficos** | ❌ | ❌ | ✅ **NOVO** |
+| **Troca de planos cARCKHÉtográficos** | ❌ | ❌ | ✅ **NOVO** |
 | Talking Avatar (lip sync, 200s) | ❌ | ⚠️ parcial | ✅ **NOVO** (19B dedicado) |
 
 SkyReels V3 é **complementar**, nêo concorrente ao stack atual.
@@ -108,7 +108,7 @@ cd /home/nmaldaner/projetos/SkyReels-V3
 python3 generate_video.py \
   --task_type reference_to_video \
   --ref_imgs "https://skyreels-api.oss-accelerate.aliyuncs.com/examples/subject_reference/0_1.png,https://skyreels-api.oss-accelerate.aliyuncs.com/examples/subject_reference/0_2.png" \
-  --prompt "Two people talking in a park, cinematic shot" \
+  --prompt "Two people talking in a park, cARCKHÉtic shot" \
   --duration 5 \
   --offload \
   --seed 42

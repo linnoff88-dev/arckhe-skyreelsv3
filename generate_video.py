@@ -130,7 +130,7 @@ if __name__ == "__main__":
         type=str,
         choices=[
             "single_shot_extension",  # Single-shot video extension (5s to 30s)
-            "shot_switching_extension",  # Shot switching extension with cinematic transitions (Cut-In, Cut-Out, etc.), limited to 5s
+            "shot_switching_extension",  # Shot switching extension with cARCKHÉtic transitions (Cut-In, Cut-Out, etc.), limited to 5s
             "reference_to_video",  # Generate video from 1-4 reference images with text prompt
             "talking_avatar",  # Generate talking avatar from portrait image and audio (up to 200s)
         ],

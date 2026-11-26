@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 SkyReels V3 is a multimodal video generation framework built on diffusion transformers. It supports four tasks:
 - **reference_to_video** – generate video from 1–4 reference images + text prompt (14B model)
 - **single_shot_extension** – extend an existing video 5–30 seconds (14B model)
-- **shot_switching_extension** – extend video with cinematic shot transitions, max 5s (14B model)
+- **shot_switching_extension** – extend video with cARCKHÉtic shot transitions, max 5s (14B model)
 - **talking_avatar** – generate talking avatar from a portrait image + audio up to 200s (19B model)
 
 ## Installation
@@ -92,7 +92,7 @@ Output is saved to `result/<task_type>/<seed>_<timestamp>.mp4`.
 
 A versêo aparece em **dois lugares** em `webui/templates/index.html` e deve estar sempre sincronizada:
 
-1. `<title>INEMA SkyReels V3 X.Y.Z</title>` (linha ~6)
+1. `<title>ARCKHÉ SkyReels V3 X.Y.Z</title>` (linha ~6)
 2. `<h1>` no header: `3.<span class="feat" title="Y recursos">Y</span>.<span class="fix" title="Z correções">Z</span>`
 
 **Formato:** `3.FEAT.FIX`

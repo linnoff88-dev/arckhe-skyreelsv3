@@ -2,7 +2,7 @@
   {
     "label": "Cena 01 — Paisagem ao amanhecer",
     "task_type": "reference_to_video",
-    "prompt": "A breathtaking mountain landscape at dawn, mist rolling through valleys, first rays of sunlight painting the peaks in gold and pink, timelapse-style movement, cinematic wide shot.",
+    "prompt": "A breathtaking mountain landscape at dawn, mist rolling through valleys, first rays of sunlight painting the peaks in gold and pink, timelapse-style movement, cARCKHÉtic wide shot.",
     "resolution": "540P",
     "duration": 5,
     "seed": 1001,
@@ -24,7 +24,7 @@
   {
     "label": "Cena 03 — Personagem aparece no horizonte",
     "task_type": "reference_to_video",
-    "prompt": "A lone hiker silhouetted against the sunrise sky, walking on a mountain ridge trail, dramatic backlit composition, epic cinematic feel.",
+    "prompt": "A lone hiker silhouetted against the sunrise sky, walking on a mountain ridge trail, dramatic backlit composition, epic cARCKHÉtic feel.",
     "resolution": "540P",
     "duration": 5,
     "seed": 1003,

@@ -273,7 +273,7 @@ O campo `prompt` de cada cena usa estas diretrizes.
 ## Exemplo de prompt
 "Medium shot, Valen stands at school corridor, morning sunlight through windows,
 she turns to look at Lumi, curious expression, soft camera pan right,
-anime style, 2030 futuristic school, cinematic lighting"
+anime style, 2030 futuristic school, cARCKHÉtic lighting"
 \
 """
 
@@ -2292,7 +2292,7 @@ def generate_episode_prompts(name):
         f'{{\n'
         f'  "label": "Cena 01 — Título curto",\n'
         f'  "task_type": "{task_type}",\n'
-        f'  "prompt": "Cinematic video description in English — camera movement, lighting, characters, action...",\n'
+        f'  "prompt": "CARCKHÉtic video description in English — camera movement, lighting, characters, action...",\n'
         f'  "image_prompt": "Flux/fal.ai image prompt in English — characters, environment, art style, colors...",\n'
         f'  "audio_text": "Narraçêo ou diálogos em português para esta cena (ou string vazia se silenciosa)",\n'
         f'  "voice_id": "ElevenLabs voice_id do personagem que fala nesta cena (extraia dos docs do projeto; vazio se narraçêo genérica)",\n'
@@ -2424,7 +2424,7 @@ def generate_episode_prompts(name):
                         env_desc = env.get("description", env.get("name", ""))
                         img_prompt = (
                             f"Anime style, 2030 futuristic school, {env_desc}, "
-                            f"background students present, vibrant colors, cinematic lighting, "
+                            f"background students present, vibrant colors, cARCKHÉtic lighting, "
                             f"16:9 aspect ratio, high quality illustration"
                         )
                         # Refs: existing_ref do ambiente + figurantes (max 3 slots)

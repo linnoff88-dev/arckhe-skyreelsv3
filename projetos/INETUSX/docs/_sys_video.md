@@ -23,4 +23,4 @@ O campo `prompt` de cada cena usa estas diretrizes.
 ## Exemplo de prompt
 "Medium shot, Valen stands at school corridor, morning sunlight through windows,
 she turns to look at Lumi, curious expression, soft camera pan right,
-anime style, 2030 futuristic school, cinematic lighting"
+anime style, 2030 futuristic school, cARCKHÉtic lighting"

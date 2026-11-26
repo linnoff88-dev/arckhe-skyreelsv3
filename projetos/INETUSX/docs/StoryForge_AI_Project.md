@@ -121,7 +121,7 @@ Para cada cena:
 
 ### 🎵 Música
 
--   Trilha cinematográfica
+-   Trilha cARCKHÉtográfica
 -   Loop base ou faixa completa
 
 Arquivos organizados:
@@ -143,7 +143,7 @@ Saídas: - MP4 horizontal - MP4 vertical - Trailer automático
 
 ## 🔟 Montagem Final
 
-Sistema: - Junta cenas - Equaliza áudio - Aplica LUT cinematográfico -
+Sistema: - Junta cenas - Equaliza áudio - Aplica LUT cARCKHÉtográfico -
 Adiciona créditos - Exporta versêo final
 
 Status final: - rendered - final

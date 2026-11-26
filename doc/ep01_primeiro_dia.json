@@ -618,7 +618,7 @@
   {
     "label": "C09-F · Marquise — Silêncio confortável, ninguém quer ir",
     "task_type": "reference_to_video",
-    "prompt": "Four students standing shoulder to shoulder under a rain shelter, watching the rain. No one moves. City lights begin to glow in the wet evening. Cinematic medium shot, quiet mood.",
+    "prompt": "Four students standing shoulder to shoulder under a rain shelter, watching the rain. No one moves. City lights begin to glow in the wet evening. CARCKHÉtic medium shot, quiet mood.",
     "resolution": "720P",
     "duration": 5,
     "seed": 1086,
@@ -690,7 +690,7 @@
   {
     "label": "C10-F · Portêo — Plano final, a pausa antes de ir",
     "task_type": "reference_to_video",
-    "prompt": "Four students at the school gate at dusk. No one rushes. A long quiet beat as the city glows behind them. Final wide cinematic shot, warm soft focus, golden light.",
+    "prompt": "Four students at the school gate at dusk. No one rushes. A long quiet beat as the city glows behind them. Final wide cARCKHÉtic shot, warm soft focus, golden light.",
     "resolution": "720P",
     "duration": 6,
     "seed": 1096,

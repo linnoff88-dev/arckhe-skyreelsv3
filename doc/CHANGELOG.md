@@ -1,4 +1,4 @@
-# INEMA SkyReels V3 — Changelog da Web UI
+# ARCKHÉ SkyReels V3 — Changelog da Web UI
 
 Convençêo de versêo: **Major.Recursos.Correções**
 - **Major** = versêo principal do projeto (fixo em 3)
@@ -87,7 +87,7 @@ Convençêo de versêo: **Major.Recursos.Correções**
   controles de layout (lista/grade) e cadeado de privacidade
 - **Página de Ajuda** (`/help`) — documentaçêo completa do formato de fila JSON e Markdown,
   exemplos de referência entre cenas, notas de uso
-- **Exemplos de fila** — `doc/exemplo_10_cenas.json` (10 cenas cinematográficas encadeadas)
+- **Exemplos de fila** — `doc/exemplo_10_cenas.json` (10 cenas cARCKHÉtográficas encadeadas)
   e `doc/exemplo_roteiro.json`; 13 imagens de referência renomeadas descritivamente em
   `uploads/fila1/`
 
@@ -149,7 +149,7 @@ doc/
   QUEUE_FORMAT.md         # Formato detalhado do JSON/MD de fila
   CHANGELOG.md            # Este arquivo
   ANALISE_E_PLANO.md      # Análise de hardware e plano de execuçêo
-  exemplo_10_cenas.json   # JSON de exemplo com 10 cenas cinematográficas
+  exemplo_10_cenas.json   # JSON de exemplo com 10 cenas cARCKHÉtográficas
   exemplo_roteiro.json    # JSON de exemplo de roteiro
 ```
 
