@@ -11,7 +11,7 @@
     "ref_imgs": ["uploads/paisagem_montanha.jpg"]
   },
   {
-    "label": "Cena 02 — Extensão da paisagem",
+    "label": "Cena 02 — Extensêo da paisagem",
     "task_type": "single_shot_extension",
     "prompt": "The sun rises fully above the mountain range, birds fly across the frame, the mist slowly dissipates revealing a lush green valley below.",
     "resolution": "540P",
@@ -33,7 +33,7 @@
     "ref_imgs": ["uploads/personagem_trilha.jpg", "uploads/paisagem_montanha.jpg"]
   },
   {
-    "label": "Cena 04 — Transição: zoom no rosto do personagem",
+    "label": "Cena 04 — Transiçêo: zoom no rosto do personagem",
     "task_type": "shot_switching_extension",
     "prompt": "[ZOOM_IN_CUT] Close-up of the hiker's determined face, sweat on their brow, eyes focused on the summit ahead, natural lighting.",
     "resolution": "540P",
@@ -55,7 +55,7 @@
     "ref_imgs": ["uploads/personagem_trilha.jpg"]
   },
   {
-    "label": "Cena 06 — Extensão: fogueira à noite",
+    "label": "Cena 06 — Extensêo: fogueira à noite",
     "task_type": "single_shot_extension",
     "prompt": "A campfire crackling under a stunning starry night sky, the hiker sits beside the fire, embers floating upward, Milky Way visible overhead.",
     "resolution": "540P",
@@ -66,7 +66,7 @@
     "input_video": "{{prev}}"
   },
   {
-    "label": "Cena 07 — Transição: panorâmica para o vale",
+    "label": "Cena 07 — Transiçêo: panorâmica para o vale",
     "task_type": "shot_switching_extension",
     "prompt": "[PAN_RIGHT_CUT] The camera pans from the campfire to reveal a vast illuminated valley town far below, twinkling lights in the darkness.",
     "resolution": "540P",
@@ -88,7 +88,7 @@
     "ref_imgs": ["uploads/personagem_trilha.jpg", "uploads/paisagem_montanha.jpg"]
   },
   {
-    "label": "Cena 09 — Extensão: contemplação no cume",
+    "label": "Cena 09 — Extensêo: contemplaçêo no cume",
     "task_type": "single_shot_extension",
     "prompt": "The hiker sits on the summit boulder, gazing at the horizon as clouds drift by below, serene and reflective, wind gently moving their hair.",
     "resolution": "540P",
@@ -99,7 +99,7 @@
     "input_video": "{{prev}}"
   },
   {
-    "label": "Cena 10 — Encerramento: narração do personagem",
+    "label": "Cena 10 — Encerramento: narraçêo do personagem",
     "task_type": "talking_avatar",
     "prompt": "A hiker speaking to camera with the mountain summit visible behind them, warm smile, reflective tone, natural wind sound.",
     "resolution": "540P",

@@ -1,36 +1,36 @@
-﻿<p align="center">
+ï»¿<p align="center">
   <img src="assets/logo2.png" alt="SkyReels Logo" width="40%">
 </p>
 
-<h1 align="center">SkyReels V3 â€” INEMA Web UI</h1>
+<h1 align="center">SkyReels V3 ê¢â¬â INEMA Web UI</h1>
 
 <p align="center">
-  Fork do <a href="https://github.com/SkyworkAI/SkyReels-V3">SkyworkAI/SkyReels-V3</a> com Web UI completa para produÃ§Ã£o de episÃ³dios em batch.
+  Fork do <a href="https://github.com/SkyworkAI/SkyReels-V3">SkyworkAI/SkyReels-V3</a> com Web UI completa para produêÂ§êÂ£o de episêÂ³dios em batch.
 </p>
 
 ---
 
-## O que Ã© este projeto
+## O que êÂ© este projeto
 
-Este repositÃ³rio Ã© um fork do modelo de geraÃ§Ã£o de vÃ­deo **SkyReels V3**, com uma interface Web (Web UI) construÃ­da sobre ele para produÃ§Ã£o de vÃ­deos em escala â€” especialmente sÃ©ries animadas com mÃºltiplos personagens e cenas.
+Este repositêÂ³rio êÂ© um fork do modelo de geraêÂ§êÂ£o de vêÂ­deo **SkyReels V3**, com uma interface Web (Web UI) construêÂ­da sobre ele para produêÂ§êÂ£o de vêÂ­deos em escala ê¢â¬â especialmente sêÂ©ries animadas com mêÂºltiplos personagens e cenas.
 
-> **Em uso:** este projeto Ã© consumido hoje pela plataforma
+> **Em uso:** este projeto êÂ© consumido hoje pela plataforma
 > [`imkt4`](https://github.com/inematds/imkt4) (orquestrador multi-tenant de
-> pipelines de mÃ­dia) como worker macro de geraÃ§Ã£o de vÃ­deo por roteiro.
-> A partir da v3.49, a Web UI expÃµe `/health`, webhook callback em
+> pipelines de mêÂ­dia) como worker macro de geraêÂ§êÂ£o de vêÂ­deo por roteiro.
+> A partir da v3.49, a Web UI expêÂµe `/health`, webhook callback em
 > `/nqueues/<id>/run?callback_url=...` e `resume-from-error` justamente
-> para esse caso de uso â€” ver [CHANGELOG 3.49.19](doc/CHANGELOG.md).
-> A interface continua 100% utilizÃ¡vel standalone.
+> para esse caso de uso ê¢â¬â ver [CHANGELOG 3.49.19](doc/CHANGELOG.md).
+> A interface continua 100% utilizêÂ¡vel standalone.
 
 ### Funcionalidades adicionadas neste fork
 
-- **Web UI completa** â€” geraÃ§Ã£o individual ou em fila, sem linha de comando
-- **Named Queues** â€” filas nomeadas com dezenas de cenas, controle por cena, retomada apÃ³s erro
-- **Suporte a `talking_avatar` na UI** â€” imagem de personagem + Ã¡udio MP3 â†’ vÃ­deo falante
-- **ImportaÃ§Ã£o de episÃ³dio via JSON** â€” uma cena por objeto, suporte a tipos mistos
-- **EdiÃ§Ã£o de cenas em runtime** â€” altere prompt, seed, resoluÃ§Ã£o sem reiniciar a fila
-- **FinalizaÃ§Ã£o automÃ¡tica** â€” concatenaÃ§Ã£o das cenas concluÃ­das em um vÃ­deo final via ffmpeg
-- **Galeria de vÃ­deos** â€” visualizaÃ§Ã£o de todos os vÃ­deos gerados com player e privacidade por card
+- **Web UI completa** ê¢â¬â geraêÂ§êÂ£o individual ou em fila, sem linha de comando
+- **Named Queues** ê¢â¬â filas nomeadas com dezenas de cenas, controle por cena, retomada apêÂ³s erro
+- **Suporte a `talking_avatar` na UI** ê¢â¬â imagem de personagem + êÂ¡udio MP3 ê¢â â vêÂ­deo falante
+- **ImportaêÂ§êÂ£o de episêÂ³dio via JSON** ê¢â¬â uma cena por objeto, suporte a tipos mistos
+- **EdiêÂ§êÂ£o de cenas em runtime** ê¢â¬â altere prompt, seed, resoluêÂ§êÂ£o sem reiniciar a fila
+- **FinalizaêÂ§êÂ£o automêÂ¡tica** ê¢â¬â concatenaêÂ§êÂ£o das cenas concluêÂ­das em um vêÂ­deo final via ffmpeg
+- **Galeria de vêÂ­deos** ê¢â¬â visualizaêÂ§êÂ£o de todos os vêÂ­deos gerados com player e privacidade por card
 
 ---
 
@@ -45,7 +45,7 @@ Este repositÃ³rio Ã© um fork do modelo de geraÃ§Ã£o de vÃ­deo **SkyRee
 
 ---
 
-## InstalaÃ§Ã£o
+## InstalaêÂ§êÂ£o
 
 ```bash
 git clone https://github.com/inematds/skyreelsv3
@@ -57,12 +57,12 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Opcional mas recomendado
-pip install flash-attn --no-build-isolation  # atenÃ§Ã£o flash (hardware compatÃ­vel)
+pip install flash-attn --no-build-isolation  # atenêÂ§êÂ£o flash (hardware compatêÂ­vel)
 pip install xfuser                           # multi-GPU
 pip install torchao                          # FP8 / Low VRAM mode
 ```
 
-Os modelos sÃ£o baixados automaticamente do HuggingFace na primeira execuÃ§Ã£o.
+Os modelos sêÂ£o baixados automaticamente do HuggingFace na primeira execuêÂ§êÂ£o.
 
 ---
 
@@ -71,80 +71,80 @@ Os modelos sÃ£o baixados automaticamente do HuggingFace na primeira execuÃ§�
 ```bash
 source .venv/bin/activate
 python webui/app.py
-# â†’ http://localhost:7860
+# ê¢â â http://localhost:7860
 ```
 
 Acesse de qualquer dispositivo na rede local via `http://<ip-do-servidor>:7860`.
 
 ---
 
-## Web UI â€” Painel de GeraÃ§Ã£o
+## Web UI ê¢â¬â Painel de GeraêÂ§êÂ£o
 
-### Campos do formulÃ¡rio
+### Campos do formulêÂ¡rio
 
-| Campo | DescriÃ§Ã£o |
+| Campo | DescriêÂ§êÂ£o |
 |---|---|
-| **Task Type** | `reference_to_video` Â· `single_shot_extension` Â· `shot_switching_extension` Â· `talking_avatar` |
-| **Prompt** | DescriÃ§Ã£o textual do vÃ­deo desejado |
-| **Reference Images** | Caminhos separados por vÃ­rgula â€” 1 a 4 imagens (`reference_to_video`) |
-| **Input Video** | Caminho local ou URL para tasks de extensÃ£o |
+| **Task Type** | `reference_to_video` êÂ· `single_shot_extension` êÂ· `shot_switching_extension` êÂ· `talking_avatar` |
+| **Prompt** | DescriêÂ§êÂ£o textual do vêÂ­deo desejado |
+| **Reference Images** | Caminhos separados por vêÂ­rgula ê¢â¬â 1 a 4 imagens (`reference_to_video`) |
+| **Input Video** | Caminho local ou URL para tasks de extensêÂ£o |
 | **Portrait Image** | Imagem de retrato para `talking_avatar` (jpg / png / gif / bmp) |
-| **Audio File** | Ãudio de conduÃ§Ã£o para `talking_avatar` (mp3 / wav Â· mÃ¡x 200 s) |
-| **Resolution** | `480P` / `540P` / `720P` â€” `talking_avatar` sÃ³ aceita `480P` ou `720P` |
-| **Duration** | Segundos de saÃ­da â€” ignorado em `talking_avatar` (definido pelo Ã¡udio) |
+| **Audio File** | êÂudio de conduêÂ§êÂ£o para `talking_avatar` (mp3 / wav êÂ· mêÂ¡x 200 s) |
+| **Resolution** | `480P` / `540P` / `720P` ê¢â¬â `talking_avatar` sêÂ³ aceita `480P` ou `720P` |
+| **Duration** | Segundos de saêÂ­da ê¢â¬â ignorado em `talking_avatar` (definido pelo êÂ¡udio) |
 | **Seed** | Semente para reprodutibilidade |
-| **Offload CPU** | Move modelos para CPU entre passes â€” reduz VRAM |
-| **Low VRAM** | QuantizaÃ§Ã£o FP8 + block offload â€” necessÃ¡rio para `talking_avatar` em GPUs < 24 GB |
+| **Offload CPU** | Move modelos para CPU entre passes ê¢â¬â reduz VRAM |
+| **Low VRAM** | QuantizaêÂ§êÂ£o FP8 + block offload ê¢â¬â necessêÂ¡rio para `talking_avatar` em GPUs < 24 GB |
 
-### BotÃµes de aÃ§Ã£o
+### BotêÂµes de aêÂ§êÂ£o
 
-- **Gerar VÃ­deo** â€” inicia geraÃ§Ã£o imediata
-- **+ Fila** â€” adiciona Ã  fila simples (tab Fila)
+- **Gerar VêÂ­deo** ê¢â¬â inicia geraêÂ§êÂ£o imediata
+- **+ Fila** ê¢â¬â adiciona êÂ  fila simples (tab Fila)
 
 ---
 
-## Web UI â€” Named Queues (ProduÃ§Ã£o em Batch)
+## Web UI ê¢â¬â Named Queues (ProduêÂ§êÂ£o em Batch)
 
-A aba **Fila** suporta filas nomeadas com mÃºltiplas cenas. Ideal para produÃ§Ã£o de episÃ³dios com dezenas de takes.
+A aba **Fila** suporta filas nomeadas com mêÂºltiplas cenas. Ideal para produêÂ§êÂ£o de episêÂ³dios com dezenas de takes.
 
-### AÃ§Ãµes por fila
+### AêÂ§êÂµes por fila
 
-| BotÃ£o | AÃ§Ã£o |
+| BotêÂ£o | AêÂ§êÂ£o |
 |---|---|
-| **â†‘ Importar** | Carrega um arquivo `.json` como nova fila nomeada |
-| **â–¶ Continuar** | Executa todas as cenas `idle` em sequÃªncia, pula erros |
-| **â†© Repetir do erro** | Reseta cenas com erro e retoma daquele ponto |
-| **â†º Reiniciar do zero** | Reseta todas (incluindo `done`) e comeÃ§a do inÃ­cio |
-| **ðŸŽ¬ Finalizar** | Concatena todos os vÃ­deos `done` em um `.mp4` final via ffmpeg |
-| **ðŸ—‘** | Exclui a fila |
+| **ê¢â â Importar** | Carrega um arquivo `.json` como nova fila nomeada |
+| **ê¢âÂ¶ Continuar** | Executa todas as cenas `idle` em sequêÂªncia, pula erros |
+| **ê¢â Â© Repetir do erro** | Reseta cenas com erro e retoma daquele ponto |
+| **ê¢â Âº Reiniciar do zero** | Reseta todas (incluindo `done`) e comeêÂ§a do inêÂ­cio |
+| **ê°Å¸Å½Â¬ Finalizar** | Concatena todos os vêÂ­deos `done` em um `.mp4` final via ffmpeg |
+| **ê°Å¸ââ** | Exclui a fila |
 
-Cada card de cena exibe status, tipo, resoluÃ§Ã£o e seed. Ao abrir a fila as cenas aparecem expandidas. Controles âŠž (expandir todas) / âŠŸ (colapsar todas) disponÃ­veis.
+Cada card de cena exibe status, tipo, resoluêÂ§êÂ£o e seed. Ao abrir a fila as cenas aparecem expandidas. Controles ê¢Å Å¾ (expandir todas) / ê¢Å Å¸ (colapsar todas) disponêÂ­veis.
 
-### EdiÃ§Ã£o de cena em runtime
+### EdiêÂ§êÂ£o de cena em runtime
 
-Clique em âœï¸ em qualquer cena com status `idle` ou `error` para editar prompt, seed, resoluÃ§Ã£o, arquivos de referÃªncia e outros campos â€” sem precisar reiniciar o servidor.
+Clique em ê¢ÅÂê¯Â¸Â em qualquer cena com status `idle` ou `error` para editar prompt, seed, resoluêÂ§êÂ£o, arquivos de referêÂªncia e outros campos ê¢â¬â sem precisar reiniciar o servidor.
 
 ### API REST (PATCH)
 
 ```bash
-# Alterar parÃ¢metros de uma cena especÃ­fica
+# Alterar parêÂ¢metros de uma cena especêÂ­fica
 curl -X PATCH http://localhost:7860/nqueues/<fila_id>/jobs/<job_id> \
   -H "Content-Type: application/json" \
   -d '{"resolution": "720P", "seed": 9999, "prompt": "novo prompt"}'
 ```
 
-Campos protegidos (nÃ£o alterÃ¡veis): `id`, `nq_id`, `status`, `task_type`, `created_at`, `output_video`.
+Campos protegidos (nêÂ£o alterêÂ¡veis): `id`, `nq_id`, `status`, `task_type`, `created_at`, `output_video`.
 
 ---
 
-## Formato JSON de EpisÃ³dio
+## Formato JSON de EpisêÂ³dio
 
 Importe um arquivo `.json` com um array de cenas para criar uma fila nomeada. Tipos de task podem ser misturados no mesmo arquivo.
 
 ```json
 [
   {
-    "label": "C01-A Â· Corredor â€” Estabelecimento",
+    "label": "C01-A êÂ· Corredor ê¢â¬â Estabelecimento",
     "task_type": "reference_to_video",
     "prompt": "A modern school hallway on the first day of school...",
     "resolution": "540P",
@@ -159,7 +159,7 @@ Importe um arquivo `.json` com um array de cenas para criar uma fila nomeada. Ti
     ]
   },
   {
-    "label": "C01-B Â· Personagem A â€” 'Foi mal!'",
+    "label": "C01-B êÂ· Personagem A ê¢â¬â 'Foi mal!'",
     "task_type": "talking_avatar",
     "prompt": "A teenage girl, composed but slightly embarrassed, speaking a brief apology.",
     "resolution": "480P",
@@ -173,52 +173,52 @@ Importe um arquivo `.json` com um array de cenas para criar uma fila nomeada. Ti
 
 ### Campos por tipo de task
 
-| Campo | `reference_to_video` | `talking_avatar` | extensÃ£o |
+| Campo | `reference_to_video` | `talking_avatar` | extensêÂ£o |
 |---|---|---|---|
 | `label` | recomendado | recomendado | recomendado |
-| `task_type` | obrigatÃ³rio | obrigatÃ³rio | obrigatÃ³rio |
-| `prompt` | obrigatÃ³rio | obrigatÃ³rio | obrigatÃ³rio |
+| `task_type` | obrigatêÂ³rio | obrigatêÂ³rio | obrigatêÂ³rio |
+| `prompt` | obrigatêÂ³rio | obrigatêÂ³rio | obrigatêÂ³rio |
 | `resolution` | `480P`/`540P`/`720P` | **`480P` ou `720P`** | `480P`/`540P`/`720P` |
-| `duration` | obrigatÃ³rio (segundos) | â€” (definido pelo Ã¡udio) | obrigatÃ³rio |
+| `duration` | obrigatêÂ³rio (segundos) | ê¢â¬â (definido pelo êÂ¡udio) | obrigatêÂ³rio |
 | `seed` | opcional | opcional | opcional |
 | `offload` | opcional | opcional | opcional |
-| `low_vram` | opcional | **obrigatÃ³rio** em < 24 GB | opcional |
-| `ref_imgs` | obrigatÃ³rio (1â€“4 caminhos) | â€” | â€” |
-| `input_image` | â€” | obrigatÃ³rio | â€” |
-| `input_audio` | â€” | obrigatÃ³rio | â€” |
-| `input_video` | â€” | â€” | obrigatÃ³rio |
+| `low_vram` | opcional | **obrigatêÂ³rio** em < 24 GB | opcional |
+| `ref_imgs` | obrigatêÂ³rio (1ê¢â¬â4 caminhos) | ê¢â¬â | ê¢â¬â |
+| `input_image` | ê¢â¬â | obrigatêÂ³rio | ê¢â¬â |
+| `input_audio` | ê¢â¬â | obrigatêÂ³rio | ê¢â¬â |
+| `input_video` | ê¢â¬â | ê¢â¬â | obrigatêÂ³rio |
 
-> âš ï¸ **AtenÃ§Ã£o:** caminhos em `ref_imgs` nÃ£o podem conter vÃ­rgulas â€” a CLI usa vÃ­rgula como separador.
+> ê¢Å¡Â ê¯Â¸Â **AtenêÂ§êÂ£o:** caminhos em `ref_imgs` nêÂ£o podem conter vêÂ­rgulas ê¢â¬â a CLI usa vêÂ­rgula como separador.
 
 ---
 
-## OrganizaÃ§Ã£o de Assets
+## OrganizaêÂ§êÂ£o de Assets
 
 ```
 uploads/
-â””â”€â”€ <projeto>/
-    â””â”€â”€ <episodio>/
-        â”œâ”€â”€ cena01.png          # cenÃ¡rios / planos de estabelecimento
-        â”œâ”€â”€ cena02.png
-        â”œâ”€â”€ personagem_a.png    # retratos de personagens (reutilizados entre cenas)
-        â”œâ”€â”€ personagem_b.png
-        â””â”€â”€ c01_a_linha1.mp3    # Ã¡udios (um por fala)
+ê¢ââê¢ââ¬ê¢ââ¬ <projeto>/
+    ê¢ââê¢ââ¬ê¢ââ¬ <episodio>/
+        ê¢âÅê¢ââ¬ê¢ââ¬ cena01.png          # cenêÂ¡rios / planos de estabelecimento
+        ê¢âÅê¢ââ¬ê¢ââ¬ cena02.png
+        ê¢âÅê¢ââ¬ê¢ââ¬ personagem_a.png    # retratos de personagens (reutilizados entre cenas)
+        ê¢âÅê¢ââ¬ê¢ââ¬ personagem_b.png
+        ê¢ââê¢ââ¬ê¢ââ¬ c01_a_linha1.mp3    # êÂ¡udios (um por fala)
 
 doc/
-â””â”€â”€ ep01_primeiro_dia.json      # exemplo: 59 cenas (21 r2v + 38 talking_avatar)
+ê¢ââê¢ââ¬ê¢ââ¬ ep01_primeiro_dia.json      # exemplo: 59 cenas (21 r2v + 38 talking_avatar)
 ```
 
 ---
 
-## Modos de MemÃ³ria
+## Modos de MemêÂ³ria
 
 | Modo | Flag | VRAM aprox. | Quando usar |
 |---|---|---|---|
-| Completo | _(nenhuma)_ | ~49 GB (14B) / ~38 GB (19B) | Multi-GPU de alto nÃ­vel |
-| Offload | `--offload` | ~20 GB (14B) | GPU Ãºnica â‰¥ 20 GB |
-| Low VRAM | `--low_vram` | ~12 GB (14B) / ~19 GB (19B) | GPU Ãºnica < 24 GB |
+| Completo | _(nenhuma)_ | ~49 GB (14B) / ~38 GB (19B) | Multi-GPU de alto nêÂ­vel |
+| Offload | `--offload` | ~20 GB (14B) | GPU êÂºnica ê¢â°Â¥ 20 GB |
+| Low VRAM | `--low_vram` | ~12 GB (14B) / ~19 GB (19B) | GPU êÂºnica < 24 GB |
 
-Para Low VRAM, defina tambÃ©m:
+Para Low VRAM, defina tambêÂ©m:
 
 ```bash
 export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True"
@@ -226,19 +226,19 @@ export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True"
 
 ### Notas sobre `talking_avatar` em Low VRAM
 
-- Usar sempre `--low_vram` (quantizaÃ§Ã£o FP8 + block offload)
-- Somente `480P` e `720P` sÃ£o suportados (nÃ£o `540P`)
-- Tempo estimado: ~50 s/step Ã— 4 steps Ã— N chunks (~3 chunks para 5 s de vÃ­deo)
+- Usar sempre `--low_vram` (quantizaêÂ§êÂ£o FP8 + block offload)
+- Somente `480P` e `720P` sêÂ£o suportados (nêÂ£o `540P`)
+- Tempo estimado: ~50 s/step êâ 4 steps êâ N chunks (~3 chunks para 5 s de vêÂ­deo)
 
 ---
 
-## CLI â€” ReferÃªncia rÃ¡pida
+## CLI ê¢â¬â ReferêÂªncia rêÂ¡pida
 
 ```bash
 python3 generate_video.py \
   --task_type reference_to_video \
   --ref_imgs "img1.png,img2.png" \
-  --prompt "descriÃ§Ã£o do vÃ­deo" \
+  --prompt "descriêÂ§êÂ£o do vêÂ­deo" \
   --resolution 540P \
   --duration 5 \
   --seed 42 \
@@ -255,16 +255,16 @@ python3 generate_video.py \
   --low_vram
 ```
 
-SaÃ­da salva em `result/<task_type>/<seed>_<timestamp>.mp4`.
-Para `talking_avatar`, tambÃ©m Ã© gerado `<seed>_<timestamp>_with_audio.mp4` com o Ã¡udio mixado.
+SaêÂ­da salva em `result/<task_type>/<seed>_<timestamp>.mp4`.
+Para `talking_avatar`, tambêÂ©m êÂ© gerado `<seed>_<timestamp>_with_audio.mp4` com o êÂ¡udio mixado.
 
 ---
 
-## CrÃ©ditos
+## CrêÂ©ditos
 
 Baseado em [SkyReels V3](https://github.com/SkyworkAI/SkyReels-V3) da [Skywork AI](https://skywork.ai).
-Agradecimentos aos projetos: [Wan 2.1](https://github.com/Wan-Video/Wan2.1) Â· [MultiTalk](https://github.com/MeiGen-AI/MultiTalk) Â· [xDiT](https://github.com/xdit-project/xDiT) Â· [diffusers](https://github.com/huggingface/diffusers).
+Agradecimentos aos projetos: [Wan 2.1](https://github.com/Wan-Video/Wan2.1) êÂ· [MultiTalk](https://github.com/MeiGen-AI/MultiTalk) êÂ· [xDiT](https://github.com/xdit-project/xDiT) êÂ· [diffusers](https://github.com/huggingface/diffusers).
 
 ---
 
-Projeto adaptado da comunidade INEMA TDS - Marca Arckhe
+Projeto  - ARCKHÉe

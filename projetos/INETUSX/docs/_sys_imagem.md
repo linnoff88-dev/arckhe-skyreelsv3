@@ -1,16 +1,16 @@
-# Guia de Geração de Imagens
+# Guia de Geraçêo de Imagens
 
-Este arquivo define o estilo e regras para geração de imagens via fal.ai (Flux/Gemini).
-As regras aqui são usadas pela IA ao gerar o campo `image_prompt` de cada cena.
+Este arquivo define o estilo e regras para geraçêo de imagens via fal.ai (Flux/Gemini).
+As regras aqui sêo usadas pela IA ao gerar o campo `image_prompt` de cada cena.
 
-## Estilo visual padrão
+## Estilo visual padrêo
 - anime style illustration
 - 2030 futuristic setting
 - vibrant colors, detailed backgrounds
 - 16:9 aspect ratio
 
 ## Regras obrigatórias
-- Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminação, ângulo
+- Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminaçêo, ângulo
 - Mantenha estilo visual consistente entre todas as cenas e episódios
 - NUNCA inclua elementos que contradizem o universo da série
 

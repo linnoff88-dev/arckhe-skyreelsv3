@@ -12,13 +12,13 @@ import os
 from pathlib import Path
 
 # ─────────────────────────────────────────────
-#  CONFIGURAÇÃO — preencha antes de rodar
+#  CONFIGURAÇêO — preencha antes de rodar
 # ─────────────────────────────────────────────
 
 ELEVENLABS_API_KEY = "sk-..."   # sua chave da API ElevenLabs
 
 # Voice IDs dos personagens.
-# Para obter: ElevenLabs → Voices → clique na voz → botão "ID"
+# Para obter: ElevenLabs → Voices → clique na voz → botêo "ID"
 VOICES = {
     "valen": "VOICE_ID_VALEN",   # ex: "21m00Tcm4TlvDq8ikWAM"
     "lumi":  "VOICE_ID_LUMI",
@@ -53,17 +53,17 @@ LINES = [
     ("c02", "lumi",  "01", "Você já entendeu essa parte?"),
     ("c02", "valen", "01", "Quase. Acho que é mais simples do que parece."),
     ("c02", "lumi",  "02", "Ou mais complicado."),
-    ("c02", "valen", "02", "Espero que não."),
+    ("c02", "valen", "02", "Espero que nêo."),
 
     # Cena 3 — Fila do Lanche
     ("c03", "lumi",  "01", "Você desenhou isso agora?"),
     ("c03", "maya",  "01", "Sim… eu gosto de desenhar enquanto espero."),
     ("c03", "valen", "01", "É um cachorro-robô?"),
-    ("c03", "maya",  "02", "É. Ele parece abandonado… mas não devia estar."),
+    ("c03", "maya",  "02", "É. Ele parece abandonado… mas nêo devia estar."),
 
     # Cena 4 — Lugar Vago
     ("c04", "caio",  "01", "Está ocupado?"),
-    ("c04", "maya",  "01", "Não."),
+    ("c04", "maya",  "01", "Nêo."),
     ("c04", "lumi",  "01", "Você já mexeu nesse sistema antes?"),
     ("c04", "caio",  "02", "Um pouco… ele é mais intuitivo do que parece."),
 
@@ -75,14 +75,14 @@ LINES = [
 
     # Cena 6 — Risada
     ("c06", "caio",  "01", "Você ouviu isso também, né?"),
-    ("c06", "maya",  "01", "Eu tentei não rir."),
+    ("c06", "maya",  "01", "Eu tentei nêo rir."),
     ("c06", "valen", "01", "Falhou miseravelmente."),
 
     # Cena 7 — Biblioteca
-    ("c07", "maya",  "01", "Vocês também vão pra biblioteca?"),
+    ("c07", "maya",  "01", "Vocês também vêo pra biblioteca?"),
     ("c07", "caio",  "01", "Preciso terminar a atividade."),
     ("c07", "lumi",  "01", "Eu queria ver os livros digitais novos."),
-    ("c07", "valen", "01", "Então vamos juntos."),
+    ("c07", "valen", "01", "Entêo vamos juntos."),
 
     # Cena 8 — Grupos
     ("c08", "valen", "01", "Já somos quatro."),
@@ -91,19 +91,19 @@ LINES = [
 
     # Cena 9 — Chuva
     ("c09", "maya",  "01", "Eu gosto do som da chuva."),
-    ("c09", "caio",  "01", "A previsão não falava nisso."),
-    ("c09", "lumi",  "01", "Às vezes a previsão erra."),
+    ("c09", "caio",  "01", "A previsêo nêo falava nisso."),
+    ("c09", "lumi",  "01", "Às vezes a previsêo erra."),
     ("c09", "valen", "01", "Melhor esperar juntos."),
 
     # Cena 10 — Saída
     ("c10", "lumi",  "01", "Foi um dia legal."),
     ("c10", "caio",  "01", "Foi mesmo."),
-    ("c10", "maya",  "01", "Não foi tão assustador quanto eu achei que seria."),
+    ("c10", "maya",  "01", "Nêo foi têo assustador quanto eu achei que seria."),
     ("c10", "valen", "01", "A gente sobreviveu ao primeiro dia. Já é um começo."),
 ]
 
 # ─────────────────────────────────────────────
-#  GERAÇÃO
+#  GERAÇêO
 # ─────────────────────────────────────────────
 
 def main():
@@ -129,7 +129,7 @@ def main():
 
         voice_id = VOICES.get(char)
         if not voice_id or voice_id.startswith("VOICE_ID_"):
-            print(f"[{i:02d}/{total}] ERRO  {char}: voice ID não configurado")
+            print(f"[{i:02d}/{total}] ERRO  {char}: voice ID nêo configurado")
             continue
 
         print(f"[{i:02d}/{total}] GEN   {filename.name}  → \"{text}\"")

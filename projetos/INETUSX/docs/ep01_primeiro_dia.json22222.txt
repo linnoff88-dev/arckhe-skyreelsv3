@@ -115,7 +115,7 @@
     "input_audio": "uploads/inetusx/eps01/c02_lumi_02.mp3"
   },
   {
-    "label": "C02-E · Valen — 'Espero que não.'",
+    "label": "C02-E · Valen — 'Espero que nêo.'",
     "task_type": "talking_avatar",
     "prompt": "A student responding quietly, a flicker of vulnerability behind the composed expression, looking back at her screen.",
     "resolution": "480P",
@@ -184,7 +184,7 @@
     "input_audio": "uploads/inetusx/eps01/c03_valen_01.mp3"
   },
   {
-    "label": "C03-E · Maya — 'É. Ele parece abandonado… mas não devia estar.'",
+    "label": "C03-E · Maya — 'É. Ele parece abandonado… mas nêo devia estar.'",
     "task_type": "talking_avatar",
     "prompt": "A girl speaking quietly, looking down at her drawing with a contemplative, gently melancholy expression. A genuine thought, not just small talk.",
     "resolution": "480P",
@@ -234,7 +234,7 @@
     "input_audio": "uploads/inetusx/eps01/c04_caio_01.mp3"
   },
   {
-    "label": "C04-C · Maya — 'Não.'",
+    "label": "C04-C · Maya — 'Nêo.'",
     "task_type": "talking_avatar",
     "prompt": "A girl answering simply, brief and neutral, barely looking up from her tablet. One word, no fuss.",
     "resolution": "480P",

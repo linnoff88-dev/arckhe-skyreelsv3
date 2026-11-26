@@ -1,6 +1,6 @@
 # Estrutura de Pastas — Projetos SkyReels V3
 
-Este documento define o padrão oficial de organização de arquivos dentro de cada projeto criado na WebUI.
+Este documento define o padrêo oficial de organizaçêo de arquivos dentro de cada projeto criado na WebUI.
 
 ---
 
@@ -20,7 +20,7 @@ projetos/<nome-do-projeto>/
 
 ---
 
-## Descrição de cada pasta
+## Descriçêo de cada pasta
 
 ### `imagens/`
 Imagens de referência **permanentes** do projeto.
@@ -51,7 +51,7 @@ Documentos base do universo da série.
 - Lista de episódios
 - Qualquer documento que a IA deve ler como contexto fixo
 
-> Todos os docs são sempre incluídos no prompt da IA ao gerar episódios.
+> Todos os docs sêo sempre incluídos no prompt da IA ao gerar episódios.
 
 ---
 
@@ -60,10 +60,10 @@ Arquivos **temporários** e de trabalho em andamento.
 
 - Roteiros em rascunho
 - Descrições de episódios antes de serem aprovadas
-- Notas de produção avulsas
-- Qualquer arquivo que o usuário quer carregar na modal de geração sem commitar como doc oficial
+- Notas de produçêo avulsas
+- Qualquer arquivo que o usuário quer carregar na modal de geraçêo sem commitar como doc oficial
 
-> O dropdown "Carregar doc" na modal de geração de episódio lista os arquivos desta pasta.
+> O dropdown "Carregar doc" na modal de geraçêo de episódio lista os arquivos desta pasta.
 
 ---
 
@@ -77,16 +77,16 @@ O nome da subpasta é derivado do nome da fila/episódio (slugificado).
 #### `episodios/<nome>/imagens/`
 - Imagens geradas via `fal-ai/nano-banana/edit` (com refs de personagem) ou `fal-ai/nano-banana` (só texto)
 - Uma imagem por cena, nomeada pelo título da cena
-- Após geração, o path é salvo como primeiro `ref_imgs` da cena (para uso no vídeo)
+- Após geraçêo, o path é salvo como primeiro `ref_imgs` da cena (para uso no vídeo)
 
 #### `episodios/<nome>/audios/`
 - Áudios gerados via ElevenLabs TTS
 - Um arquivo `.mp3` por cena, nomeado pelo título da cena
-- Após geração, o path é salvo como `input_audio` da cena
+- Após geraçêo, o path é salvo como `input_audio` da cena
 
 ---
 
-## Fluxo de geração de um episódio
+## Fluxo de geraçêo de um episódio
 
 ```
 1. Criar projeto
@@ -94,13 +94,13 @@ O nome da subpasta é derivado do nome da fila/episódio (slugificado).
 
 2. Popular imagens/ e docs/ com as referências base do projeto
 
-3. Abrir modal ⚡ IA → escrever descrição do episódio
-   └── Descrição salva automaticamente em docs/<titulo>.md
+3. Abrir modal ⚡ IA → escrever descriçêo do episódio
+   └── Descriçêo salva automaticamente em docs/<titulo>.md
 
 4. IA gera cenas JSON com:
-   - prompt       → descrição cinemática em inglês (para vídeo)
+   - prompt       → descriçêo cinemática em inglês (para vídeo)
    - image_prompt → prompt para fal.ai (imagem estática)
-   - audio_text   → narração/diálogos em PT-BR (para ElevenLabs)
+   - audio_text   → narraçêo/diálogos em PT-BR (para ElevenLabs)
    - ref_imgs     → paths das imagens de personagens em imagens/
 
 5. Aprovar → Criar Fila (episódio vinculado ao projeto)
@@ -116,7 +116,7 @@ O nome da subpasta é derivado do nome da fila/episódio (slugificado).
 
 | Etapa | Modelo | Endpoint |
 |-------|--------|----------|
-| Geração de prompts | Claude (Anthropic) | CLI subprocess |
+| Geraçêo de prompts | Claude (Anthropic) | CLI subprocess |
 | Imagem com referência | Gemini 2.5 Flash | `fal-ai/nano-banana/edit` |
 | Imagem sem referência | Gemini 2.5 Flash | `fal-ai/nano-banana` |
 | Áudio / TTS | ElevenLabs | `eleven_multilingual_v2` |

@@ -11,7 +11,7 @@
     "ref_imgs": ["uploads/personagem_principal.jpg"]
   },
   {
-    "label": "Cena 2 — Extensão: ela se levanta e olha pela janela",
+    "label": "Cena 2 — Extensêo: ela se levanta e olha pela janela",
     "task_type": "single_shot_extension",
     "prompt": "She walks to the window and looks outside at the city below, contemplative expression, golden hour lighting.",
     "resolution": "540P",
@@ -21,7 +21,7 @@
     "input_video": "{{prev}}"
   },
   {
-    "label": "Cena 3 — Transição: close no rosto [ZOOM_IN_CUT]",
+    "label": "Cena 3 — Transiçêo: close no rosto [ZOOM_IN_CUT]",
     "task_type": "shot_switching_extension",
     "prompt": "[ZOOM_IN_CUT] Close-up on her face, eyes full of determination, shallow depth of field, cinematic portrait.",
     "resolution": "540P",
@@ -42,7 +42,7 @@
     "ref_imgs": ["uploads/personagem_principal.jpg", "uploads/cenario_cidade.jpg"]
   },
   {
-    "label": "Cena 5 — Narração: personagem fala para câmera",
+    "label": "Cena 5 — Narraçêo: personagem fala para câmera",
     "task_type": "talking_avatar",
     "prompt": "A confident young woman speaking directly to camera, natural expression, urban background slightly blurred.",
     "resolution": "720P",

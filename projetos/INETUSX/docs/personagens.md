@@ -1,4 +1,4 @@
-Aqui está a lista de todos os nomes criados na sessão:
+Aqui está a lista de todos os nomes criados na sessêo:
 
 **Personagens principais**
 
@@ -17,5 +17,5 @@ Aqui está a lista de todos os nomes criados na sessão:
 * Ticha (lagartixa)
 * Rosinha (porquinha)
 * Roc (sapo)
-* Ale (pastor alemão)
+* Ale (pastor alemêo)
 

@@ -1,11 +1,11 @@
-# Processo de Geração de Vídeo — SkyReels V3
+# Processo de Geraçêo de Vídeo — SkyReels V3
 
-Documento baseado na execução real do teste `reference_to_video` (2026-02-22).
+Documento baseado na execuçêo real do teste `reference_to_video` (2026-02-22).
 Explica cada etapa, cada componente e cada parâmetro do sistema.
 
 ---
 
-## Visão Geral do Fluxo
+## Visêo Geral do Fluxo
 
 ```
 Entrada (imagens + texto)
@@ -14,13 +14,13 @@ Entrada (imagens + texto)
 1. Parsing de argumentos (generate_video.py)
         │
         ▼
-2. Download/resolução do modelo (HuggingFace Hub)
+2. Download/resoluçêo do modelo (HuggingFace Hub)
         │
         ▼
-3. Preparação dos inputs (imagens → PIL, URLs → local)
+3. Preparaçêo dos inputs (imagens → PIL, URLs → local)
         │
         ▼
-4. Instanciação do Pipeline
+4. Instanciaçêo do Pipeline
         │
         ▼
 5. Encoding do texto (T5 → embeddings)
@@ -45,16 +45,16 @@ Entrada (imagens + texto)
 
 O ponto de entrada único do sistema. Aceita:
 
-| Argumento | Tipo | Descrição |
+| Argumento | Tipo | Descriçêo |
 |-----------|------|-----------|
 | `--task_type` | string | Qual pipeline usar: `reference_to_video`, `single_shot_extension`, `shot_switching_extension`, `talking_avatar` |
-| `--prompt` | string | Descrição textual do vídeo desejado. Vai para o encoder T5 |
+| `--prompt` | string | Descriçêo textual do vídeo desejado. Vai para o encoder T5 |
 | `--resolution` | string | `480P`, `540P` ou `720P`. Determina a tabela de dimensões usada |
-| `--duration` | int | Duração em segundos. Convertida em `num_frames = duration × fps + 1` |
+| `--duration` | int | Duraçêo em segundos. Convertida em `num_frames = duration × fps + 1` |
 | `--seed` | int | Semente aleatória. Controla o ruído inicial — mesmo seed = mesmo vídeo |
 | `--ref_imgs` | string | Caminhos das imagens de referência separados por vírgula (máx 4) |
 | `--offload` | flag | Move modelos para CPU entre usos, libera VRAM. Mais lento, menos memória |
-| `--low_vram` | flag | Offload + quantização FP8 (torchao). Para GPUs < 24 GB. Incompatível com `--use_usp` |
+| `--low_vram` | flag | Offload + quantizaçêo FP8 (torchao). Para GPUs < 24 GB. Incompatível com `--use_usp` |
 | `--use_usp` | flag | Paralelismo multi-GPU via xDiT USP. Usa `torchrun`. Incompatível com `--low_vram` |
 | `--model_id` | string | Path local ou ID HuggingFace. Se omitido, selecionado automaticamente pelo `task_type` |
 
@@ -67,7 +67,7 @@ task_type=reference_to_video, resolution=540P, duration=5, seed=42, offload=True
 
 ---
 
-## 2. Seleção de Modelo e Download
+## 2. Seleçêo de Modelo e Download
 
 ```python
 MODEL_ID_CONFIG = {
@@ -80,16 +80,16 @@ MODEL_ID_CONFIG = {
 
 `download_model()` em `skyreels_v3/modules/__init__.py`:
 - Se o path já existe localmente → usa direto
-- Se não → chama `huggingface_hub.snapshot_download()` e baixa para `~/.cache/huggingface/hub/`
+- Se nêo → chama `huggingface_hub.snapshot_download()` e baixa para `~/.cache/huggingface/hub/`
 - Retorna o path local do snapshot
 
 **No nosso teste:** modelo já estava em cache (`~/.cache/huggingface/hub/models--Skywork--SkyReels-V3-Reference2Video/snapshots/8df04fa.../`), carga em ~3s.
 
-A linha de log `Fetching 21 files: 100%|█| 21/21` indica verificação dos 21 arquivos do repositório (não re-download, apenas checagem de integridade).
+A linha de log `Fetching 21 files: 100%|█| 21/21` indica verificaçêo dos 21 arquivos do repositório (nêo re-download, apenas checagem de integridade).
 
 ---
 
-## 3. Preparação dos Inputs (`prepare_and_broadcast_inputs`)
+## 3. Preparaçêo dos Inputs (`prepare_and_broadcast_inputs`)
 
 Para `reference_to_video`:
 1. String `"ref_imgs/0_1.png,ref_imgs/0_2.png"` é separada por vírgula em lista
@@ -101,23 +101,23 @@ Para `reference_to_video`:
 ```
 ref_imgs = [PIL.Image 960x544, PIL.Image 960x544]
 ```
-As imagens foram redimensionadas para 960x544 ao carregar (resolução 540P, aspect ratio 1.78).
+As imagens foram redimensionadas para 960x544 ao carregar (resoluçêo 540P, aspect ratio 1.78).
 
 ---
 
-## 4. Seleção de Resolução e Dimensões (`config.py`)
+## 4. Seleçêo de Resoluçêo e Dimensões (`config.py`)
 
 `ASPECT_RATIO_CONFIG` é um dicionário de três níveis:
 ```
-resolução → aspect_ratio → (altura, largura)
+resoluçêo → aspect_ratio → (altura, largura)
 ```
 
-**Como funciona a seleção:**
+**Como funciona a seleçêo:**
 1. Calcula o aspect ratio da imagem de entrada (largura/altura)
-2. Encontra o aspect ratio mais próximo na tabela para a resolução escolhida
+2. Encontra o aspect ratio mais próximo na tabela para a resoluçêo escolhida
 3. Usa as dimensões correspondentes
 
-**Para 540P, as dimensões base são:**
+**Para 540P, as dimensões base sêo:**
 
 | Aspect Ratio | Dimensões (H × W) | Uso |
 |---|---|---|
@@ -127,17 +127,17 @@ resolução → aspect_ratio → (altura, largura)
 | 1.33 (4:3) | 832 × 624 | |
 | 1.78 (16:9) | 960 × 544 | paisagem |
 
-> Todas as dimensões são múltiplos de 16 (requisito do transformer).
+> Todas as dimensões sêo múltiplos de 16 (requisito do transformer).
 
 ---
 
-## 5. Instanciação do Pipeline (`ReferenceToVideoPipeline`)
+## 5. Instanciaçêo do Pipeline (`ReferenceToVideoPipeline`)
 
 O pipeline `reference_to_video` usa `WanSkyReelsA2WanT2VPipeline`, uma subclasse de `diffusers.DiffusionPipeline`.
 
 Contém 5 componentes carregados via `from_pretrained`:
 
-| Componente | Classe | Função |
+| Componente | Classe | Funçêo |
 |-----------|--------|--------|
 | `tokenizer` | `AutoTokenizer` (UMT5) | Converte texto em token IDs |
 | `text_encoder` | `UMT5EncoderModel` | Converte tokens em embeddings semânticos |
@@ -164,7 +164,7 @@ O diffusers espera o tipo base; o SkyReels usa uma subclasse customizada compat�
 
 **O que é o T5/UMT5:**
 - UMT5 (Unified Multilingual T5) é um modelo encoder-decoder de linguagem da Google
-- Versão XXL: ~11B parâmetros
+- Versêo XXL: ~11B parâmetros
 - Transforma texto em vetores de alta dimensionalidade que capturam semântica
 
 **Fluxo em `_get_t5_prompt_embeds()`:**
@@ -199,7 +199,7 @@ prompt (string)
 
 **O que é o VAE (Variational Autoencoder):**
 - Comprime imagens/vídeos de espaço de pixels para espaço latente
-- Fator de compressão espacial: 8× (960→120, 544→68)
+- Fator de compressêo espacial: 8× (960→120, 544→68)
 - Fator temporal: 4× (para vídeos)
 - Espaço latente: 16 canais (z_dim=16)
 
@@ -208,16 +208,16 @@ prompt (string)
 PIL.Image (960×544, RGB)
     │
     ▼ F.to_tensor() → [0,1]
-    ▼ .sub_(0.5).div_(0.5) → [-1,1]  ← normalização padrão
+    ▼ .sub_(0.5).div_(0.5) → [-1,1]  ← normalizaçêo padrêo
     │
     ▼ unsqueeze: [1, 3, 1, 544, 960]  ← batch=1, C=3, T=1, H, W
     │
-    ▼ vae.encode() → distribuição latente
+    ▼ vae.encode() → distribuiçêo latente
     │
-    ▼ retrieve_latents() → sample da distribuição
+    ▼ retrieve_latents() → sample da distribuiçêo
     │  → tensor [1, 16, 1, 68, 120]
     │
-    ▼ normalização: (latent - mean) × (1/std)
+    ▼ normalizaçêo: (latent - mean) × (1/std)
     │  → latent normalizado para média 0
 ```
 
@@ -238,9 +238,9 @@ Este tensor de ruído gaussiano é o que será progressivamente "limpado" pelo d
 
 ## 8. Loop de Denoising (8 Steps)
 
-Este é o coração do processo — ~13 minutos no nosso teste.
+Este é o coraçêo do processo — ~13 minutos no nosso teste.
 
-### O que é Denoising por Difusão
+### O que é Denoising por Difusêo
 
 A ideia central: começar com ruído puro (Gaussiano) e remover o ruído gradualmente, guiado pelo texto e pelas imagens de referência.
 
@@ -248,7 +248,7 @@ A ideia central: começar com ruído puro (Gaussiano) e remover o ruído gradual
 
 O scheduler controla **quando** e **quanto** ruído é removido em cada step. Usa o algoritmo UniPC (Unified Predictor-Corrector), mais eficiente que DDPM puro.
 
-Com `num_inference_steps=8`, os timesteps são distribuídos em [0, 1000]:
+Com `num_inference_steps=8`, os timesteps sêo distribuídos em [0, 1000]:
 ```
 t=1000 → t=857 → t=714 → t=571 → t=428 → t=285 → t=142 → t=0
 (muito ruído)                                              (sem ruído)
@@ -256,7 +256,7 @@ t=1000 → t=857 → t=714 → t=571 → t=428 → t=285 → t=142 → t=0
 
 ### O Transformer: `SkyReelsA2WanI2v3DModel` (14B parâmetros)
 
-Modelo de atenção 3D (espacial + temporal) baseado na arquitetura Wan. A cada step, recebe:
+Modelo de atençêo 3D (espacial + temporal) baseado na arquitetura Wan. A cada step, recebe:
 
 ```
 hidden_states = cat([latents_ruidosos, condition_imagens], dim=2)
@@ -297,7 +297,7 @@ Após o forward pass:
 ```python
 latents = scheduler.step(noise_pred, t, latents)[0]
 ```
-O scheduler usa a previsão de ruído para calcular os latents "menos ruidosos" para o próximo step. É a "receita" matemática do UniPC.
+O scheduler usa a previsêo de ruído para calcular os latents "menos ruidosos" para o próximo step. É a "receita" matemática do UniPC.
 
 **Com `--offload`:** o transformer vai para GPU antes do loop e volta para CPU depois.
 
@@ -305,18 +305,18 @@ O scheduler usa a previsão de ruído para calcular os latents "menos ruidosos" 
 
 ## 9. VAE Decode
 
-Após os 8 steps, os latents finais (quase sem ruído) são decodificados de volta para pixels:
+Após os 8 steps, os latents finais (quase sem ruído) sêo decodificados de volta para pixels:
 
 ```
 latents [1, 16, 31, 68, 120]
     │
-    ▼ desnormalização: latent × std + mean
+    ▼ desnormalizaçêo: latent × std + mean
     │
     ▼ vae.decode() ← processo inverso do encoder
     │  → video tensor [1, 3, 121, 544, 960]  ← C=RGB, T=frames, H, W
     │
     ▼ video_processor.postprocess_video()
-    │  → normalização [-1,1] → [0,255]
+    │  → normalizaçêo [-1,1] → [0,255]
     │  → tensor de uint8
 ```
 
@@ -338,7 +338,7 @@ imageio.mimwrite(
 
 **Nome do arquivo:** `{seed}_{timestamp}.mp4`
 - `42` = seed usado
-- `2026-02-22_06-22-44` = horário de conclusão
+- `2026-02-22_06-22-44` = horário de conclusêo
 
 ---
 
@@ -346,13 +346,13 @@ imageio.mimwrite(
 
 | Arquivo | Responsabilidade |
 |---------|-----------------|
-| `generate_video.py` | Entry point: argumentos, download, orquestração, salvamento |
+| `generate_video.py` | Entry point: argumentos, download, orquestraçêo, salvamento |
 | `skyreels_v3/config.py` | Tabela de resoluções e aspect ratios |
 | `skyreels_v3/modules/__init__.py` | Factory functions: download_model, get_vae, get_transformer |
 | `skyreels_v3/modules/reference_to_video/transformer.py` | Arquitetura do transformer 14B (SkyReelsA2WanI2v3DModel) |
 | `skyreels_v3/pipelines/reference_to_video_pipeline.py` | Pipeline completo: encode → denoise → decode |
-| `skyreels_v3/scheduler/` | FlowUniPCMultistepScheduler (para pipelines de extensão) |
-| `skyreels_v3/distributed/` | Patches de atenção para multi-GPU |
+| `skyreels_v3/scheduler/` | FlowUniPCMultistepScheduler (para pipelines de extensêo) |
+| `skyreels_v3/distributed/` | Patches de atençêo para multi-GPU |
 
 ---
 
@@ -360,7 +360,7 @@ imageio.mimwrite(
 
 | Métrica | Valor |
 |---------|-------|
-| Resolução | 960 × 544 (540P, aspect 1.78) |
+| Resoluçêo | 960 × 544 (540P, aspect 1.78) |
 | Frames | 121 (5s × 24fps + 1) |
 | Latent frames | 31 = (121-1)÷4 + 1 |
 | Latent shape | [1, 16, 31, 68, 120] |
@@ -375,7 +375,7 @@ imageio.mimwrite(
 
 | Warning | Causa | Problema? |
 |---------|-------|-----------|
-| `cuda capability 12.1 ... max is 12.0` | GB10 (Blackwell) é mais novo que o PyTorch instalado | Não — funciona por compatibilidade forward |
-| `flash_attn not found` | flash-attention não instalada (ARM64) | Não — usa atenção padrão do PyTorch, ~20% mais lento |
-| `Expected types for transformer: WanTransformer3DModel` | diffusers espera o tipo base, SkyReels usa subclasse | Não — subclasse é compatível por herança |
-| `amp.autocast deprecated` | API antiga do PyTorch em transformer_a2v.py | Não — aviso cosmético, funciona |
+| `cuda capability 12.1 ... max is 12.0` | GB10 (Blackwell) é mais novo que o PyTorch instalado | Nêo — funciona por compatibilidade forward |
+| `flash_attn not found` | flash-attention nêo instalada (ARM64) | Nêo — usa atençêo padrêo do PyTorch, ~20% mais lento |
+| `Expected types for transformer: WanTransformer3DModel` | diffusers espera o tipo base, SkyReels usa subclasse | Nêo — subclasse é compatível por herança |
+| `amp.autocast deprecated` | API antiga do PyTorch em transformer_a2v.py | Nêo — aviso cosmético, funciona |

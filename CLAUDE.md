@@ -90,7 +90,7 @@ Output is saved to `result/<task_type>/<seed>_<timestamp>.mp4`.
 
 ## Web UI Version — OBRIGATÓRIO antes de todo git push
 
-A versão aparece em **dois lugares** em `webui/templates/index.html` e deve estar sempre sincronizada:
+A versêo aparece em **dois lugares** em `webui/templates/index.html` e deve estar sempre sincronizada:
 
 1. `<title>INEMA SkyReels V3 X.Y.Z</title>` (linha ~6)
 2. `<h1>` no header: `3.<span class="feat" title="Y recursos">Y</span>.<span class="fix" title="Z correções">Z</span>`
@@ -99,9 +99,9 @@ A versão aparece em **dois lugares** em `webui/templates/index.html` e deve est
 - `FEAT` — incrementar por cada novo recurso/funcionalidade adicionado
 - `FIX`  — incrementar por cada bug corrigido
 
-**Regra:** SEMPRE atualizar ambos os lugares com a nova versão antes de fazer `git push`. Nunca fazer push sem atualizar a versão.
+**Regra:** SEMPRE atualizar ambos os lugares com a nova versêo antes de fazer `git push`. Nunca fazer push sem atualizar a versêo.
 
-Versão atual: **3.49.19**
+Versêo atual: **3.49.19**
 
 ## Model IDs
 

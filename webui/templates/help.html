@@ -249,7 +249,7 @@
 
 <div class="page-header">
   <a href="/">← Voltar</a>
-  <h1>Ajuda — Fila de Geração</h1>
+  <h1>Ajuda — Fila de Geraçêo</h1>
   <span>INEMA SkyReels V3 3.10.4</span>
 </div>
 
@@ -274,15 +274,15 @@
 
   <!-- COMO USAR -->
   <h2 id="como-usar">Como usar a fila</h2>
-  <p>A aba <strong>Fila</strong> permite enfileirar múltiplos jobs de geração que rodam automaticamente um após o outro, sem que você precise ficar monitorando.</p>
+  <p>A aba <strong>Fila</strong> permite enfileirar múltiplos jobs de geraçêo que rodam automaticamente um após o outro, sem que você precise ficar monitorando.</p>
 
   <table>
-    <tr><th>Ação</th><th>Como fazer</th></tr>
+    <tr><th>Açêo</th><th>Como fazer</th></tr>
     <tr><td><strong>Adicionar job manual</strong></td><td>Preencha o formulário no painel esquerdo e clique em <strong>+ Fila</strong></td></tr>
-    <tr><td><strong>Importar arquivo</strong></td><td>Aba Fila → botão <strong>↑ Importar</strong> → selecione um <code>.json</code> ou <code>.md</code></td></tr>
+    <tr><td><strong>Importar arquivo</strong></td><td>Aba Fila → botêo <strong>↑ Importar</strong> → selecione um <code>.json</code> ou <code>.md</code></td></tr>
     <tr><td><strong>Remover job</strong></td><td>Clique no <strong>✕</strong> ao lado do job (só funciona em jobs pendentes)</td></tr>
-    <tr><td><strong>Limpar fila</strong></td><td>Botão <strong>Limpar</strong> remove todos os jobs pendentes</td></tr>
-    <tr><td><strong>Gerar imediatamente</strong></td><td>Botão <strong>Gerar Vídeo</strong> também usa a fila — começa agora se não há nada rodando</td></tr>
+    <tr><td><strong>Limpar fila</strong></td><td>Botêo <strong>Limpar</strong> remove todos os jobs pendentes</td></tr>
+    <tr><td><strong>Gerar imediatamente</strong></td><td>Botêo <strong>Gerar Vídeo</strong> também usa a fila — começa agora se nêo há nada rodando</td></tr>
   </table>
 
   <div class="note">
@@ -291,7 +291,7 @@
 
   <!-- FORMATO JSON -->
   <h2 id="formato-json">Formato JSON</h2>
-  <p>Um array de objetos. Cada objeto é um job. Salve com extensão <code>.json</code>.</p>
+  <p>Um array de objetos. Cada objeto é um job. Salve com extensêo <code>.json</code>.</p>
 
   <div class="code-wrap">
     <div class="code-header">
@@ -311,7 +311,7 @@
     <span class="j-key">"ref_imgs"</span><span class="j-punct">:</span>    <span class="j-punct">[</span><span class="j-str">"uploads/personagem.jpg"</span><span class="j-punct">,</span> <span class="j-str">"uploads/floresta.jpg"</span><span class="j-punct">]</span>
   <span class="j-punct">},</span>
   <span class="j-punct">{</span>
-    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensão"</span><span class="j-punct">,</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensêo"</span><span class="j-punct">,</span>
     <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"single_shot_extension"</span><span class="j-punct">,</span>
     <span class="j-key">"prompt"</span><span class="j-punct">:</span>      <span class="j-str">"She stops to look at a deer in the distance."</span><span class="j-punct">,</span>
     <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
@@ -335,7 +335,7 @@
 
   <!-- FORMATO MD -->
   <h2 id="formato-md">Formato Markdown</h2>
-  <p>Cada job é uma seção <code>##</code>. Os campos são linhas <code>- chave: valor</code>. Salve com extensão <code>.md</code> ou <code>.txt</code>.</p>
+  <p>Cada job é uma seçêo <code>##</code>. Os campos sêo linhas <code>- chave: valor</code>. Salve com extensêo <code>.md</code> ou <code>.txt</code>.</p>
 
   <div class="code-wrap">
     <div class="code-header">
@@ -373,7 +373,7 @@
       <th>reference_to_video</th>
       <th>single/shot_extension</th>
       <th>talking_avatar</th>
-      <th>Descrição</th>
+      <th>Descriçêo</th>
     </tr>
     <tr>
       <td><code>task_type</code></td><td>string</td>
@@ -383,7 +383,7 @@
     <tr>
       <td><code>prompt</code></td><td>string</td>
       <td class="req">✔ obrigatório</td><td class="req">✔ obrigatório</td><td class="opt">opcional</td>
-      <td>Descrição do vídeo. No talking_avatar tem baixa influência</td>
+      <td>Descriçêo do vídeo. No talking_avatar tem baixa influência</td>
     </tr>
     <tr>
       <td><code>resolution</code></td><td>string</td>
@@ -393,7 +393,7 @@
     <tr>
       <td><code>duration</code></td><td>int</td>
       <td class="opt">opcional</td><td class="opt">opcional</td><td class="opt">ignorado</td>
-      <td>Duração em segundos. talking_avatar usa a duração do áudio</td>
+      <td>Duraçêo em segundos. talking_avatar usa a duraçêo do áudio</td>
     </tr>
     <tr>
       <td><code>seed</code></td><td>int</td>
@@ -418,7 +418,7 @@
     <tr>
       <td><code>input_video</code></td><td>string</td>
       <td>—</td><td class="req">✔ obrigatório</td><td>—</td>
-      <td>Caminho, URL ou referência (<code>{{ "{{prev}}" }}</code>, <code>{{ "{{job:N}}" }}</code>) do vídeo a estender. Não aceita imagens — só vídeo.</td>
+      <td>Caminho, URL ou referência (<code>{{ "{{prev}}" }}</code>, <code>{{ "{{job:N}}" }}</code>) do vídeo a estender. Nêo aceita imagens — só vídeo.</td>
     </tr>
     <tr>
       <td><code>input_image</code></td><td>string</td>
@@ -448,7 +448,7 @@
   <h2 id="limites">Limites e regras</h2>
 
   <table>
-    <tr><th>Tarefa</th><th>Duração</th><th>Resolução</th><th>Observação</th></tr>
+    <tr><th>Tarefa</th><th>Duraçêo</th><th>Resoluçêo</th><th>Observaçêo</th></tr>
     <tr>
       <td><code>reference_to_video</code></td>
       <td>1–30 s (recomendado 5 s)</td>
@@ -469,7 +469,7 @@
     </tr>
     <tr>
       <td><code>talking_avatar</code></td>
-      <td>= duração do áudio (máx 200 s)</td>
+      <td>= duraçêo do áudio (máx 200 s)</td>
       <td>480P / 720P</td>
       <td><code>low_vram: true</code> obrigatório</td>
     </tr>
@@ -491,10 +491,10 @@
     <tr>
       <td><strong>Contexto do input</strong></td>
       <td>Usa os últimos frames para continuar o movimento e a narrativa</td>
-      <td>Usa os últimos frames para herdar aparência e iluminação no novo ângulo</td>
+      <td>Usa os últimos frames para herdar aparência e iluminaçêo no novo ângulo</td>
     </tr>
     <tr>
-      <td><strong>Duração</strong></td>
+      <td><strong>Duraçêo</strong></td>
       <td>5–30 s</td>
       <td>máx 5 s</td>
     </tr>
@@ -505,15 +505,15 @@
     </tr>
     <tr>
       <td><strong>ref_imgs</strong></td>
-      <td>Não aceita — só <code>input_video</code></td>
-      <td>Não aceita — só <code>input_video</code></td>
+      <td>Nêo aceita — só <code>input_video</code></td>
+      <td>Nêo aceita — só <code>input_video</code></td>
     </tr>
   </table>
 
   <div class="note">
     <strong>Quando preferir <code>reference_to_video</code> no lugar de <code>shot_switching_extension</code>:</strong>
     se você quer mudar de plano mas tem imagens de referência do personagem/cenário,
-    <code>reference_to_video</code> dá mais controle visual, não tem limite de 5 s e é mais
+    <code>reference_to_video</code> dá mais controle visual, nêo tem limite de 5 s e é mais
     estável em hardware com pouca VRAM. O <code>shot_switching_extension</code> vale a pena
     quando você quer que o novo plano herde automaticamente a aparência exata do clip
     anterior sem precisar preparar imagens adicionais.
@@ -522,11 +522,11 @@
   <!-- PROMPTS E IMAGENS DE REFERÊNCIA -->
   <h2 id="prompts">Prompts e imagens de referência</h2>
 
-  <h3>A imagem de referência é uma guia, não uma cópia</h3>
+  <h3>A imagem de referência é uma guia, nêo uma cópia</h3>
   <p>
     Quando você passa imagens em <code>ref_imgs</code>, o modelo aprende a <strong>identidade visual</strong>
-    do sujeito (rosto, cor, forma) e tenta mantê-la nos frames gerados — mas não copia pixels.
-    O resultado é sempre uma geração nova com movimento, iluminação e composição definidos pelo prompt.
+    do sujeito (rosto, cor, forma) e tenta mantê-la nos frames gerados — mas nêo copia pixels.
+    O resultado é sempre uma geraçêo nova com movimento, iluminaçêo e composiçêo definidos pelo prompt.
   </p>
 
   <table>
@@ -536,20 +536,20 @@
       <td>Alta fidelidade — o modelo tenta preservar</td>
     </tr>
     <tr>
-      <td><strong>Postura / expressão</strong></td>
+      <td><strong>Postura / expressêo</strong></td>
       <td>Varia conforme o movimento gerado e o prompt</td>
     </tr>
     <tr>
-      <td><strong>Iluminação / fundo</strong></td>
+      <td><strong>Iluminaçêo / fundo</strong></td>
       <td>Adapta-se ao contexto da cena descrita no prompt</td>
     </tr>
     <tr>
-      <td><strong>Composição / enquadramento</strong></td>
-      <td>Controlada pelo prompt, não pela imagem</td>
+      <td><strong>Composiçêo / enquadramento</strong></td>
+      <td>Controlada pelo prompt, nêo pela imagem</td>
     </tr>
     <tr>
       <td><strong>Pixels exatos</strong></td>
-      <td>Nunca — é geração, não compositing ou copy-paste</td>
+      <td>Nunca — é geraçêo, nêo compositing ou copy-paste</td>
     </tr>
   </table>
 
@@ -558,13 +558,13 @@
     Você pode passar até 4 imagens de referência. Imagens do mesmo personagem em ângulos
     diferentes (frente, perfil, corpo) ajudam o modelo a manter consistência em cenas com movimento.
     A métrica interna de <em>Reference Consistency</em> do modelo é 0,67 (escala 0–1) — alta, mas
-    não perfeita, pois o objetivo é gerar movimento natural, não congelar a imagem.
+    nêo perfeita, pois o objetivo é gerar movimento natural, nêo congelar a imagem.
   </div>
 
   <div class="note warn">
     <strong>Prompt vs imagem:</strong> se o prompt contradiz a referência (ex: imagem de cabelo preto
     mas prompt diz "blonde hair"), o <strong>prompt tende a ganhar</strong>. Use o prompt para descrever
-    a cena e a ação; deixe a identidade do personagem para a imagem de referência.
+    a cena e a açêo; deixe a identidade do personagem para a imagem de referência.
   </div>
 
   <h3>Como escrever prompts por tarefa</h3>
@@ -577,7 +577,7 @@
     </tr>
     <tr>
       <td><code>reference_to_video</code></td>
-      <td>Descreva a cena, ação e câmera. Não precisa re-descrever o personagem (ele vem da imagem).</td>
+      <td>Descreva a cena, açêo e câmera. Nêo precisa re-descrever o personagem (ele vem da imagem).</td>
       <td><em>"A woman walks through a sunlit forest, cinematic wide shot."</em></td>
     </tr>
     <tr>
@@ -587,12 +587,12 @@
     </tr>
     <tr>
       <td><code>shot_switching_extension</code></td>
-      <td>Comece com <strong>prefixo de corte</strong>, depois descreva a nova perspectiva. O modelo herda aparência e iluminação do vídeo anterior.</td>
+      <td>Comece com <strong>prefixo de corte</strong>, depois descreva a nova perspectiva. O modelo herda aparência e iluminaçêo do vídeo anterior.</td>
       <td><em>"[ZOOM_IN_CUT] Close-up of the woman's face, determined expression."</em></td>
     </tr>
     <tr>
       <td><code>talking_avatar</code></td>
-      <td>Descreva postura, expressão e movimento de câmera. O áudio sincroniza o lábio automaticamente — não precisa transcrever a fala.</td>
+      <td>Descreva postura, expressêo e movimento de câmera. O áudio sincroniza o lábio automaticamente — nêo precisa transcrever a fala.</td>
       <td><em>"A woman giving a speech. Confident, poised. Use a static shot."</em></td>
     </tr>
   </table>
@@ -610,11 +610,11 @@
 
   <div class="note">
     <strong>Dica:</strong> o próprio README do projeto recomenda usar um LLM (ex: ChatGPT, Claude)
-    para redigir e otimizar prompts para <code>shot_switching_extension</code>, garantindo direção
+    para redigir e otimizar prompts para <code>shot_switching_extension</code>, garantindo direçêo
     cinematográfica clara e precisa.
   </div>
 
-  <h3>Links de documentação oficial</h3>
+  <h3>Links de documentaçêo oficial</h3>
   <table>
     <tr><th>Recurso</th><th>Link</th></tr>
     <tr><td>Technical Report (artigo científico)</td><td><a href="https://arxiv.org/abs/2601.17323" target="_blank" style="color:#7c3aed">arxiv.org/abs/2601.17323</a></td></tr>
@@ -626,7 +626,7 @@
 
   <!-- CAMINHOS -->
   <h2 id="caminhos">Caminhos de arquivo</h2>
-  <p>Todos os caminhos são relativos à <strong>raiz do projeto</strong> (<code>SkyReels-V3/</code>).</p>
+  <p>Todos os caminhos sêo relativos à <strong>raiz do projeto</strong> (<code>SkyReels-V3/</code>).</p>
 
   <table>
     <tr><th>Local</th><th>Onde fica</th></tr>
@@ -652,7 +652,7 @@
     <tr>
       <td><strong>Caminho fixo</strong></td>
       <td><code>uploads/meu_video.mp4</code></td>
-      <td>arquivo já existe no servidor; não muda entre gerações</td>
+      <td>arquivo já existe no servidor; nêo muda entre gerações</td>
     </tr>
     <tr>
       <td><code>{{ "{{prev}}" }}</code></td>
@@ -667,9 +667,9 @@
   </table>
 
   <div class="note">
-    <strong>Resolução em tempo de execução:</strong> referências dinâmicas (<code>{{ "{{prev}}" }}</code>,
-    <code>{{ "{{job:N}}" }}</code>) são substituídas pelo caminho real do vídeo no momento
-    em que o job começa. Se a cena referenciada falhou ou ainda não rodou, o job falha
+    <strong>Resoluçêo em tempo de execuçêo:</strong> referências dinâmicas (<code>{{ "{{prev}}" }}</code>,
+    <code>{{ "{{job:N}}" }}</code>) sêo substituídas pelo caminho real do vídeo no momento
+    em que o job começa. Se a cena referenciada falhou ou ainda nêo rodou, o job falha
     com aviso no log.
   </div>
 
@@ -694,12 +694,12 @@
     <tr>
       <td><code>ref_imgs</code></td>
       <td><code>reference_to_video</code></td>
-      <td>⚠ apenas caminhos fixos — não aceita <code>{{ "{{prev}}" }}</code></td>
+      <td>⚠ apenas caminhos fixos — nêo aceita <code>{{ "{{prev}}" }}</code></td>
     </tr>
   </table>
 
   <div class="note warn">
-    <strong>Extension tasks não aceitam imagens de referência.</strong>
+    <strong>Extension tasks nêo aceitam imagens de referência.</strong>
     <code>single_shot_extension</code> e <code>shot_switching_extension</code> só recebem
     <code>input_video</code> — o campo <code>ref_imgs</code> é ignorado nessas tarefas.
     Para guiar o estilo visual use o prompt de texto.
@@ -719,7 +719,7 @@
     <span class="j-key">"ref_imgs"</span><span class="j-punct">:</span>   <span class="j-punct">[</span><span class="j-str">"uploads/personagem.jpg"</span><span class="j-punct">]</span>   <span class="j-comment">← caminho fixo</span>
   <span class="j-punct">},</span>
   <span class="j-punct">{</span>
-    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensão"</span><span class="j-punct">,</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 2 — Extensêo"</span><span class="j-punct">,</span>
     <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"single_shot_extension"</span><span class="j-punct">,</span>
     <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
     <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">10</span><span class="j-punct">,</span>
@@ -729,7 +729,7 @@
     <span class="j-key">"input_video"</span><span class="j-punct">:</span> <span class="j-str">"{{ "{{prev}}" }}"</span>    <span class="j-comment">← output da Cena 1</span>
   <span class="j-punct">},</span>
   <span class="j-punct">{</span>
-    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 3 — Transição"</span><span class="j-punct">,</span>
+    <span class="j-key">"label"</span><span class="j-punct">:</span>       <span class="j-str">"Cena 3 — Transiçêo"</span><span class="j-punct">,</span>
     <span class="j-key">"task_type"</span><span class="j-punct">:</span>   <span class="j-str">"shot_switching_extension"</span><span class="j-punct">,</span>
     <span class="j-key">"resolution"</span><span class="j-punct">:</span>  <span class="j-str">"540P"</span><span class="j-punct">,</span>
     <span class="j-key">"duration"</span><span class="j-punct">:</span>    <span class="j-num">5</span><span class="j-punct">,</span>
@@ -800,8 +800,8 @@
       <div class="example-info">
         <div class="example-title">Vídeo de 10 cenas — Trilha de montanha</div>
         <div class="example-desc">
-          Uma jornada épica: paisagem ao amanhecer, caminhante, acampamento, fogueira noturna, chegada ao cume e narração final.
-          Uso avançado com transições cinemáticas e variação de resolução.
+          Uma jornada épica: paisagem ao amanhecer, caminhante, acampamento, fogueira noturna, chegada ao cume e narraçêo final.
+          Uso avançado com transições cinemáticas e variaçêo de resoluçêo.
         </div>
       </div>
       <div class="example-actions">
@@ -851,7 +851,7 @@
       <span class="scene-badge badge-r2v">C01-A · reference_to_video</span>
       <span class="scene-badge badge-av">C01-B,C,D,E · talking_avatar ×4</span>
       <span class="scene-badge badge-r2v">C01-F · reference_to_video</span>
-      <span style="font-size:.7rem;color:#555;padding:3px 8px">… padrão se repete nas 10 cenas</span>
+      <span style="font-size:.7rem;color:#555;padding:3px 8px">… padrêo se repete nas 10 cenas</span>
       <span class="scene-badge badge-av">38 × talking_avatar</span>
       <span class="scene-badge badge-r2v">21 × reference_to_video</span>
     </div>
@@ -897,7 +897,7 @@ async function copyExample(name) {
     btn.textContent = '✔ Copiado';
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = '⎘ Copiar'; btn.classList.remove('copied'); }, 2000);
-  } catch(e) { alert('Não foi possível copiar.'); }
+  } catch(e) { alert('Nêo foi possível copiar.'); }
 }
 
 // Simple JSON syntax highlighter

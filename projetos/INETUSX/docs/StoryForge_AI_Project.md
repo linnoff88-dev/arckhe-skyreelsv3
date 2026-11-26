@@ -1,10 +1,10 @@
 # 🎬 StoryForge AI
 
-Sistema de Criação Automatizada de Séries com IA
+Sistema de Criaçêo Automatizada de Séries com IA
 
 ------------------------------------------------------------------------
 
-# 📌 Visão Geral
+# 📌 Visêo Geral
 
 StoryForge AI é uma plataforma que permite:
 
@@ -33,9 +33,9 @@ Projeto_X/ ├── 1_Descricao_Geral ├── 2_Mundo ├── 3_Personagens
 
 ------------------------------------------------------------------------
 
-# 🔁 Fluxo de Execução (1 → 10)
+# 🔁 Fluxo de Execuçêo (1 → 10)
 
-## 1️⃣ Descrição Geral
+## 1️⃣ Descriçêo Geral
 
 Usuário escreve ideia base.
 
@@ -48,7 +48,7 @@ Status possíveis: - draft - generated - edited - approved
 
 ## 2️⃣ Mundo
 
-Sistema gera: - Ano - Ambientação - Tecnologia - Regras do universo -
+Sistema gera: - Ano - Ambientaçêo - Tecnologia - Regras do universo -
 Conflitos globais
 
 ------------------------------------------------------------------------
@@ -56,7 +56,7 @@ Conflitos globais
 ## 3️⃣ Personagens
 
 Sistema gera: - Protagonista - Antagonista - Secundários - Conflitos
-internos - Motivação
+internos - Motivaçêo
 
 Usuário pode editar e aprovar.
 
@@ -86,7 +86,7 @@ Usuário pode: - Criar novo - Reordenar - Apagar - Selecionar episódio
 
 Sistema gera: - Sinopse detalhada - Estrutura em 3 atos - Cliffhanger
 
-Após aprovação → libera roteiro completo.
+Após aprovaçêo → libera roteiro completo.
 
 ------------------------------------------------------------------------
 
@@ -96,14 +96,14 @@ Formato profissional:
 
 INT. LABORATÓRIO -- NOITE
 
-CAEL: (voz baixa) --- Isso não é um eco.
+CAEL: (voz baixa) --- Isso nêo é um eco.
 
-Inclui: - Divisão por cenas - Descrição visual - Emoção - Movimentos de
-câmera - Duração estimada
+Inclui: - Divisêo por cenas - Descriçêo visual - Emoçêo - Movimentos de
+câmera - Duraçêo estimada
 
 ------------------------------------------------------------------------
 
-## 8️⃣ Geração de Mídia
+## 8️⃣ Geraçêo de Mídia
 
 Para cada cena:
 
@@ -116,7 +116,7 @@ Para cada cena:
 ### 🎙️ Áudio
 
 -   Voz por personagem
--   Emoção ajustada
+-   Emoçêo ajustada
 -   Sons ambiente
 
 ### 🎵 Música
@@ -130,7 +130,7 @@ Arquivos organizados:
 
 ------------------------------------------------------------------------
 
-## 9️⃣ Geração de Vídeo
+## 9️⃣ Geraçêo de Vídeo
 
 Processo: - Animar imagens - Sincronizar áudio - Inserir música -
 Adicionar transições
@@ -144,7 +144,7 @@ Saídas: - MP4 horizontal - MP4 vertical - Trailer automático
 ## 🔟 Montagem Final
 
 Sistema: - Junta cenas - Equaliza áudio - Aplica LUT cinematográfico -
-Adiciona créditos - Exporta versão final
+Adiciona créditos - Exporta versêo final
 
 Status final: - rendered - final
 
@@ -161,7 +161,7 @@ Status final: - rendered - final
 
 Inicial: - SQLite local
 
-Produção: - Supabase (PostgreSQL)
+Produçêo: - Supabase (PostgreSQL)
 
 ------------------------------------------------------------------------
 
@@ -256,12 +256,12 @@ Produção: - Supabase (PostgreSQL)
 
 Menu lateral:
 
-\[1\] Descrição \[2\] Mundo \[3\] Personagens \[4\] Arco \[5\] Episódios
+\[1\] Descriçêo \[2\] Mundo \[3\] Personagens \[4\] Arco \[5\] Episódios
 \[6\] Episódio Atual \[7\] Roteiro \[8\] Mídia \[9\] Vídeo \[10\] Final
 
 ------------------------------------------------------------------------
 
-## Telegram (extensão)
+## Telegram (extensêo)
 
 Permite: - Criar projeto - Aprovar etapas - Gerar novo episódio -
 Receber vídeo final
@@ -282,7 +282,7 @@ Cada etapa só desbloqueia a próxima quando estiver `approved`.
 
 -   Backend
 -   Banco
--   Geração de roteiro
+-   Geraçêo de roteiro
 
 ## Fase 2
 
@@ -306,7 +306,7 @@ Criar um:
 🎬 Estúdio Automatizado de Séries com IA
 
 Possibilidades: - SaaS - Ferramenta para criadores - Plataforma de anime
-IA - Gerador de novelas IA - Sistema de produção automatizada
+IA - Gerador de novelas IA - Sistema de produçêo automatizada
 
 ------------------------------------------------------------------------
 

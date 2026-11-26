@@ -1,13 +1,13 @@
 # Análise e Plano: SkyReels V3 no DGX Spark
 **Data:** 2026-02-22
 **Autor:** Claude Code (Sonnet 4.6)
-**Status:** Em execução — ambiente isolado sendo criado
+**Status:** Em execuçêo — ambiente isolado sendo criado
 
 ---
 
 ## 1. Comparativo: Hardware vs. Requisitos
 
-| Critério | DGX Spark (produção) | SkyReels V3 precisa | Status |
+| Critério | DGX Spark (produçêo) | SkyReels V3 precisa | Status |
 |----------|----------------------|----------------------|--------|
 | CUDA | 13.0 | 12.8+ | ✅ OK (retrocompat.) |
 | Python | 3.12.3 | 3.12+ | ✅ OK |
@@ -22,23 +22,23 @@
 
 | Capacidade | Wan 2.2 | LTX-2 | **SkyReels V3** |
 |---|---|---|---|
-| Text-to-Video | ✅ | ✅ | ❌ (não é o foco) |
+| Text-to-Video | ✅ | ✅ | ❌ (nêo é o foco) |
 | Image-to-Video | ✅ 5B | ✅ | ✅ (R2V com até 4 imagens ref.) |
 | **Multi-referência (1–4 imagens)** | ❌ | ❌ | ✅ **NOVO** |
-| **Extensão de vídeo (5–30s)** | ❌ | ❌ | ✅ **NOVO** |
+| **Extensêo de vídeo (5–30s)** | ❌ | ❌ | ✅ **NOVO** |
 | **Troca de planos cinematográficos** | ❌ | ❌ | ✅ **NOVO** |
 | Talking Avatar (lip sync, 200s) | ❌ | ⚠️ parcial | ✅ **NOVO** (19B dedicado) |
 
-SkyReels V3 é **complementar**, não concorrente ao stack atual.
+SkyReels V3 é **complementar**, nêo concorrente ao stack atual.
 
 ---
 
 ## 3. Riscos Técnicos
 
 ### 3.1 flash_attn no ARM64 — Risco Médio
-- Não há wheels pré-compilados para ARM64+CUDA13 no PyPI
+- Nêo há wheels pré-compilados para ARM64+CUDA13 no PyPI
 - Fallbacks: compilar na máquina ou `FLASH_ATTENTION_SKIP_CUDA_BUILD=TRUE`
-- SkyReels usa flash_attn via diffusers/transformers, que têm fallback para atenção padrão
+- SkyReels usa flash_attn via diffusers/transformers, que têm fallback para atençêo padrêo
 
 ### 3.2 PyTorch 2.8.0 → 2.10.0 — Risco Baixo
 - requirements.txt pede 2.8.0, mas código usa APIs estáveis
@@ -47,7 +47,7 @@ SkyReels V3 é **complementar**, não concorrente ao stack atual.
 ### 3.3 xfuser / yunchang — Irrelevante
 - Necessários apenas para `--use_usp` (multi-GPU)
 - DGX Spark tem 1 GPU — nunca será usado
-- Pular instalação completamente
+- Pular instalaçêo completamente
 
 ### 3.4 VRAM — Sem Risco
 | Modelo SkyReels | VRAM BF16 | Com `--low_vram` FP8 |
@@ -94,7 +94,7 @@ cd /home/nmaldaner/projetos/SkyReels-V3
 ### Dependências instaladas
 - PyTorch: `2.10.0+cu130` (em vez de 2.8.0 — compatível e testado na máquina)
 - flash_attn: instalado se possível, caso contrário skip (fallback automático)
-- xfuser / yunchang: **não instalados** (single GPU, desnecessário)
+- xfuser / yunchang: **nêo instalados** (single GPU, desnecessário)
 
 ---
 
@@ -156,7 +156,7 @@ ls -lth /home/nmaldaner/projetos/SkyReels-V3/result/
 ## 8. Rollback (se necessário)
 
 ```bash
-# Remove tudo sem tocar na produção
+# Remove tudo sem tocar na produçêo
 rm -rf /home/nmaldaner/projetos/SkyReels-V3/.venv
 rm -rf ~/.cache/huggingface/hub/models--Skywork*
 
@@ -165,15 +165,15 @@ rm -rf ~/.cache/huggingface/hub/models--Skywork*
 
 ---
 
-## 9. Plano de Integração (Fase Futura — após validação)
+## 9. Plano de Integraçêo (Fase Futura — após validaçêo)
 
 Após validar os 3 task types com sucesso:
 
 1. **Wrapper scripts** — `gerar_video_skyreels_r2v.py`, `gerar_video_skyreels_v2v.py`, `gerar_video_skyreels_avatar.py`
-2. **Interface web** — adicionar 3 novos modelos no seletor da v4.2 (ou nova versão)
-3. **Job queue** — subprocess com `.venv` python, mesmo padrão do ComfyUI na interface atual
+2. **Interface web** — adicionar 3 novos modelos no seletor da v4.2 (ou nova versêo)
+3. **Job queue** — subprocess com `.venv` python, mesmo padrêo do ComfyUI na interface atual
 
-### Arquitetura de integração (idêntica à atual)
+### Arquitetura de integraçêo (idêntica à atual)
 ```
 Interface Web v4.x (FastAPI :7862)
     ├── ComfyUI jobs → HTTP POST → ComfyUI :8188      [existente]
@@ -183,4 +183,4 @@ Interface Web v4.x (FastAPI :7862)
 ---
 
 **Status:** Ambiente criado e dependências instaladas
-**Próxima ação:** Testar os 3 task types e medir VRAM real
+**Próxima açêo:** Testar os 3 task types e medir VRAM real

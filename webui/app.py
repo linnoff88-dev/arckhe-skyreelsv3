@@ -30,31 +30,31 @@ GLOBAL_CONFIG_FILE   = UPLOAD_DIR / "global_config.json"
 SYSTEM_PROMPT_FILE   = UPLOAD_DIR / "system_prompt_episode.txt"
 
 DEFAULT_SYSTEM_PROMPT = """\
-Você é um assistente de produção de série animada com IA (SkyReels V3). A partir da descrição do episódio e dos recursos do projeto, gere um array JSON com TODAS as cenas necessárias para cobrir a história completa.
+Você é um assistente de produçêo de série animada com IA (SkyReels V3). A partir da descriçêo do episódio e dos recursos do projeto, gere um array JSON com TODAS as cenas necessárias para cobrir a história completa.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DESCRIÇÃO DO EPISÓDIO:
+DESCRIÇêO DO EPISÓDIO:
 {description}
 
 {resources}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PARÂMETROS TÉCNICOS:
 - Task type   : {task_type}
-- Resolução   : {resolution}
-- Duração/cena: ~{duration}s (ajuste conforme ritmo de cada cena)
+- Resoluçêo   : {resolution}
+- Duraçêo/cena: ~{duration}s (ajuste conforme ritmo de cada cena)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 REFERÊNCIA DAS TASKS DO SKYREELS V3:
 
 • reference_to_video — Gera vídeo a partir de 1–4 imagens de referência + prompt de texto (modelo 14B).
   O campo "ref_imgs" é OBRIGATÓRIO (paths das imagens do personagem/ambiente da cena).
-  O "prompt" descreve o movimento e ação que ocorre no vídeo.
+  O "prompt" descreve o movimento e açêo que ocorre no vídeo.
 
 • single_shot_extension — Estende um vídeo existente por 5–30s (modelo 14B).
   Usado quando a cena anterior precisa continuar sem corte.
 
-• shot_switching_extension — Estende com transição cinemática de câmera, máx. 5s (modelo 14B).
-  Usado para mudança de ângulo ou ambiente com transição suave.
+• shot_switching_extension — Estende com transiçêo cinemática de câmera, máx. 5s (modelo 14B).
+  Usado para mudança de ângulo ou ambiente com transiçêo suave.
 
 • talking_avatar — Gera avatar falante a partir de retrato + áudio, até 200s (modelo 19B).
   Requer "input_image" (portrait) e "input_audio" (arquivo de áudio).
@@ -63,23 +63,23 @@ REFERÊNCIA DAS TASKS DO SKYREELS V3:
 REGRAS OBRIGATÓRIAS — preencha TODOS os campos:
 
 1. PROMPT DE VÍDEO (campo "prompt"):
-   - Descrição cinemática detalhada em INGLÊS
-   - Inclua: composição, iluminação, movimento de câmera, emoção da cena, ação dos personagens
+   - Descriçêo cinemática detalhada em INGLÊS
+   - Inclua: composiçêo, iluminaçêo, movimento de câmera, emoçêo da cena, açêo dos personagens
    - Exemplo: "Medium shot, Valen stands at school corridor, morning sunlight through windows, she turns to look at Lumi, curious expression, soft camera pan right, anime style, 2030 futuristic school"
 
 2. PROMPT DE IMAGEM (campo "image_prompt"):
-   - Prompt em INGLÊS para geração de imagem estática via fal.ai / Flux
-   - Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminação, ângulo
+   - Prompt em INGLÊS para geraçêo de imagem estática via fal.ai / Flux
+   - Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminaçêo, ângulo
    - Mantenha estilo visual consistente com os personagens do projeto
-   - ⚠ ESCALA FÍSICA REAL: animais devem aparecer em tamanho real — hamster é do tamanho de uma mão,
+   - ⚠ ESCALA FÍSICA REAL: animais devem aparecer em tamanho real — hamster é do tamanho de uma mêo,
      gato do tamanho de um colo, robô companheiro menor que os estudantes. NUNCA exagere o tamanho
      de animais — especifique sempre: "small hamster on Maya's palm", "tiny robot at knee height"
    - Exemplo: "anime style illustration, 2030 futuristic school corridor, teenage girl with purple hair and confident expression, warm morning light, small brown hamster on her shoulder, vibrant colors"
 
 3. TEXTO DE ÁUDIO (campo "audio_text"):
-   - Narração ou diálogos em PORTUGUÊS BRASILEIRO para geração via ElevenLabs
+   - Narraçêo ou diálogos em PORTUGUÊS BRASILEIRO para geraçêo via ElevenLabs
    - Inclua APENAS o que será falado/narrado nesta cena
-   - ⚠ NUNCA inclua o nome do personagem como prefixo — escreva DIRETO a fala ou narração.
+   - ⚠ NUNCA inclua o nome do personagem como prefixo — escreva DIRETO a fala ou narraçêo.
      ERRADO: "Valen: Você também vai para a turma do Professor Dex?"
      CORRETO: "Você também vai para a turma do Professor Dex?"
      ERRADO: "[Lumi] Claro, vamos juntas!"
@@ -93,10 +93,10 @@ REGRAS OBRIGATÓRIAS — preencha TODOS os campos:
    - REGRA DE CONSISTÊNCIA DE AMBIENTE: SEMPRE inclua a imagem do local/ambiente em TODA
      cena que acontece naquele ambiente — inclusive closes e planos de diálogo.
      Sem a imagem do ambiente, o modelo gera um fundo aleatório e inconsistente.
-   - Composição ideal por cena:
+   - Composiçêo ideal por cena:
      · Cena de estabelecimento (wide/panorâmica): ambiente + 1-2 personagens presentes
      · Close/diálogo: personagem que fala + ambiente onde a cena ocorre
-     · Grupo: até 2 personagens principais + ambiente (máx 3 refs, reserve 1 slot para variação)
+     · Grupo: até 2 personagens principais + ambiente (máx 3 refs, reserve 1 slot para variaçêo)
    - Exemplo correto (close em corredor): ["projetos/X/imagens/valen.png", "projetos/X/imagens/escola.png"]
    - Exemplo ERRADO (close sem ambiente): ["projetos/X/imagens/valen.png"]  ← fundo inconsistente!
    - ⚠ PROIBIDO: colocar duas imagens diferentes que mostrem o MESMO personagem — isso
@@ -110,27 +110,27 @@ REGRAS OBRIGATÓRIAS — preencha TODOS os campos:
    - Extraia o voice_id do ElevenLabs diretamente dos documentos do projeto (tabela de casting)
    - Coloque o voice_id do personagem principal que fala ou narra a cena
    - Se a cena for silenciosa ou a voz for genérica/narradora, use string vazia: ""
-   - NÃO invente voice_ids — use SOMENTE os que estão explicitamente nos docs do projeto
+   - NêO invente voice_ids — use SOMENTE os que estêo explicitamente nos docs do projeto
    - Exemplo: "FIEA0c5UHH9JnvWaQrXS" (Valen), "vibfi5nlk3hs8Mtvf9Oy" (Lumi), etc.
 
 6. TRILHA DE FUNDO (campo "audio_bg"):
    - Path para arquivo de música/trilha do projeto (pasta audios/ do projeto)
-   - Mixada a 28% do volume sobre a narração/diálogo (ou sozinha se audio_text vazio)
-   - Use para: cenas épicas, panorâmicas, momentos de tensão, transições sem diálogo
-   - Se não há trilha disponível ou a cena não precisa, use string vazia: ""
+   - Mixada a 28% do volume sobre a narraçêo/diálogo (ou sozinha se audio_text vazio)
+   - Use para: cenas épicas, panorâmicas, momentos de tensêo, transições sem diálogo
+   - Se nêo há trilha disponível ou a cena nêo precisa, use string vazia: ""
    - Exemplo: "projetos/INETUSX/audios/tema_principal.mp3"
 
 7. CONSISTÊNCIA NARRATIVA:
    - Use os documentos do projeto como base de conhecimento absoluta para personagens, universo e vozes
    - Use EXATAMENTE os nomes dos personagens conforme os documentos do projeto — NUNCA invente
-     nomes alternativos ou genéricos (ex: se o personagem chama "Ratinho", não use "Rato" ou "ratinho")
-   - ⚠ COERÊNCIA AÇÃO/DIREÇÃO: o audio_text e o prompt de vídeo DEVEM descrever a MESMA
-     ação na MESMA direção. Se a narração diz "subindo a escada", o prompt DEVE dizer
+     nomes alternativos ou genéricos (ex: se o personagem chama "Ratinho", nêo use "Rato" ou "ratinho")
+   - ⚠ COERÊNCIA AÇêO/DIREÇêO: o audio_text e o prompt de vídeo DEVEM descrever a MESMA
+     açêo na MESMA direçêo. Se a narraçêo diz "subindo a escada", o prompt DEVE dizer
      "walking UP the stairs" — jamais "walking down". Contradições entre áudio e vídeo
      destroem completamente a coerência narrativa.
    - Distribua imagens de referência coerentemente (personagem correto em cada cena)
-   - Adapte duração conforme intensidade narrativa (~{duration}s como base)
-   - Cubra TODA a história descrita — não pule cenas importantes
+   - Adapte duraçêo conforme intensidade narrativa (~{duration}s como base)
+   - Cubra TODA a história descrita — nêo pule cenas importantes
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Retorne SOMENTE um array JSON válido, sem texto antes ou depois, começando com [ e terminando com ].
@@ -149,16 +149,16 @@ def _load_system_prompt():
 
 # ── Templates dos system prompts por projeto ──────────────────────────────
 DEFAULT_PHASE1_TEMPLATE = """\
-Você é um supervisor de produção de série animada.
-A partir da descrição do episódio e dos recursos visuais do projeto, faça:
+Você é um supervisor de produçêo de série animada.
+A partir da descriçêo do episódio e dos recursos visuais do projeto, faça:
 
 1. MAPEAMENTO DE AMBIENTES: Identifique todos os locais/ambientes onde as cenas acontecem
-2. ELEMENTOS NOVOS: Identifique elementos visuais que NÃO têm imagem de referência disponível na lista abaixo
+2. ELEMENTOS NOVOS: Identifique elementos visuais que NêO têm imagem de referência disponível na lista abaixo
 
 Imagens de referência disponíveis no projeto:
 {images_list}{docs_str}
 
-Descrição do episódio:
+Descriçêo do episódio:
 {description}
 
 Retorne SOMENTE um JSON válido com este formato exato:
@@ -166,8 +166,8 @@ Retorne SOMENTE um JSON válido com este formato exato:
   "environments": [
     {{
       "name": "nome curto do ambiente",
-      "description": "descrição visual detalhada do ambiente",
-      "existing_ref": "projetos/X/imagens/Y.png ou null se não existe"
+      "description": "descriçêo visual detalhada do ambiente",
+      "existing_ref": "projetos/X/imagens/Y.png ou null se nêo existe"
     }}
   ],
   "new_elements": [
@@ -181,7 +181,7 @@ Retorne SOMENTE um JSON válido com este formato exato:
 
 REGRAS OBRIGATÓRIAS:
 - environments.existing_ref: use o path EXATO de uma imagem da lista acima (copie exatamente como está), ou null
-- new_elements: SOMENTE elementos que NÃO têm nenhuma imagem correspondente na lista acima
+- new_elements: SOMENTE elementos que NêO têm nenhuma imagem correspondente na lista acima
 - Máximo 5 novos elementos — priorize ambientes e personagens novos mais importantes
 - Se todos os ambientes já têm referência visual: new_elements = []
 
@@ -189,30 +189,30 @@ APENAS o JSON.\
 """
 
 DEFAULT_IMAGE_GUIDE = """\
-# Guia de Geração de Imagens
+# Guia de Geraçêo de Imagens
 
-Este arquivo define o estilo e regras para geração de imagens via fal.ai (Flux/Gemini).
-As regras aqui são usadas pela IA ao gerar o campo `image_prompt` de cada cena.
+Este arquivo define o estilo e regras para geraçêo de imagens via fal.ai (Flux/Gemini).
+As regras aqui sêo usadas pela IA ao gerar o campo `image_prompt` de cada cena.
 
-## Estilo visual padrão
+## Estilo visual padrêo
 - anime style illustration
 - 2030 futuristic setting
 - vibrant colors, detailed backgrounds
 - 16:9 aspect ratio
 
 ## Regras obrigatórias
-- Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminação, ângulo
+- Descreva: personagens presentes, ambiente, cores dominantes, estilo artístico, iluminaçêo, ângulo
 - Mantenha estilo visual consistente entre todas as cenas e episódios
 - NUNCA inclua elementos que contradizem o universo da série
 
 ## Regras de escala física (OBRIGATÓRIO)
-- Todos os personagens e animais devem aparecer em proporção física REAL
-- Hamster/rato: tamanho de uma mão humana — pequeno, coadjuvante visual
+- Todos os personagens e animais devem aparecer em proporçêo física REAL
+- Hamster/rato: tamanho de uma mêo humana — pequeno, coadjuvante visual
 - Gato/cachorro pequeno: tamanho de um lap (colo)
 - Estudantes: altura humana normal (1,6m–1,8m)
-- Robô companheiro: altura de criança ou menor (não maior que os estudantes)
-- NUNCA exagere o tamanho de animais — eles são coadjuvantes, NÃO protagonistas visuais
-- Exceção SOMENTE se a descrição da cena explicitamente pedir tamanho diferente
+- Robô companheiro: altura de criança ou menor (nêo maior que os estudantes)
+- NUNCA exagere o tamanho de animais — eles sêo coadjuvantes, NêO protagonistas visuais
+- Exceçêo SOMENTE se a descriçêo da cena explicitamente pedir tamanho diferente
 - Para especificar escala no prompt: "small hamster sitting on Maya's palm, hand-sized pet"
 
 ## Exemplo de image_prompt
@@ -223,24 +223,24 @@ small brown hamster resting on her shoulder, realistic proportions"
 """
 
 DEFAULT_AUDIO_GUIDE = """\
-# Guia de Geração de Áudio (ElevenLabs TTS)
+# Guia de Geraçêo de Áudio (ElevenLabs TTS)
 
-Este arquivo define as regras para geração de áudio via ElevenLabs TTS.
+Este arquivo define as regras para geraçêo de áudio via ElevenLabs TTS.
 O campo `audio_text` de cada cena usa estas diretrizes.
 
 ## Idioma
 - PORTUGUÊS BRASILEIRO exclusivamente
 
 ## Tom e estilo
-- Narração: terceira pessoa, tempo presente, tom cinemático e envolvente
+- Narraçêo: terceira pessoa, tempo presente, tom cinemático e envolvente
 - Diálogos: primeira pessoa, tom natural e expressivo para cada personagem
 - Mantenha a personalidade definida nos documentos do projeto
 
 ## Regras
 - Inclua APENAS o que será falado ou narrado — sem descrições de cena
 - Se a cena for silenciosa ou apenas musical, use string vazia: ""
-- Duração do áudio determina a duração do vídeo — escreva com ritmo adequado à cena
-- Evite texto muito longo que não couça no tempo de duração da cena (~5s ≈ 2-3 frases curtas)
+- Duraçêo do áudio determina a duraçêo do vídeo — escreva com ritmo adequado à cena
+- Evite texto muito longo que nêo couça no tempo de duraçêo da cena (~5s ≈ 2-3 frases curtas)
 
 ## Casting de vozes
 Definido na tabela de personagens nos documentos do projeto (campo voice_id).
@@ -248,22 +248,22 @@ Definido na tabela de personagens nos documentos do projeto (campo voice_id).
 """
 
 DEFAULT_VIDEO_GUIDE = """\
-# Guia de Geração de Vídeo (SkyReels V3)
+# Guia de Geraçêo de Vídeo (SkyReels V3)
 
-Este arquivo define as regras para geração de vídeos via SkyReels V3.
+Este arquivo define as regras para geraçêo de vídeos via SkyReels V3.
 O campo `prompt` de cada cena usa estas diretrizes.
 
 ## Tasks disponíveis
 - **reference_to_video**: gera vídeo a partir de 1–4 imagens de referência + prompt
 - **single_shot_extension**: estende vídeo existente (5–30s)
-- **shot_switching_extension**: estende com transição cinemática (máx. 5s)
+- **shot_switching_extension**: estende com transiçêo cinemática (máx. 5s)
 - **talking_avatar**: avatar falante (retrato + áudio, até 200s)
 
 ## Regras do prompt de vídeo
 - Escreva em INGLÊS
-- Inclua: composição, iluminação, movimento de câmera, emoção, ação dos personagens
+- Inclua: composiçêo, iluminaçêo, movimento de câmera, emoçêo, açêo dos personagens
 - Seja específico sobre direções (up/down/left/right) — o vídeo seguirá exatamente
-- ⚠ COERÊNCIA: o prompt de vídeo DEVE descrever a mesma ação/direção que o audio_text
+- ⚠ COERÊNCIA: o prompt de vídeo DEVE descrever a mesma açêo/direçêo que o audio_text
 
 ## Referências visuais (ref_imgs)
 - MÁXIMO 4 imagens por cena
@@ -279,7 +279,7 @@ anime style, 2030 futuristic school, cinematic lighting"
 
 
 def _ensure_project_prompts(proj_dir: Path):
-    """Cria arquivos de system prompt em docs/ do projeto se não existirem."""
+    """Cria arquivos de system prompt em docs/ do projeto se nêo existirem."""
     docs_dir = proj_dir / "docs"
     docs_dir.mkdir(exist_ok=True)
     files = {
@@ -296,7 +296,7 @@ def _ensure_project_prompts(proj_dir: Path):
 
 
 def _load_project_prompt(proj_dir: Path, filename: str, default: str) -> str:
-    """Carrega prompt do projeto; usa default se não existir."""
+    """Carrega prompt do projeto; usa default se nêo existir."""
     fp = proj_dir / "docs" / filename
     if fp.exists():
         return fp.read_text(encoding="utf-8")
@@ -413,7 +413,7 @@ def _load_queues():
                 if j.get("status") in ("running", "pending"):
                     j["status"] = "idle"
             named_queues.append(nq)
-        # Atribuir ep_code a episódios existentes que não têm código
+        # Atribuir ep_code a episódios existentes que nêo têm código
         _proj_counters: dict = {}
         for nq in named_queues:
             proj = nq.get("project", "")
@@ -440,7 +440,7 @@ def _next_job_id():
 def _parse_project_voices(proj_name: str) -> dict:
     """Lê os docs do projeto e extrai mapa {nome_personagem: voice_id} de tabelas Markdown.
     Procura pela coluna 'Voice ID' (3ª coluna) em tabelas pipe-separadas.
-    Padrão: | Personagem | Voz | voice_id | ...
+    Padrêo: | Personagem | Voz | voice_id | ...
     """
     voices: dict = {}
     docs_dir = PROJECTS_DIR / proj_name / "docs"
@@ -465,7 +465,7 @@ def _parse_project_voices(proj_name: str) -> dict:
 
 def _match_voice(voices: dict, label: str, fallback: str) -> str:
     """Retorna o voice_id do personagem cujo nome aparece MAIS CEDO no label da cena.
-    Evita falso match quando múltiplos personagens estão no título (ex: 'Lumi Chama Valen').
+    Evita falso match quando múltiplos personagens estêo no título (ex: 'Lumi Chama Valen').
     """
     label_lower = label.lower()
     best_pos = len(label_lower) + 1
@@ -673,7 +673,7 @@ def start_next_queued_job():
 
 def _fire_webhook(url, payload):
     """POSTa payload pro callback_url em thread separada. 3 retries com backoff
-    exponencial (1s, 2s, 4s) em timeout/conn-error/5xx. 4xx não é retry-able."""
+    exponencial (1s, 2s, 4s) em timeout/conn-error/5xx. 4xx nêo é retry-able."""
     import urllib.request as urllib_req
     import urllib.error as urllib_err
 
@@ -921,7 +921,7 @@ def run_generation(cmd, env_extra=None, metadata=None, job=None):
                         last_video.rename(new_path)
                         last_video = new_path
                     except Exception as e:
-                        print(f"[namespace] warn: não consegui mover {last_video}: {e}")
+                        print(f"[namespace] warn: nêo consegui mover {last_video}: {e}")
                 generation_state["last_video"] = str(last_video.relative_to(PROJECT_ROOT))
                 if job:
                     job["output_video"] = generation_state["last_video"]
@@ -1237,7 +1237,7 @@ def export_nq_json(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return "Fila não encontrada", 404
+            return "Fila nêo encontrada", 404
         data = json.dumps(nq, indent=2, ensure_ascii=False).encode("utf-8")
         safe = "".join(c if c.isalnum() or c in "-_ " else "_" for c in nq["name"]).strip()
     buf = io.BytesIO(data)
@@ -1250,7 +1250,7 @@ def download_nq_zip(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return "Fila não encontrada", 404
+            return "Fila nêo encontrada", 404
         jobs_snap = [dict(j) for j in nq["jobs"]]
         safe = "".join(c if c.isalnum() or c in "-_ " else "_" for c in nq["name"]).strip()
     buf = io.BytesIO()
@@ -1343,7 +1343,7 @@ def queue_remove(job_id):
             if job["id"] == job_id and job["status"] == "pending":
                 job_queue.pop(i)
                 return jsonify({"ok": True})
-    return jsonify({"error": "Job não encontrado ou não está pendente"}), 404
+    return jsonify({"error": "Job nêo encontrado ou nêo está pendente"}), 404
 
 
 @app.route("/queue/import", methods=["POST"])
@@ -1546,7 +1546,7 @@ def get_named_queue_detail(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
     return jsonify(nq)
 
 
@@ -1558,7 +1558,7 @@ def add_nq_job(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         job_id = _next_job_id()
         job = {
             "id": job_id,
@@ -1580,12 +1580,12 @@ def delete_nq_job(nq_id, job_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         job = next((j for j in nq["jobs"] if j["id"] == job_id), None)
         if job is None:
-            return jsonify({"error": "Cena não encontrada"}), 404
+            return jsonify({"error": "Cena nêo encontrada"}), 404
         if job["status"] == "running":
-            return jsonify({"error": "Cena em execução não pode ser removida"}), 400
+            return jsonify({"error": "Cena em execuçêo nêo pode ser removida"}), 400
         nq["jobs"] = [j for j in nq["jobs"] if j["id"] != job_id]
     _save_queues()
     return jsonify({"ok": True})
@@ -1599,17 +1599,17 @@ def patch_nq_job(nq_id, job_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         job = next((j for j in nq["jobs"] if j["id"] == job_id), None)
         if job is None:
-            return jsonify({"error": "Cena não encontrada"}), 404
+            return jsonify({"error": "Cena nêo encontrada"}), 404
         if job["status"] == "running":
-            return jsonify({"error": "Cena não pode ser editada enquanto está rodando"}), 400
+            return jsonify({"error": "Cena nêo pode ser editada enquanto está rodando"}), 400
         was_done = job["status"] == "done"
         for k, v in data.items():
             if k not in PROTECTED:
                 job[k] = v
-        # Campos de áudio/voz não invalidam o vídeo gerado — não resetar o job
+        # Campos de áudio/voz nêo invalidam o vídeo gerado — nêo resetar o job
         AUDIO_ONLY = {"audio_bg", "audio_text", "voice_id", "input_audio"}
         edits = set(k for k in data if k not in PROTECTED)
         audio_only_edit = bool(edits) and edits.issubset(AUDIO_ONLY)
@@ -1628,9 +1628,9 @@ def delete_named_queue_route(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         if nq["status"] == "running":
-            return jsonify({"error": "Não é possível excluir uma fila em execução"}), 400
+            return jsonify({"error": "Nêo é possível excluir uma fila em execuçêo"}), 400
         if nq.get("project") and not force:
             # Episódio vinculado a projeto sem force: só limpa jobs e reseta status
             nq["jobs"] = []
@@ -1647,7 +1647,7 @@ def nq_gallery(nq_id):
     """Lista os assets gerados para o episódio: imagens, áudios e vídeos."""
     nq = next((q for q in named_queues if q["id"] == nq_id), None)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
 
     proj_name = nq.get("project", "")
     ep_code   = nq.get("ep_code", "")
@@ -1674,13 +1674,13 @@ def nq_gallery(nq_id):
 
 @app.route("/nqueues/<int:nq_id>/project-link", methods=["DELETE"])
 def unlink_nq_from_project(nq_id):
-    """Remove a associação do episódio com o projeto sem excluir a fila."""
+    """Remove a associaçêo do episódio com o projeto sem excluir a fila."""
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         if nq["status"] == "running":
-            return jsonify({"error": "Não é possível desvincular uma fila em execução"}), 400
+            return jsonify({"error": "Nêo é possível desvincular uma fila em execuçêo"}), 400
         nq.pop("project", None)
     _save_queues()
     return jsonify({"ok": True})
@@ -1691,7 +1691,7 @@ def run_nq_route(nq_id):
     callback_url = request.args.get("callback_url") or None
     ok = run_named_queue(nq_id, callback_url=callback_url)
     if not ok:
-        return jsonify({"error": "Fila não encontrada, já em execução, ou sem cenas pendentes"}), 400
+        return jsonify({"error": "Fila nêo encontrada, já em execuçêo, ou sem cenas pendentes"}), 400
     return jsonify({"ok": True, "callback_registered": bool(callback_url)})
 
 
@@ -1699,7 +1699,7 @@ def run_nq_route(nq_id):
 def run_nq_job_route(nq_id, job_id):
     ok = run_single_nq_job_fn(nq_id, job_id)
     if not ok:
-        return jsonify({"error": "Cena não encontrada ou já em execução"}), 400
+        return jsonify({"error": "Cena nêo encontrada ou já em execuçêo"}), 400
     return jsonify({"ok": True})
 
 
@@ -1709,9 +1709,9 @@ def reset_nq_route(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         if nq["status"] == "running":
-            return jsonify({"error": "Não é possível operar uma fila em execução"}), 400
+            return jsonify({"error": "Nêo é possível operar uma fila em execuçêo"}), 400
         for j in nq["jobs"]:
             if j["status"] in ("error", "idle"):
                 j["status"] = "idle"
@@ -1731,9 +1731,9 @@ def restart_nq_route(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         if nq["status"] == "running":
-            return jsonify({"error": "Não é possível operar uma fila em execução"}), 400
+            return jsonify({"error": "Nêo é possível operar uma fila em execuçêo"}), 400
         for j in nq["jobs"]:
             j["status"] = "idle"
             j["output_video"] = ""
@@ -1748,16 +1748,16 @@ def restart_nq_route(nq_id):
 
 @app.route("/nqueues/<int:nq_id>/resume-from-error", methods=["POST"])
 def resume_from_error_nq_route(nq_id):
-    """Continua a execução pulando jobs com status=error.
-    Jobs idle seguintes são executados; {{prev}} resolve para o último
+    """Continua a execuçêo pulando jobs com status=error.
+    Jobs idle seguintes sêo executados; {{prev}} resolve para o último
     output_video anterior (ignora jobs com erro)."""
     callback_url = request.args.get("callback_url") or None
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         if nq["status"] == "running":
-            return jsonify({"error": "Não é possível operar uma fila em execução"}), 400
+            return jsonify({"error": "Nêo é possível operar uma fila em execuçêo"}), 400
         jobs = nq["jobs"]
         if not jobs:
             return jsonify({"error": "Fila vazia"}), 400
@@ -1769,7 +1769,7 @@ def resume_from_error_nq_route(nq_id):
         if idle_count == 0:
             return jsonify({"error": "Nenhuma cena idle restante após os erros"}), 400
         # Se o primeiro job da fila falhou e nada anterior está 'done',
-        # não há ponto de partida pra {{prev}}: erro claro em vez de resolver
+        # nêo há ponto de partida pra {{prev}}: erro claro em vez de resolver
         # silenciosamente pra string literal.
         if jobs[0]["status"] == "error" and done_count == 0:
             return jsonify({
@@ -1788,14 +1788,14 @@ def resume_from_error_nq_route(nq_id):
 
 def _strip_audio_prefix(text: str) -> str:
     """Remove prefixos de nome de personagem do audio_text antes de enviar ao ElevenLabs.
-    Ex: 'Valen: texto' → 'texto', '[Lumi] texto' → 'texto', '(narração) texto' → 'texto'
+    Ex: 'Valen: texto' → 'texto', '[Lumi] texto' → 'texto', '(narraçêo) texto' → 'texto'
     """
     import re as _re
-    # Padrão: "[Nome] texto" ou "[Nome]: texto"
+    # Padrêo: "[Nome] texto" ou "[Nome]: texto"
     text = _re.sub(r'^\s*\[[^\]]{1,40}\]\s*:?\s*', '', text)
-    # Padrão: "Nome: texto" ou "Nome — texto" ou "Nome - texto" (hífen só com espaço antes)
+    # Padrêo: "Nome: texto" ou "Nome — texto" ou "Nome - texto" (hífen só com espaço antes)
     text = _re.sub(r'^\s*[A-ZÀ-Ú][a-zA-ZÀ-ú ]{1,30}\s*(?::|—| - )\s*', '', text)
-    # Padrão: "(narração)", "(narrador)", "(voz off)", etc.
+    # Padrêo: "(narraçêo)", "(narrador)", "(voz off)", etc.
     text = _re.sub(r'^\s*\([^)]{1,30}\)\s*', '', text)
     return text.strip()
 
@@ -1829,8 +1829,8 @@ def _video_info(path):
 def _mix_audio_scene(video_path: Path, speech_path: Path = None,
                      bg_path: Path = None, bg_volume: float = 0.28) -> bool:
     """Mixes speech and/or background audio into a video, replacing it in-place.
-    - speech_path: narração/diálogo (volume 100%)
-    - bg_path: trilha de fundo (volume bg_volume, padrão 28%)
+    - speech_path: narraçêo/diálogo (volume 100%)
+    - bg_path: trilha de fundo (volume bg_volume, padrêo 28%)
     - Usa -map 0:v para sempre descartar o áudio existente no vídeo.
     """
     if not speech_path and not bg_path:
@@ -1888,7 +1888,7 @@ def finalize_nq_route(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         videos = [
             PROJECT_ROOT / j["output_video"]
             for j in nq["jobs"]
@@ -1902,9 +1902,9 @@ def finalize_nq_route(nq_id):
 
     missing = [str(v) for v in videos if not v.exists()]
     if missing:
-        return jsonify({"error": f"Arquivo(s) não encontrado(s): {', '.join(missing)}"}), 400
+        return jsonify({"error": f"Arquivo(s) nêo encontrado(s): {', '.join(missing)}"}), 400
 
-    # Namespacing: project setado → result/<project>/finalized/. Senão mantém
+    # Namespacing: project setado → result/<project>/finalized/. Senêo mantém
     # result/finalized/ (retrocompat).
     if nq_project:
         out_dir = PROJECT_ROOT / "result" / nq_project / "finalized"
@@ -2000,7 +2000,7 @@ def nq_mix_audio(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         jobs = nq["jobs"]
 
     mixed, skipped, errors = 0, 0, []
@@ -2016,14 +2016,14 @@ def nq_mix_audio(nq_id):
             continue
         vpath = PROJECT_ROOT / output_video
         if not vpath.exists():
-            errors.append(f"{job.get('label','?')}: vídeo não encontrado")
+            errors.append(f"{job.get('label','?')}: vídeo nêo encontrado")
             continue
         sp = (PROJECT_ROOT / sp_str) if sp_str else None
         bg = (PROJECT_ROOT / bg_str) if bg_str else None
         sp = sp if (sp and sp.exists()) else None
         bg = bg if (bg and bg.exists()) else None
         if not sp and not bg:
-            errors.append(f"{job.get('label','?')}: arquivo(s) de áudio não encontrado(s)")
+            errors.append(f"{job.get('label','?')}: arquivo(s) de áudio nêo encontrado(s)")
             continue
         # Se só tem speech e o vídeo já tem áudio: pula (já mixado)
         # Se tem audio_bg: sempre re-mixa (pode ter mudado a trilha)
@@ -2049,7 +2049,7 @@ def nq_set_audio_bg(nq_id):
     with nq_lock:
         nq = next((q for q in named_queues if q["id"] == nq_id), None)
         if nq is None:
-            return jsonify({"error": "Fila não encontrada"}), 404
+            return jsonify({"error": "Fila nêo encontrada"}), 404
         updated = 0
         for job in nq["jobs"]:
             job["audio_bg"] = audio_bg
@@ -2103,7 +2103,7 @@ def create_project():
 def get_project(name):
     proj_dir = PROJECTS_DIR / name
     if not proj_dir.exists():
-        return jsonify({"error": "Projeto não encontrado"}), 404
+        return jsonify({"error": "Projeto nêo encontrado"}), 404
     _ensure_project_prompts(proj_dir)
     folders = {}
     for sub in ("imagens", "audios", "docs", "episodios", "temp", "figurantes"):
@@ -2150,7 +2150,7 @@ def upload_project_file(name, subfolder):
     proj_dir = PROJECTS_DIR / name / subfolder
     proj_dir.mkdir(parents=True, exist_ok=True)
     if not (PROJECTS_DIR / name).exists():
-        return jsonify({"error": "Projeto não encontrado"}), 404
+        return jsonify({"error": "Projeto nêo encontrado"}), 404
     uploaded = []
     for file in request.files.getlist("files"):
         fname = secure_filename(file.filename)
@@ -2167,7 +2167,7 @@ def delete_project_file(name, subfolder, filename):
         return jsonify({"error": "Pasta inválida"}), 400
     fpath = PROJECTS_DIR / name / subfolder / filename
     if not fpath.exists():
-        return jsonify({"error": "Arquivo não encontrado"}), 404
+        return jsonify({"error": "Arquivo nêo encontrado"}), 404
     fpath.unlink()
     return jsonify({"ok": True})
 
@@ -2177,7 +2177,7 @@ def delete_project(name):
     import shutil
     proj_dir = PROJECTS_DIR / name
     if not proj_dir.exists():
-        return jsonify({"error": "Projeto não encontrado"}), 404
+        return jsonify({"error": "Projeto nêo encontrado"}), 404
     shutil.rmtree(str(proj_dir))
     return jsonify({"ok": True})
 
@@ -2194,7 +2194,7 @@ def get_project_config(name):
 def save_project_config(name):
     proj_dir = PROJECTS_DIR / name
     if not proj_dir.exists():
-        return jsonify({"error": "Projeto não encontrado"}), 404
+        return jsonify({"error": "Projeto nêo encontrado"}), 404
     data = request.get_json(force=True)
     (proj_dir / "config.json").write_text(json.dumps(data, ensure_ascii=False, indent=2))
     return jsonify({"ok": True})
@@ -2210,7 +2210,7 @@ def save_system_prompt():
     data = request.get_json(force=True)
     text = data.get("prompt", "").strip()
     if not text:
-        return jsonify({"error": "Prompt não pode ser vazio"}), 400
+        return jsonify({"error": "Prompt nêo pode ser vazio"}), 400
     SYSTEM_PROMPT_FILE.write_text(text, encoding="utf-8")
     return jsonify({"ok": True})
 
@@ -2246,7 +2246,7 @@ def generate_episode_prompts(name):
     if proj_dir.exists():
         _ensure_project_prompts(proj_dir)
 
-    # Salvar descrição em docs/ antes de gerar
+    # Salvar descriçêo em docs/ antes de gerar
     saved_doc = None
     doc_path  = None
     if proj_dir.exists() and description:
@@ -2294,11 +2294,11 @@ def generate_episode_prompts(name):
         f'  "task_type": "{task_type}",\n'
         f'  "prompt": "Cinematic video description in English — camera movement, lighting, characters, action...",\n'
         f'  "image_prompt": "Flux/fal.ai image prompt in English — characters, environment, art style, colors...",\n'
-        f'  "audio_text": "Narração ou diálogos em português para esta cena (ou string vazia se silenciosa)",\n'
-        f'  "voice_id": "ElevenLabs voice_id do personagem que fala nesta cena (extraia dos docs do projeto; vazio se narração genérica)",\n'
+        f'  "audio_text": "Narraçêo ou diálogos em português para esta cena (ou string vazia se silenciosa)",\n'
+        f'  "voice_id": "ElevenLabs voice_id do personagem que fala nesta cena (extraia dos docs do projeto; vazio se narraçêo genérica)",\n'
         f'  "audio_bg": "path para trilha de fundo do projeto (projetos/<nome>/audios/<arquivo>.mp3) ou string vazia",\n'
         f'  "resolution": "{resolution}",\n'
-        f'  "duration": <duração em segundos mais adequada para esta cena>,\n'
+        f'  "duration": <duraçêo em segundos mais adequada para esta cena>,\n'
         f'  "seed": <número entre 1000 e 9999>,\n'
         f'  "offload": false,\n'
         f'  "low_vram": false,\n'
@@ -2310,7 +2310,7 @@ def generate_episode_prompts(name):
     _sys_template  = _load_project_prompt(proj_dir, "_sys_episodio.md", _load_system_prompt())
     _fase1_template = _load_project_prompt(proj_dir, "_sys_fase1.md", DEFAULT_PHASE1_TEMPLATE)
 
-    # Iniciar geração em background — retorna job_id imediatamente
+    # Iniciar geraçêo em background — retorna job_id imediatamente
     job_id = uuid.uuid4().hex[:8]
     with _ep_gen_lock:
         _ep_gen_state[job_id] = {
@@ -2366,7 +2366,7 @@ def generate_episode_prompts(name):
                     os.environ["FAL_KEY"] = fal_key
                     fal_ok = True
                 except ImportError:
-                    print("[ep-gen] fal-client não instalado — pulando geração de imagens")
+                    print("[ep-gen] fal-client nêo instalado — pulando geraçêo de imagens")
 
             if fal_ok:
                 # ── Figurantes do projeto ────────────────────────────────────────
@@ -2379,7 +2379,7 @@ def generate_episode_prompts(name):
                 if not figurantes and all_docs_content:
                     with _ep_gen_lock:
                         _ep_gen_state[job_id]["phase"]     = "generating_refs"
-                        _ep_gen_state[job_id]["phase_msg"] = "Gerando figurantes padrão do projeto…"
+                        _ep_gen_state[job_id]["phase_msg"] = "Gerando figurantes padrêo do projeto…"
                     docs_ctx = "\n\n".join(all_docs_content)[:2000]
                     fig_prompt = (
                         f"Anime style illustration, 2030 futuristic school, diverse group of "
@@ -2577,7 +2577,7 @@ def generate_episode_prompts(name):
                 raw2 = re.sub(r"\n?```$", "", raw2)
             jobs = json.loads(raw2)
             if not isinstance(jobs, list):
-                raise ValueError("Resposta não é um array")
+                raise ValueError("Resposta nêo é um array")
 
             with _ep_gen_lock:
                 if job_id in _ep_gen_state:
@@ -2605,7 +2605,7 @@ def generate_episode_status(name, job_id):
     with _ep_gen_lock:
         state = dict(_ep_gen_state.get(job_id, {}))
     if not state:
-        return jsonify({"error": "não encontrado"}), 404
+        return jsonify({"error": "nêo encontrado"}), 404
     return jsonify(state)
 
 
@@ -2623,24 +2623,24 @@ def regenerate_scene_prompt(name):
         f'{{\n'
         f'  "label": "{label}",\n'
         f'  "task_type": "reference_to_video",\n'
-        f'  "prompt": "Descrição cinemática detalhada em inglês para geração de vídeo por IA...",\n'
+        f'  "prompt": "Descriçêo cinemática detalhada em inglês para geraçêo de vídeo por IA...",\n'
         f'  "resolution": "{resolution}",\n'
         f'  "duration": {duration},\n'
         f'  "seed": <número entre 1000 e 9999>,\n'
         f'  "offload": false,\n'
         f'  "low_vram": false,\n'
-        f'  "ref_imgs": [<inclua paths relevantes da lista acima, ou [] se não houver>]\n'
+        f'  "ref_imgs": [<inclua paths relevantes da lista acima, ou [] se nêo houver>]\n'
         f'}}'
     )
-    prompt = f"""Você é um assistente de produção de vídeo. Gere um prompt detalhado para esta cena de vídeo IA (SkyReels).
+    prompt = f"""Você é um assistente de produçêo de vídeo. Gere um prompt detalhado para esta cena de vídeo IA (SkyReels).
 
 Cena: {label}
 Imagens de referência disponíveis (use os paths exatos):
 {images_list}
-Resolução: {resolution}
-Duração sugerida: ~{duration}s
+Resoluçêo: {resolution}
+Duraçêo sugerida: ~{duration}s
 
-Retorne SOMENTE um objeto JSON válido (não um array), começando com {{ e terminando com }}:
+Retorne SOMENTE um objeto JSON válido (nêo um array), começando com {{ e terminando com }}:
 {json_template}
 
 APENAS o JSON, nada mais."""
@@ -2673,12 +2673,12 @@ def generate_episode_images(name):
     try:
         import fal_client
     except ImportError:
-        return jsonify({"error": "fal-client não instalado. Execute: pip install fal-client"}), 500
+        return jsonify({"error": "fal-client nêo instalado. Execute: pip install fal-client"}), 500
 
     cfg = _load_global_config()
     fal_key = cfg.get("fal_key", "") or os.environ.get("FAL_KEY", "")
     if not fal_key:
-        return jsonify({"error": "FAL_KEY não configurada. Clique em ⚙ na aba Projetos."}), 400
+        return jsonify({"error": "FAL_KEY nêo configurada. Clique em ⚙ na aba Projetos."}), 400
 
     os.environ["FAL_KEY"] = fal_key
     data    = request.get_json(force=True)
@@ -2714,13 +2714,13 @@ def generate_episode_audio(name):
     try:
         from elevenlabs.client import ElevenLabs as EL
     except ImportError:
-        return jsonify({"error": "elevenlabs não instalado. Execute: pip install elevenlabs"}), 500
+        return jsonify({"error": "elevenlabs nêo instalado. Execute: pip install elevenlabs"}), 500
 
     cfg    = _load_global_config()
     el_key = cfg.get("elevenlabs_key", "") or os.environ.get("ELEVENLABS_API_KEY", "")
     voice  = cfg.get("elevenlabs_voice_id", "")
     if not el_key or not voice:
-        return jsonify({"error": "ElevenLabs não configurado. Clique em ⚙ na aba Projetos."}), 400
+        return jsonify({"error": "ElevenLabs nêo configurado. Clique em ⚙ na aba Projetos."}), 400
 
     data    = request.get_json(force=True)
     jobs    = data.get("jobs", [])
@@ -2773,18 +2773,18 @@ def nq_generate_images(nq_id):
     import urllib.request as urllib_req
     nq, proj_name = _nq_get_project(nq_id)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
     if not proj_name:
-        return jsonify({"error": "Episódio não vinculado a um projeto"}), 400
+        return jsonify({"error": "Episódio nêo vinculado a um projeto"}), 400
     try:
         import fal_client
     except ImportError:
-        return jsonify({"error": "fal-client não instalado"}), 500
+        return jsonify({"error": "fal-client nêo instalado"}), 500
 
     cfg = _load_global_config()
     fal_key = cfg.get("fal_key", "") or os.environ.get("FAL_KEY", "")
     if not fal_key:
-        return jsonify({"error": "FAL_KEY não configurada. Clique em ⚙ na aba Projetos."}), 400
+        return jsonify({"error": "FAL_KEY nêo configurada. Clique em ⚙ na aba Projetos."}), 400
 
     os.environ["FAL_KEY"] = fal_key
     model = cfg.get("image_model", "fal-ai/flux/dev")
@@ -2820,7 +2820,7 @@ def nq_generate_images(nq_id):
                         "output_format": "png",
                     })
                 else:
-                    # Refs não encontradas em disco → text-to-image
+                    # Refs nêo encontradas em disco → text-to-image
                     res = fal_client.subscribe("fal-ai/nano-banana", arguments={
                         "prompt": img_prompt,
                         "num_images": 1,
@@ -2858,19 +2858,19 @@ def nq_generate_images(nq_id):
 def nq_generate_audio(nq_id):
     nq, proj_name = _nq_get_project(nq_id)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
     if not proj_name:
-        return jsonify({"error": "Episódio não vinculado a um projeto"}), 400
+        return jsonify({"error": "Episódio nêo vinculado a um projeto"}), 400
     try:
         from elevenlabs.client import ElevenLabs as EL
     except ImportError:
-        return jsonify({"error": "elevenlabs não instalado"}), 500
+        return jsonify({"error": "elevenlabs nêo instalado"}), 500
 
     cfg         = _load_global_config()
     el_key      = cfg.get("elevenlabs_key", "") or os.environ.get("ELEVENLABS_API_KEY", "")
     global_voice = cfg.get("elevenlabs_voice_id", "")
     if not el_key:
-        return jsonify({"error": "ElevenLabs não configurado. Clique em ⚙ na aba Projetos."}), 400
+        return jsonify({"error": "ElevenLabs nêo configurado. Clique em ⚙ na aba Projetos."}), 400
 
     # Mapa de vozes por personagem extraído dos docs do projeto
     proj_voices = _parse_project_voices(proj_name)
@@ -2907,7 +2907,7 @@ def nq_generate_audio(nq_id):
             dest  = aud_dir / fname
             dest.write_bytes(audio_bytes)
             rel   = str(dest.relative_to(PROJECT_ROOT))
-            # Sincroniza duração do job com a duração real do áudio (+1s de respiro)
+            # Sincroniza duraçêo do job com a duraçêo real do áudio (+1s de respiro)
             import math
             aud_dur = _audio_duration(dest)
             new_job = {**job, "input_audio": rel, "voice_id": voice}
@@ -2933,25 +2933,25 @@ def nq_job_generate_audio(nq_id, job_id):
     """Regenera o áudio de uma cena específica."""
     nq, proj_name = _nq_get_project(nq_id)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
     if not proj_name:
-        return jsonify({"error": "Episódio não vinculado a um projeto"}), 400
+        return jsonify({"error": "Episódio nêo vinculado a um projeto"}), 400
     try:
         from elevenlabs.client import ElevenLabs as EL
     except ImportError:
-        return jsonify({"error": "elevenlabs não instalado"}), 500
+        return jsonify({"error": "elevenlabs nêo instalado"}), 500
 
     cfg          = _load_global_config()
     el_key       = cfg.get("elevenlabs_key", "") or os.environ.get("ELEVENLABS_API_KEY", "")
     global_voice = cfg.get("elevenlabs_voice_id", "")
     if not el_key:
-        return jsonify({"error": "ElevenLabs não configurado"}), 400
+        return jsonify({"error": "ElevenLabs nêo configurado"}), 400
 
     with nq_lock:
         nq2  = next((q for q in named_queues if q["id"] == nq_id), None)
         job  = next((j for j in nq2["jobs"] if j["id"] == job_id), None) if nq2 else None
     if job is None:
-        return jsonify({"error": "Cena não encontrada"}), 404
+        return jsonify({"error": "Cena nêo encontrada"}), 404
 
     text = _strip_audio_prefix(job.get("audio_text", ""))
     if not text:
@@ -3010,24 +3010,24 @@ def nq_job_generate_image(nq_id, job_id):
     import urllib.request as urllib_req
     nq, proj_name = _nq_get_project(nq_id)
     if nq is None:
-        return jsonify({"error": "Fila não encontrada"}), 404
+        return jsonify({"error": "Fila nêo encontrada"}), 404
     if not proj_name:
-        return jsonify({"error": "Episódio não vinculado a um projeto"}), 400
+        return jsonify({"error": "Episódio nêo vinculado a um projeto"}), 400
     try:
         import fal_client
     except ImportError:
-        return jsonify({"error": "fal-client não instalado"}), 500
+        return jsonify({"error": "fal-client nêo instalado"}), 500
 
     cfg     = _load_global_config()
     fal_key = cfg.get("fal_key", "") or os.environ.get("FAL_KEY", "")
     if not fal_key:
-        return jsonify({"error": "FAL_KEY não configurada"}), 400
+        return jsonify({"error": "FAL_KEY nêo configurada"}), 400
 
     with nq_lock:
         nq2 = next((q for q in named_queues if q["id"] == nq_id), None)
         job = next((j for j in nq2["jobs"] if j["id"] == job_id), None) if nq2 else None
     if job is None:
-        return jsonify({"error": "Cena não encontrada"}), 404
+        return jsonify({"error": "Cena nêo encontrada"}), 404
 
     img_prompt = job.get("image_prompt") or job.get("prompt", "")[:400]
     if not img_prompt:

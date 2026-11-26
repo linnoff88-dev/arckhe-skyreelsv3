@@ -1,14 +1,14 @@
-# Formato da Fila de Geração — SkyReels V3
+# Formato da Fila de Geraçêo — SkyReels V3
 
 A fila aceita dois formatos: **JSON** e **Markdown**. O arquivo pode ser
-importado pela interface web (botão "↑ Importar" na aba Fila) ou enviado
+importado pela interface web (botêo "↑ Importar" na aba Fila) ou enviado
 diretamente ao endpoint `/queue/import`.
 
 ---
 
 ## Formato JSON
 
-Um array de objetos. Cada objeto representa um job de geração.
+Um array de objetos. Cada objeto representa um job de geraçêo.
 
 ```json
 [
@@ -56,12 +56,12 @@ Um array de objetos. Cada objeto representa um job de geração.
 
 ### Campos por task_type
 
-| Campo | Tipo | Obrigatório em | Descrição |
+| Campo | Tipo | Obrigatório em | Descriçêo |
 |---|---|---|---|
 | `task_type` | string | todos | `reference_to_video`, `single_shot_extension`, `shot_switching_extension`, `talking_avatar` |
-| `prompt` | string | todos | Descrição do vídeo a gerar |
+| `prompt` | string | todos | Descriçêo do vídeo a gerar |
 | `resolution` | string | todos | `480P`, `540P`, `720P`. talking_avatar só aceita 480P e 720P |
-| `duration` | int | todos exceto talking_avatar | Duração em segundos. talking_avatar ignora (usa o áudio) |
+| `duration` | int | todos exceto talking_avatar | Duraçêo em segundos. talking_avatar ignora (usa o áudio) |
 | `seed` | int | todos | Semente de reprodutibilidade |
 | `offload` | bool | todos | Move modelos para CPU entre passes (reduz VRAM) |
 | `low_vram` | bool | talking_avatar (obrigatório) | FP8 + block offload. Obrigatório para o modelo 19B |
@@ -75,7 +75,7 @@ Um array de objetos. Cada objeto representa um job de geração.
 
 ## Formato Markdown
 
-Cada job é uma seção `##`. Os campos são linhas `- chave: valor`.
+Cada job é uma seçêo `##`. Os campos sêo linhas `- chave: valor`.
 
 ```markdown
 # SkyReels Queue
@@ -89,7 +89,7 @@ Cada job é uma seção `##`. Os campos são linhas `- chave: valor`.
 - offload: true
 - ref_imgs: uploads/personagem.jpg, uploads/fundo.png
 
-## Extensão corredor
+## Extensêo corredor
 - task_type: single_shot_extension
 - prompt: A câmera avança lentamente pelo corredor.
 - resolution: 720P
@@ -98,7 +98,7 @@ Cada job é uma seção `##`. Os campos são linhas `- chave: valor`.
 - offload: true
 - input_video: result/reference_to_video/42_2026-02-22_06-22-44.mp4
 
-## Transição close-up
+## Transiçêo close-up
 - task_type: shot_switching_extension
 - prompt: [ZOOM_IN_CUT] Close-up no rosto da personagem.
 - resolution: 540P
@@ -130,17 +130,17 @@ Cada job é uma seção `##`. Os campos são linhas `- chave: valor`.
 
 ## Regras e limites por task_type
 
-| Tarefa | Duração | Resolução | Nota |
+| Tarefa | Duraçêo | Resoluçêo | Nota |
 |---|---|---|---|
 | `reference_to_video` | 1–30 s, recomendado 5 s | 480P / 540P / 720P | 1–4 imagens ref |
 | `single_shot_extension` | 5–30 s | 480P / 540P / 720P | Vídeo de entrada obrigatório |
 | `shot_switching_extension` | máx 5 s | 480P / 540P / 720P | Prefixo no prompt obrigatório |
-| `talking_avatar` | ignorado (= duração do áudio, máx 200 s) | 480P / 720P | `low_vram: true` obrigatório |
+| `talking_avatar` | ignorado (= duraçêo do áudio, máx 200 s) | 480P / 720P | `low_vram: true` obrigatório |
 
 ### Prefixos para shot_switching_extension
 
 ```
-[ZOOM_IN_CUT]     — aproximação de câmera
+[ZOOM_IN_CUT]     — aproximaçêo de câmera
 [ZOOM_OUT_CUT]    — afastamento de câmera
 [STATIC_CUT]      — corte simples, câmera estática
 [PAN_LEFT_CUT]    — panorâmica para a esquerda
@@ -151,10 +151,10 @@ Cada job é uma seção `##`. Os campos são linhas `- chave: valor`.
 
 ## Notas sobre caminhos de arquivos
 
-- Caminhos são relativos à **raiz do projeto** (`SkyReels-V3/`)
+- Caminhos sêo relativos à **raiz do projeto** (`SkyReels-V3/`)
 - Arquivos enviados pela interface web ficam em `uploads/`
 - Resultados anteriores ficam em `result/<task_type>/`
-- URLs públicas (http/https) também são aceitas — o sistema baixa automaticamente
+- URLs públicas (http/https) também sêo aceitas — o sistema baixa automaticamente
 
 ### Exemplos de caminhos válidos
 

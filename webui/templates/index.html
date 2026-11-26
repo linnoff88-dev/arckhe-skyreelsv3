@@ -1012,7 +1012,7 @@
 
 <header>
   <h1>INEMA SkyReels V3 <span class="ver">3.<span class="feat" title="49 recursos adicionados">49</span>.<span class="fix" title="19 correções">19</span></span></h1>
-  <span>Interface de Geração de Vídeo</span>
+  <span>Interface de Geraçêo de Vídeo</span>
 </header>
 
 <div class="layout">
@@ -1095,16 +1095,16 @@
             Clique ou arraste o arquivo de áudio
           </div>
           <input type="text" id="input_audio" placeholder="Ou informe URL/path do áudio" style="margin-top:8px">
-          <div class="hint warn">Máximo 200 s. O vídeo terá a mesma duração do áudio.<br>Formatos: mp3, wav, m4a, ogg, flac, mp4, mov, mkv (ffmpeg extrai o áudio automaticamente).</div>
+          <div class="hint warn">Máximo 200 s. O vídeo terá a mesma duraçêo do áudio.<br>Formatos: mp3, wav, m4a, ogg, flac, mp4, mov, mkv (ffmpeg extrai o áudio automaticamente).</div>
         </div>
       </div>
 
       <hr class="divider">
 
-      <!-- Resolução + Duração -->
+      <!-- Resoluçêo + Duraçêo -->
       <div class="row2">
         <div class="field">
-          <label>Resolução</label>
+          <label>Resoluçêo</label>
           <select id="resolution">
             <option value="540P" selected>540P</option>
             <option value="720P">720P</option>
@@ -1113,16 +1113,16 @@
           <div class="hint" id="res-hint"></div>
         </div>
         <div class="field" id="duration-field">
-          <label>Duração (s)</label>
+          <label>Duraçêo (s)</label>
           <input type="number" id="duration" value="5" min="1" max="200">
           <div class="hint" id="dur-hint"></div>
         </div>
       </div>
 
-      <!-- Duração desabilitada (talking_avatar) -->
+      <!-- Duraçêo desabilitada (talking_avatar) -->
       <div class="field cond" id="duration-disabled-field">
-        <label>Duração</label>
-        <div class="info-box">Determinada pelo <strong>áudio</strong> — este campo não tem efeito no Talking Avatar.</div>
+        <label>Duraçêo</label>
+        <div class="info-box">Determinada pelo <strong>áudio</strong> — este campo nêo tem efeito no Talking Avatar.</div>
       </div>
 
       <!-- Seed -->
@@ -1168,7 +1168,7 @@
       <button class="btn-generate" id="btn-generate" onclick="startGeneration()" style="flex:1;margin:0">
         Gerar Vídeo
       </button>
-      <button class="btn-queue-add" id="btn-queue-add" onclick="addToQueue()" title="Adicionar à fila de geração">
+      <button class="btn-queue-add" id="btn-queue-add" onclick="addToQueue()" title="Adicionar à fila de geraçêo">
         + Fila
       </button>
     </div>
@@ -1246,7 +1246,7 @@
             </div>
             <div class="video-info" id="video-info"></div>
             <div class="details-panel" id="details-panel">
-              <h3>Detalhes da Geração</h3>
+              <h3>Detalhes da Geraçêo</h3>
               <div id="details-body"><div class="detail-row"><span class="detail-val no-meta">Selecione um vídeo para ver os detalhes.</span></div></div>
             </div>
           </div>
@@ -1274,7 +1274,7 @@
         <!-- Top bar (shared by list and detail views) -->
         <div class="queue-top">
           <button id="btn-nq-back" class="queue-btn" style="display:none" onclick="showNqList()">← Voltar</button>
-          <span class="queue-top-title" id="queue-view-title">Filas de Geração</span>
+          <span class="queue-top-title" id="queue-view-title">Filas de Geraçêo</span>
           <input type="file" id="queue-import-input" accept=".json,.md,.txt" style="display:none"
                  onchange="importQueueFile(this)">
           <button id="btn-add-from-form" class="queue-btn add-from-form" style="display:none"
@@ -1284,7 +1284,7 @@
           <button class="queue-btn" onclick="document.getElementById('queue-import-input').click()" title="Importar .json ou .md como nova fila">
             ↑ Importar
           </button>
-          <a class="queue-btn" href="/help" target="_blank" title="Ver formato e documentação">? Ajuda</a>
+          <a class="queue-btn" href="/help" target="_blank" title="Ver formato e documentaçêo">? Ajuda</a>
         </div>
 
         <!-- Running banner (shown when a named queue is executing) -->
@@ -1374,14 +1374,14 @@ const TASK_INFO = {
   single_shot_extension: {
     desc: 'Estende um vídeo existente preservando o estilo e movimento. Modelo 14B.',
     time: '~5–8 min (5 s, 540P)',
-    promptHint: 'Descreva o que deve acontecer na extensão.',
+    promptHint: 'Descreva o que deve acontecer na extensêo.',
     resHint: '',
     durHint: 'Intervalo: 5–30 s.',
     durMax: 30,
     extHint: 'Aceita path local ou URL pública do vídeo.',
   },
   shot_switching_extension: {
-    desc: 'Estende com transição cinemática de plano. Use prefixos no prompt: [ZOOM_IN_CUT], [ZOOM_OUT_CUT], [STATIC_CUT]. Modelo 14B.',
+    desc: 'Estende com transiçêo cinemática de plano. Use prefixos no prompt: [ZOOM_IN_CUT], [ZOOM_OUT_CUT], [STATIC_CUT]. Modelo 14B.',
     time: '~5 min (máx 5 s, 540P)',
     promptHint: 'Prefixos: [ZOOM_IN_CUT] · [ZOOM_OUT_CUT] · [STATIC_CUT] · [PAN_LEFT_CUT] · [PAN_RIGHT_CUT]',
     resHint: '',
@@ -1393,7 +1393,7 @@ const TASK_INFO = {
     desc: 'Anima um retrato a falar sincronizado com o áudio. Modelo 19B.',
     time: '~3 min / 5 s de áudio',
     promptHint: 'Baixa influência — o modelo é guiado principalmente pelo áudio e pela imagem do rosto.',
-    resHint: 'Somente 480P e 720P são suportados (540P não existe neste modelo).',
+    resHint: 'Somente 480P e 720P sêo suportados (540P nêo existe neste modelo).',
     durHint: null, // hidden
     durMax: null,
   },
@@ -1596,7 +1596,7 @@ async function startGeneration() {
           }, 500);
         }
       } else {
-        setStatus('error', 'Erro na geração');
+        setStatus('error', 'Erro na geraçêo');
       }
     }
   };
@@ -1674,7 +1674,7 @@ async function loadDetails(path) {
   try {
     const res = await fetch('/video-meta/' + path);
     if (!res.ok) {
-      body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Sem metadados — vídeo gerado antes desta versão.</span></div>';
+      body.innerHTML = '<div class="detail-row"><span class="detail-val no-meta">Sem metadados — vídeo gerado antes desta versêo.</span></div>';
       return;
     }
     const m = await res.json();
@@ -1692,10 +1692,10 @@ async function loadDetails(path) {
     };
     add('Tarefa', TASK_LABELS[m.task_type] || m.task_type);
     add('Prompt', m.prompt || '(sem prompt)', 'prompt-val');
-    add('Resolução', m.resolution);
-    add('Duração', m.duration);
+    add('Resoluçêo', m.resolution);
+    add('Duraçêo', m.duration);
     add('Seed', m.seed);
-    add('Modo', m.low_vram ? 'Low VRAM (FP8 + block offload)' : m.offload ? 'Offload CPU' : 'Padrão');
+    add('Modo', m.low_vram ? 'Low VRAM (FP8 + block offload)' : m.offload ? 'Offload CPU' : 'Padrêo');
     if (m.ref_imgs) add('Imagens ref.', Array.isArray(m.ref_imgs) ? m.ref_imgs.map(p => p.split('/').pop()).join(', ') : m.ref_imgs);
     if (m.input_video) add('Vídeo entrada', m.input_video.split('/').pop());
     if (m.input_image) add('Imagem retrato', m.input_image.split('/').pop() || m.input_image);
@@ -1955,7 +1955,7 @@ async function refreshNamedQueues() {
     const st = await fetch('/status').then(r => r.json());
     const banner = document.getElementById('nq-running-banner');
     if (st.running && st.current_nq_id != null) {
-      document.getElementById('rb-queue-name').textContent = '▶ ' + (st.current_nq_name || 'Fila em execução');
+      document.getElementById('rb-queue-name').textContent = '▶ ' + (st.current_nq_name || 'Fila em execuçêo');
       document.getElementById('rb-scene-name').textContent = st.current_nq_scene || '';
       document.getElementById('rb-goto-btn').onclick = () => openNq(st.current_nq_id);
       banner.classList.add('visible');
@@ -1985,7 +1985,7 @@ async function refreshNamedQueues() {
     return;
   }
 
-  // Atualização incremental: só reconstrói o card se os dados mudaram
+  // Atualizaçêo incremental: só reconstrói o card se os dados mudaram
   const existing = new Map(
     Array.from(list.querySelectorAll('.nq-card[id]'))
       .map(el => [parseInt(el.id.replace('nq-card-', '')), el])
@@ -1995,7 +1995,7 @@ async function refreshNamedQueues() {
   queues.forEach((nq, idx) => {
     seen.add(nq.id);
     const prev = existing.get(nq.id);
-    // Chave de comparação: o que pode mudar visualmente no card da lista
+    // Chave de comparaçêo: o que pode mudar visualmente no card da lista
     const key = `${nq.status}|${nq.done_count}|${nq.error_count}|${nq.remaining_minutes}`;
     if (!prev) {
       list.appendChild(buildNqCard(nq));
@@ -2012,7 +2012,7 @@ async function refreshNamedQueues() {
     }
   });
 
-  // Remove cards de filas que não existem mais
+  // Remove cards de filas que nêo existem mais
   existing.forEach((el, id) => { if (!seen.has(id)) el.remove(); });
 }
 
@@ -2037,7 +2037,7 @@ function showNqList() {
   document.getElementById('btn-add-from-form').style.display = 'none';
   const qaBtn = document.getElementById('btn-queue-add');
   if (qaBtn) qaBtn.classList.remove('has-target');
-  document.getElementById('queue-view-title').textContent = 'Filas de Geração';
+  document.getElementById('queue-view-title').textContent = 'Filas de Geraçêo';
   refreshNamedQueues();
 }
 
@@ -2110,7 +2110,7 @@ async function refreshNqDetail(id) {
   _nqDetailWasRunning = nq.status === 'running';
   _lastNqDetailRefresh = Date.now();
 
-  // ── Atualização incremental dos cards ───────────────────────
+  // ── Atualizaçêo incremental dos cards ───────────────────────
   // Só reconstrói o card se os dados do job realmente mudaram.
   const scenes = document.getElementById('nq-scenes');
   const isFirstLoad = scenes.querySelectorAll('.nq-scene-card').length === 0;
@@ -2137,9 +2137,9 @@ async function refreshNqDetail(id) {
     const cached   = _jobCache.get(job.id);
     try {
       if (!existing) {
-        // Card novo — cria e insere na posição correta
+        // Card novo — cria e insere na posiçêo correta
         const card = buildSceneCard(id, job);
-        // Não expandir automaticamente — usuário abre clicando
+        // Nêo expandir automaticamente — usuário abre clicando
         scenes.appendChild(card);
       } else if (_jobChanged(cached, job)) {
         // Dados mudaram — reconstrói preservando expanded + quickview
@@ -2157,7 +2157,7 @@ async function refreshNqDetail(id) {
           if (qvPanel && qvBtn) qvBtn.click();
         }
       }
-      // Caso contrário: card inalterado — não toca em nada
+      // Caso contrário: card inalterado — nêo toca em nada
       existingCards.delete(job.id);
       rendered++;
     } catch(err) {
@@ -2169,7 +2169,7 @@ async function refreshNqDetail(id) {
       existingCards.delete(job.id);
     }
   }
-  // Remove cards de jobs que não existem mais
+  // Remove cards de jobs que nêo existem mais
   existingCards.forEach(card => card.remove());
 
   if (rendered === 0 && nq.jobs.length > 0) {
@@ -2237,7 +2237,7 @@ function buildSceneCard(nqId, job) {
     header.appendChild(editBtn);
   }
 
-  // Botões de regeneração — voz e imagem
+  // Botões de regeneraçêo — voz e imagem
   if (job.audio_text) {
     const rAudBtn = document.createElement('button');
     rAudBtn.className = 'nq-mini-btn';
@@ -2345,7 +2345,7 @@ function buildSceneCard(nqId, job) {
       const wrap = document.createElement('div');
       wrap.className = 'nq-qv-text';
       const sections = [
-        job.audio_text ? ['🇧🇷 Narração / Diálogo (PT-BR)', job.audio_text, 'pt'] : null,
+        job.audio_text ? ['🇧🇷 Narraçêo / Diálogo (PT-BR)', job.audio_text, 'pt'] : null,
         job.prompt     ? ['🎬 Prompt de Vídeo (EN)', job.prompt, 'en'] : null,
         job.image_prompt ? ['🖼 Prompt de Imagem (EN)', job.image_prompt, 'en'] : null,
       ];
@@ -2418,7 +2418,7 @@ function buildSceneCard(nqId, job) {
   } else {
     const nov = document.createElement('div');
     nov.className = 'nq-no-video';
-    nov.textContent = 'Vídeo não gerado ainda.';
+    nov.textContent = 'Vídeo nêo gerado ainda.';
     body.appendChild(nov);
   }
 
@@ -2488,7 +2488,7 @@ async function retryNq(id) {
 async function retryCurrentNq() { if (currentNqId) retryNq(currentNqId); }
 
 async function restartNq(id) {
-  if (!confirm('Reiniciar do zero? Todas as cenas (incluindo as concluídas) serão resetadas e a fila começará do início.')) return;
+  if (!confirm('Reiniciar do zero? Todas as cenas (incluindo as concluídas) serêo resetadas e a fila começará do início.')) return;
   const res = await fetch(`/nqueues/${id}/restart`, { method: 'POST' });
   const data = await res.json();
   if (!data.ok) { alert(data.error); return; }
@@ -2985,7 +2985,7 @@ async function loadProjectDetail(name) {
                    <img src="/file/${f.path}" onclick="window.open('/file/${f.path}','_blank')">
                    <button class="proj-fig-del" onclick="deleteProjectFile('${name}','${sub}','${f.name}',this)" title="Remover">✕</button>
                  </div>`).join('')
-               : '<div style="color:#444;padding:4px 14px;font-size:.8rem">Vazio — adicione imagens de figurantes ou serão gerados automaticamente</div>'}
+               : '<div style="color:#444;padding:4px 14px;font-size:.8rem">Vazio — adicione imagens de figurantes ou serêo gerados automaticamente</div>'}
            </div>`
         : `<div class="proj-file-list" id="${subId}">
              ${files.map(f => buildProjectFileRow(f, sub)).join('') || '<div style="color:#444;padding:4px 0 4px 14px;font-size:.8rem">Vazio</div>'}
@@ -3267,13 +3267,13 @@ async function openEpisodeDetail(nqId, projectName) {
             </div>
             <div style="display:flex;gap:6px">
               <div style="flex:1">
-                <div class="proj-config-label">Resolução</div>
+                <div class="proj-config-label">Resoluçêo</div>
                 <select class="proj-config-input" id="ej-res-${nqId}-${j.id}">
                   ${['480P','540P','720P'].map(r=>`<option${j.resolution===r?' selected':''}>${r}</option>`).join('')}
                 </select>
               </div>
               <div style="flex:1">
-                <div class="proj-config-label">Duração (s)</div>
+                <div class="proj-config-label">Duraçêo (s)</div>
                 <input type="number" class="proj-config-input" id="ej-dur-${nqId}-${j.id}" value="${esc(j.duration||5)}" min="1" max="30">
               </div>
             </div>
@@ -3289,7 +3289,7 @@ async function openEpisodeDetail(nqId, projectName) {
           </div>` : ''}
           ${j.audio_text !== undefined ? `
           <div style="margin-bottom:8px">
-            <div class="proj-config-label">Texto de áudio (narração / fala)</div>
+            <div class="proj-config-label">Texto de áudio (narraçêo / fala)</div>
             <textarea class="proj-config-input" id="ej-audio-${nqId}-${j.id}" rows="2">${esc(j.audio_text||'')}</textarea>
           </div>` : ''}
           <div style="margin-bottom:8px">
@@ -3441,7 +3441,7 @@ async function openEpisodeGallery(nqId) {
 let _removeEpState = null;
 
 function confirmRemoveEpisode(nqId, epName, projectName, isRunning) {
-  if (isRunning) { alert('Não é possível remover um episódio em execução.'); return; }
+  if (isRunning) { alert('Nêo é possível remover um episódio em execuçêo.'); return; }
   _removeEpState = { nqId, projectName };
   document.getElementById('rem-ep-name').textContent = epName;
   document.getElementById('remove-episode-modal').style.display = 'flex';
@@ -3623,7 +3623,7 @@ async function openGenEpisodeModal(projName) {
     nDocs         ? `${nDocs} doc${nDocs !== 1 ? 's' : ''}` : '',
   ].filter(Boolean).join(' \xB7 ') || 'Nenhum arquivo no projeto';
 
-  // Renderização das imagens — chamada por toggleGenImgView()
+  // Renderizaçêo das imagens — chamada por toggleGenImgView()
   window._genEpImages = images;
 
   const imgSection = images.length ? `
@@ -3704,7 +3704,7 @@ function renderGenImgView(view) {
   const checked = new Set(
     Array.from(document.querySelectorAll('input[name="gen-ref-img"]:checked')).map(c => c.value)
   );
-  // Se ainda não há estado, marcar todas
+  // Se ainda nêo há estado, marcar todas
   const hasState = document.querySelectorAll('input[name="gen-ref-img"]').length > 0;
   const isChecked = p => hasState ? checked.has(p) : true;
 
@@ -3758,7 +3758,7 @@ function toggleGenImgSelectAll(select) {
 }
 
 function closeGenEpisodeModal() {
-  // Não cancela o poll — geração continua em background
+  // Nêo cancela o poll — geraçêo continua em background
   if (_genPollTimer) clearInterval(_genPollTimer);
   _genPollTimer = null;
   document.getElementById('gen-ep-modal').style.display = 'none';
@@ -3788,7 +3788,7 @@ async function saveSysPrompt() {
 }
 
 async function resetSysPrompt() {
-  if (!confirm('Restaurar o system prompt padrão? O prompt atual será perdido.')) return;
+  if (!confirm('Restaurar o system prompt padrêo? O prompt atual será perdido.')) return;
   const res = await fetch('/system-prompt/episode/reset', {method:'POST'});
   const data = res.ok ? await res.json() : {};
   const ta = document.getElementById('sys-prompt-ta');
@@ -3918,13 +3918,13 @@ function _startGenPoll(projName, jobId) {
         _genJobs = data.jobs;
         renderGenPreview();
         _showGenStep(2);
-        // Resumo de geração (doc salvo + novas referências criadas)
+        // Resumo de geraçêo (doc salvo + novas referências criadas)
         const sl = document.getElementById('gen-ep-scene-list');
         if (sl && (data.saved_doc || (data.new_refs && data.new_refs.length))) {
           const info = document.createElement('div');
           info.style.cssText = 'font-size:.75rem;color:#6fcf6f;padding:4px 0 8px;line-height:1.6';
           let html = '';
-          if (data.saved_doc) html += `✓ Descrição salva em ${data.saved_doc}<br>`;
+          if (data.saved_doc) html += `✓ Descriçêo salva em ${data.saved_doc}<br>`;
           if (data.environments && data.environments.length) {
             html += `🗺 ${data.environments.length} ambiente(s) mapeado(s) · `;
           }
@@ -4118,12 +4118,12 @@ refreshNamedQueues();
       <input type="hidden" id="edit-job-id">
       <label>Label<input id="edit-label" type="text" class="modal-input"></label>
       <label>Prompt<textarea id="edit-prompt" class="modal-input" rows="3"></textarea></label>
-      <label>Resolução
+      <label>Resoluçêo
         <select id="edit-resolution" class="modal-input">
           <option>480P</option><option>540P</option><option>720P</option>
         </select>
       </label>
-      <label id="edit-duration-row">Duração (s)<input id="edit-duration" type="number" min="1" max="30" class="modal-input"></label>
+      <label id="edit-duration-row">Duraçêo (s)<input id="edit-duration" type="number" min="1" max="30" class="modal-input"></label>
       <label>Seed<input id="edit-seed" type="number" class="modal-input"></label>
       <div class="modal-checks">
         <label><input id="edit-offload" type="checkbox"> offload</label>
@@ -4161,7 +4161,7 @@ refreshNamedQueues();
         <input id="new-episode-name" type="text" class="modal-input" placeholder="ex: Ep01 — Abertura"
                onkeydown="if(event.key==='Enter')createNewEpisode()">
       </label>
-      <div style="font-size:.78rem;color:#666">Cria uma fila de geração vazia vinculada ao projeto. Adicione cenas na aba Fila.</div>
+      <div style="font-size:.78rem;color:#666">Cria uma fila de geraçêo vazia vinculada ao projeto. Adicione cenas na aba Fila.</div>
     </div>
     <div class="modal-footer">
       <button class="nq-action-btn" onclick="closeNewEpisodeModal()">Cancelar</button>
@@ -4179,13 +4179,13 @@ refreshNamedQueues();
     </div>
     <div class="modal-body">
       <div style="font-size:.78rem;color:#666;margin-bottom:4px">Configurações globais — valem para todos os projetos.</div>
-      <label style="font-size:.78rem;color:#888">FAL_KEY <span style="color:#555">(fal.ai — geração de imagens)</span>
+      <label style="font-size:.78rem;color:#888">FAL_KEY <span style="color:#555">(fal.ai — geraçêo de imagens)</span>
         <input id="gcfg-fal-key" type="password" class="modal-input" placeholder="key_xxxx..." style="margin-top:4px">
       </label>
       <label style="font-size:.78rem;color:#888">Modelo de imagem
         <input id="gcfg-image-model" type="text" class="modal-input" placeholder="fal-ai/flux/dev" style="margin-top:4px">
       </label>
-      <label style="font-size:.78rem;color:#888">ElevenLabs API Key <span style="color:#555">(geração de áudio / TTS)</span>
+      <label style="font-size:.78rem;color:#888">ElevenLabs API Key <span style="color:#555">(geraçêo de áudio / TTS)</span>
         <input id="gcfg-el-key" type="password" class="modal-input" placeholder="sk_xxxx..." style="margin-top:4px">
       </label>
       <label style="font-size:.78rem;color:#888">ElevenLabs Voice ID
@@ -4248,7 +4248,7 @@ refreshNamedQueues();
     </div>
     <div class="modal-body" style="flex:1;display:flex;flex-direction:column;gap:8px;overflow:auto">
       <div style="font-size:.75rem;color:#666;line-height:1.5">
-        Variáveis disponíveis (serão substituídas automaticamente na hora de gerar):
+        Variáveis disponíveis (serêo substituídas automaticamente na hora de gerar):
         <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{description}</code>
         <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{resources}</code>
         <code style="background:#0a0a12;border:1px solid #2a2a3a;padding:2px 6px;border-radius:4px;color:#a78bfa">{task_type}</code>
@@ -4259,7 +4259,7 @@ refreshNamedQueues();
       <textarea id="sys-prompt-ta" class="proj-config-input" style="flex:1;min-height:420px;font-size:.78rem;font-family:monospace;line-height:1.6;resize:vertical"></textarea>
     </div>
     <div class="modal-footer" style="display:flex;gap:8px">
-      <button class="gen-ep-btn" onclick="resetSysPrompt()" style="color:#f59e0b;border-color:#b45309">↺ Restaurar padrão</button>
+      <button class="gen-ep-btn" onclick="resetSysPrompt()" style="color:#f59e0b;border-color:#b45309">↺ Restaurar padrêo</button>
       <div style="flex:1"></div>
       <button class="gen-ep-btn" onclick="closeSysPromptModal()">Cancelar</button>
       <button class="gen-ep-btn primary" onclick="saveSysPrompt()">💾 Salvar</button>
@@ -4276,7 +4276,7 @@ refreshNamedQueues();
     </div>
     <div class="modal-body">
       <div style="font-size:.88rem;color:#e0e0e0">Remover <strong id="rem-ep-name"></strong> do projeto?</div>
-      <div style="font-size:.78rem;color:#888;margin-top:4px">Esta ação não pode ser desfeita.</div>
+      <div style="font-size:.78rem;color:#888;margin-top:4px">Esta açêo nêo pode ser desfeita.</div>
     </div>
     <div class="modal-footer" style="flex-direction:column;gap:8px;align-items:stretch">
       <button class="nq-action-btn" onclick="removeEpisodeFromProject(false)">Remover do projeto (manter na fila)</button>
@@ -4298,7 +4298,7 @@ refreshNamedQueues();
         <input id="new-project-name" type="text" class="modal-input" placeholder="ex: Episodio_01"
                onkeydown="if(event.key==='Enter')createNewProject()">
       </label>
-      <div style="font-size:.78rem;color:#666">Serão criadas subpastas: imagens/, audios/, docs/</div>
+      <div style="font-size:.78rem;color:#666">Serêo criadas subpastas: imagens/, audios/, docs/</div>
     </div>
     <div class="modal-footer">
       <button class="nq-action-btn" onclick="closeNewProjectModal()">Cancelar</button>

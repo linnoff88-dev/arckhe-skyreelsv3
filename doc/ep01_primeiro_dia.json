@@ -115,7 +115,7 @@
     "input_audio": "uploads/inetusx/eps01/c02_lumi_02.mp3"
   },
   {
-    "label": "C02-E · Valen — 'Espero que não.'",
+    "label": "C02-E · Valen — 'Espero que nêo.'",
     "task_type": "talking_avatar",
     "prompt": "A student responding quietly, a flicker of vulnerability behind the composed expression, looking back at her screen.",
     "resolution": "720P",
@@ -184,7 +184,7 @@
     "input_audio": "uploads/inetusx/eps01/c03_valen_01.mp3"
   },
   {
-    "label": "C03-E · Maya — 'É. Ele parece abandonado… mas não devia estar.'",
+    "label": "C03-E · Maya — 'É. Ele parece abandonado… mas nêo devia estar.'",
     "task_type": "talking_avatar",
     "prompt": "A girl speaking quietly, looking down at her drawing with a contemplative, gently melancholy expression. A genuine thought, not just small talk.",
     "resolution": "720P",
@@ -234,7 +234,7 @@
     "input_audio": "uploads/inetusx/eps01/c04_caio_01.mp3"
   },
   {
-    "label": "C04-C · Maya — 'Não.'",
+    "label": "C04-C · Maya — 'Nêo.'",
     "task_type": "talking_avatar",
     "prompt": "A girl answering simply, brief and neutral, barely looking up from her tablet. One word, no fuss.",
     "resolution": "720P",
@@ -390,7 +390,7 @@
     "input_audio": "uploads/inetusx/eps01/c06_caio_01.mp3"
   },
   {
-    "label": "C06-D · Maya — 'Eu tentei não rir.'",
+    "label": "C06-D · Maya — 'Eu tentei nêo rir.'",
     "task_type": "talking_avatar",
     "prompt": "A student responding in a hushed voice, already losing the battle with laughter, shoulders slightly raised, suppressed giggle.",
     "resolution": "720P",
@@ -442,7 +442,7 @@
     ]
   },
   {
-    "label": "C07-B · Maya — 'Vocês também vão pra biblioteca?'",
+    "label": "C07-B · Maya — 'Vocês também vêo pra biblioteca?'",
     "task_type": "talking_avatar",
     "prompt": "A student looking at the others while walking, slightly hopeful expression, open and inviting.",
     "resolution": "720P",
@@ -472,7 +472,7 @@
     "input_audio": "uploads/inetusx/eps01/c07_lumi_01.mp3"
   },
   {
-    "label": "C07-E · Valen — 'Então vamos juntos.'",
+    "label": "C07-E · Valen — 'Entêo vamos juntos.'",
     "task_type": "talking_avatar",
     "prompt": "A student saying this simply, no drama, no special emphasis. Like it was already decided. Slight tilt of the head forward.",
     "resolution": "720P",
@@ -586,7 +586,7 @@
     "input_audio": "uploads/inetusx/eps01/c09_maya_01.mp3"
   },
   {
-    "label": "C09-C · Caio — 'A previsão não falava nisso.'",
+    "label": "C09-C · Caio — 'A previsêo nêo falava nisso.'",
     "task_type": "talking_avatar",
     "prompt": "A student responding factually, glancing at his phone then at the sky, calm and completely unbothered.",
     "resolution": "720P",
@@ -596,7 +596,7 @@
     "input_audio": "uploads/inetusx/eps01/c09_caio_01.mp3"
   },
   {
-    "label": "C09-D · Lumi — 'Às vezes a previsão erra.'",
+    "label": "C09-D · Lumi — 'Às vezes a previsêo erra.'",
     "task_type": "talking_avatar",
     "prompt": "A student responding gently, eyes following reflections on the wet street, thoughtful and unhurried.",
     "resolution": "720P",
@@ -632,7 +632,7 @@
     ]
   },
   {
-    "label": "C10-A · Portão — Chuva diminui, último momento do dia",
+    "label": "C10-A · Portêo — Chuva diminui, último momento do dia",
     "task_type": "reference_to_video",
     "prompt": "School gate at dusk. The rain fades to a light drizzle. Four students walk toward the exit together, the school day finally ending. Warm street lights glowing softly. Wide shot, golden-hour tones.",
     "resolution": "720P",
@@ -668,7 +668,7 @@
     "input_audio": "uploads/inetusx/eps01/c10_caio_01.mp3"
   },
   {
-    "label": "C10-D · Maya — 'Não foi tão assustador quanto eu achei que seria.'",
+    "label": "C10-D · Maya — 'Nêo foi têo assustador quanto eu achei que seria.'",
     "task_type": "talking_avatar",
     "prompt": "A student speaking with quiet relief and genuine surprise at herself, slight laugh in her voice, looking at her companions.",
     "resolution": "720P",
@@ -688,7 +688,7 @@
     "input_audio": "uploads/inetusx/eps01/c10_valen_01.mp3"
   },
   {
-    "label": "C10-F · Portão — Plano final, a pausa antes de ir",
+    "label": "C10-F · Portêo — Plano final, a pausa antes de ir",
     "task_type": "reference_to_video",
     "prompt": "Four students at the school gate at dusk. No one rushes. A long quiet beat as the city glows behind them. Final wide cinematic shot, warm soft focus, golden light.",
     "resolution": "720P",
